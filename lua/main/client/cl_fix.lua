@@ -23,7 +23,7 @@ function FixGrass()
 		--grass:SetTexture("$basetexture",Material("nature/grassfloor002a"):GetTexture("$basetexture"))
 		grass:SetTexture("$basetexture",Material("nature/snowfloor001a"):GetTexture("$basetexture"))
 		--grass:SetVector("$color",Vector(1))
-		grass:SetVector("$color",Vector(.5,.5,.4))
+		grass:SetVector("$color",Vector(.5,.5,.5))
 	end)
 end
 
