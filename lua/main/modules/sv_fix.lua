@@ -106,6 +106,12 @@ timer.Create("Gruppa",5*60,0,function()
 	ChatAddText(Color(68,255,68),"Join us in our Discord Channel: ",Color(161,161,255),"https://discord.gg/3wsBm3N")
 end)
 
+local verbose_tools = {
+	creator = true,
+	paint = true,
+	inflator = true
+}
+
 local disallow_by_hours = {}
 disallow_by_hours["duplicator"] = 1000
 disallow_by_hours["stacker"] = 1000
@@ -114,7 +120,7 @@ hook.Add("CanTool","minge_duplicator",function(ply,_, tool )
 	if not ply:IsPlayer() then return end
 	local t = ply.GMODTIME or ply.GetGTime and ply:GetGTime() or 0
 	
-	if tool~="creator" and tool~="paint" then
+	if not verbose_tools[tool] then
 		MsgAll('[Tool] ',ply,' <',ply:SteamID(),'> ',' used tool: ',tool)
 	end
 	
