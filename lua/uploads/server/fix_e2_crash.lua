@@ -38,6 +38,8 @@ end
 
 local e2replaces = {}
 local function replaceFunctions()
+	if not wire_expression2_funcs then return end
+
 	for prototype, func in pairs( e2replaces ) do
 		local intable = wire_expression2_funcs[ prototype ]
 		
@@ -317,18 +319,9 @@ end
 
 
 -- For some reason functions can be restored back, so we check for it
-timer.Create( "anti-crash check replaces", 1, 0, function()
-	for prototype, func in pairs( e2replaces ) do
-		local intable = wire_expression2_funcs[ prototype ]
-		
-		if intable then
-			intable[3] = func
-		end
-	end
-end )
+timer.Create( "anti-crash check replaces", 1, 0, replaceFunctions )
 
-
-replaceFunctions()
+hook.Add( "Initialize", "fix_e2_crash", replaceFunctions)
 
 hook.Add('EntityRemoved','CheckE2Ragdoll',function(ent)
 
