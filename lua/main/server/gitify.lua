@@ -1,4 +1,4 @@
-function string.gitify(json)
+local function gitify(json)
 
 	json = util.JSONToTable(json).payload.commits
 	
@@ -17,3 +17,7 @@ function string.gitify(json)
 		
 	
 end
+
+concommand.Add("echo_git_commit",function()
+	gitify(file.Read('git.json','DATA'))
+end)
