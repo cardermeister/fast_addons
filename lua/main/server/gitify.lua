@@ -24,7 +24,7 @@ local function gitify(json)
 	for i,k in pairs(json) do
 		
 		local sha = k.id
-		print(sha)
+		
 		http.Fetch("https://gitlab.com/api/v4/projects/4541032/repository/commits/"..sha,
 		function(a)
 			func(k,util.JSONToTable(a))
