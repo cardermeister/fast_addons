@@ -319,7 +319,7 @@ e2function void entity:printColor(...)
 
 	if not check_delay( self.player ) then return end
 
-	printColorVarArg(self.entity, this, typeids, ...)
+	printColorVarArg(nil, this, typeids, ...)
 end
 
 e2function void entity:printColor(array arr)
@@ -328,5 +328,5 @@ e2function void entity:printColor(array arr)
 
 	if not check_delay( self.player ) then return end
 
-	printColorArray(self.entity, this, arr)
+	printColorArray(nil, this, arr)
 end
