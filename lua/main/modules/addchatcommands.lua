@@ -110,18 +110,21 @@ iin_Msg(nil,Color(255,187,0)," ● ",ply,Color(255,255,255),' cleanup decals.')
 end,'admins')
 
 iin.AddCommand('goto',function(ply,line)
-ply.iin_tpprevious = ply:GetPos()
-if not ply:Alive() then ply:Spawn() end
-if !line then return end
+    
+    if ply.time_to_goto and ply.time_to_goto>=CurTime() then return end
+    
+    ply.iin_tpprevious = ply:GetPos()
+    if not ply:Alive() then ply:Spawn() end
+    if !line then return end
+    
+    local x,y,z = line:match("(%-?%d+%.*%d*)[,%s]%s-(%-?%d+%.*%d*)[,%s]%s-(%-?%d+%.*%d*)")
+    if x and y and z then
+    	ply:SetPos(Vector(tonumber(x),tonumber(y),tonumber(z)))
+    	iin_Msg(nil,Color(255,187,0)," ● ",ply,Color(255,255,255),' goto Vector('..x..','..y..','..z..')',Color(255,255,255),'.')
+    	return
+    end
 
-local x,y,z = line:match("(%-?%d+%.*%d*)[,%s]%s-(%-?%d+%.*%d*)[,%s]%s-(%-?%d+%.*%d*)")
-if x and y and z then
-	ply:SetPos(Vector(tonumber(x),tonumber(y),tonumber(z)))
-	iin_Msg(nil,Color(255,187,0)," ● ",ply,Color(255,255,255),' goto Vector('..x..','..y..','..z..')',Color(255,255,255),'.')
-	return
-end
-
-local ent = FindEntity(line)
+    local ent = FindEntity(line)
 
 	if ent:IsPlayer() then
 
@@ -134,6 +137,8 @@ local ent = FindEntity(line)
 		return 
 	end
 	iin_Msg(nil,Color(255,187,0)," ● ",ply,Color(255,255,255),' goto ',ent:IsPlayer() and ent,Color(255,255,255),'.')
+	
+	ply.time_to_goto = CurTime()+1
 end)
 
 iin.AddCommand('return',function(ply)
