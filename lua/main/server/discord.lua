@@ -25,7 +25,7 @@ hook.Add("PostGamemodeLoaded","discord.lua",function()
     	if ( IsValid(ply) ) then return end
     	
     	easylua.RunLua(nil,file.Read("discord-lua.txt","DATA"))
-    	file.Delete("discord-lua.txt")
+    	//file.Delete("discord-lua.txt")
     
     end)
 
