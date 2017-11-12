@@ -249,7 +249,6 @@ local function printColorVarArg(chip, ply, typeids, ...)
 		end
 	end
 
-	PrintTable(send_array)
 	net.Start("wire_expression2_printColor")
 		net.WriteEntity(chip)
 		net.WriteTable(send_array)
@@ -296,6 +295,7 @@ local function printColorArray(chip, ply, arr)
 		end
 	end
 
+	PrintTable(send_array)
 	net.Start("wire_expression2_printColor")
 		net.WriteEntity(chip)
 		net.WriteTable(send_array)
