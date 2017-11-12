@@ -29,6 +29,8 @@ hook.Add("PostGamemodeLoaded","discord.lua",function()
     
     end)
 
+    discord.print("[INIT] Server successfully started")
+
     hook.Remove("PostGamemodeLoaded","discord.lua")
 
 end)
