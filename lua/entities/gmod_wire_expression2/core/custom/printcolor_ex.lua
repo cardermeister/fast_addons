@@ -286,7 +286,7 @@ local function printColorArray(chip, ply, arr)
 					sanitized = sanitized:sub(2)
 				end
 
-				newline = sanitized[-1] == "\n"
+				newline = sanitized == "" or sanitized[-1] == "\n"
 			end
 
 			send_array[i] = sanitized
