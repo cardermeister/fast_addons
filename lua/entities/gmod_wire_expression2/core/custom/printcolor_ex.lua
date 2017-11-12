@@ -319,7 +319,7 @@ e2function void entity:printColor(...)
 
 	if not check_delay( self.player ) then return end
 
-	printColorVarArg(nil, this, typeids, ...)
+	printColorVarArg(nil, this, typeids, "[" .. self.player:Nick() .. "] ", ...)
 end
 
 e2function void entity:printColor(array arr)
@@ -328,5 +328,6 @@ e2function void entity:printColor(array arr)
 
 	if not check_delay( self.player ) then return end
 
+	table.insert(arr, 1, "[" .. self.player:Nick() .. "] ")
 	printColorArray(nil, this, arr)
 end
