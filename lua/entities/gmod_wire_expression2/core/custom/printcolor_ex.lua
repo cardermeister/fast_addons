@@ -216,7 +216,7 @@ local printColor_typeids = {
 	n = tostring,
 	s = function(s)
 		return s
-			:match("^[ \t]*(.-)%[ \t]*$")
+			:match("^[ \t]*(.-)[ \t]*$")
 			:gsub("(%s)%s+", function(match) return match[1] end)
 	end,
 	v = function(v) return Color(v[1],v[2],v[3]) end,
