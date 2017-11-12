@@ -285,17 +285,14 @@ local function printColorArray(chip, ply, arr)
 		if printColor_types[tp] then
 			local sanitized = printColor_types[tp](arr[i])
 
-			if tp == "s" then
+			if tp == "string" then
 				if newline and sanitized[1] == "\n" then
 					sanitized = sanitized:sub(2)
 				end
 
 				newline = sanitized == "" or sanitized[-1] == "\n"
-
-				print( "|" .. sanitized .. "|" )
 			end
 
-			print(tp)
 			send_array[i] = sanitized
 		else
 			send_array[i] = ""
