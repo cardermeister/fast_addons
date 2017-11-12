@@ -295,6 +295,7 @@ local function printColorArray(chip, ply, arr)
 				print( "|" .. sanitized .. "|" )
 			end
 
+			print(tp)
 			send_array[i] = sanitized
 		else
 			send_array[i] = ""
