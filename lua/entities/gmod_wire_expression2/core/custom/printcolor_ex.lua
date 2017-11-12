@@ -214,7 +214,7 @@ util.AddNetworkString("wire_expression2_printColor")
 
 local printColor_typeids = {
 	n = tostring,
-	s = tostring,
+	s = function(s) return s:gsub("%s+", function(match) return match[1] end) end,
 	v = function(v) return Color(v[1],v[2],v[3]) end,
 	xv4 = function(v) return Color(v[1],v[2],v[3],v[4]) end,
 	e = function(e) return IsValid(e) and e:IsPlayer() and e or "" end,
@@ -323,7 +323,7 @@ e2function void entity:printColor(...)
 	table.insert(typeids, 2, "s")
 	table.insert(typeids, 3, "v")
 
-	printColorVarArg(nil, this, typeids, Vector(255, 255, 255), "[printColor] ", Vector(255, 255, 255), ...)
+	printColorVarArg(nil, this, typeids, Vector(220, 100, 100), "(Expression 2) ", Vector(255, 255, 255), ...)
 end
 
 e2function void entity:printColor(array arr)
@@ -336,8 +336,8 @@ e2function void entity:printColor(array arr)
 	table.insert(typeids, 2, "s")
 	table.insert(typeids, 3, "v")
 
-	table.insert(arr, 1, Vector(255, 255, 255))
-	table.insert(arr, 2, "[printColor] ")
+	table.insert(arr, 1, Vector(220, 100, 100))
+	table.insert(arr, 2, "(Expression 2) ")
 	table.insert(arr, 3, Vector(255, 255, 255))
 
 	printColorArray(nil, this, arr)
