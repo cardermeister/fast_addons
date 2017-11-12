@@ -214,7 +214,11 @@ util.AddNetworkString("wire_expression2_printColor")
 
 local printColor_typeids = {
 	n = tostring,
-	s = function(s) return s:gsub("%s+", function(match) return match[1] end) end,
+	s = function(s)
+		return s
+			:match("^[ \t]*(.-)%[ \t]*$", "")
+			:gsub("(%s)%s+", function(match) return match[1] end)
+	end,
 	v = function(v) return Color(v[1],v[2],v[3]) end,
 	xv4 = function(v) return Color(v[1],v[2],v[3],v[4]) end,
 	e = function(e) return IsValid(e) and e:IsPlayer() and e or "" end,
@@ -223,11 +227,23 @@ local printColor_typeids = {
 local function printColorVarArg(chip, ply, typeids, ...)
 	if not IsValid(ply) then return end
 	if not check_delay(ply) then return end
+	
 	local send_array = { ... }
+	local newline = false
 
 	for i,tp in ipairs(typeids) do
 		if printColor_typeids[tp] then
-			send_array[i] = printColor_typeids[tp](send_array[i])
+			local sanitized = printColor_typeids[tp](send_array[i])
+
+			if tp == "s" then
+				if newline and sanitized[1] == "\n" then
+					sanitized = sanitized:sub(2)
+				end
+
+				newline = sanitized[-1] == "\n"
+			end
+
+			send_array[i] = sanitized
 		else
 			send_array[i] = ""
 		end
@@ -259,10 +275,21 @@ local function printColorArray(chip, ply, arr)
 	if not check_delay( ply ) then return end
 
 	local send_array = {}
+	local newline = false
 
 	for i,tp in ipairs_map(arr,type) do
 		if printColor_types[tp] then
-			send_array[i] = printColor_types[tp](arr[i])
+			local sanitized = printColor_types[tp](arr[i])
+
+			if tp == "s" then
+				if newline and sanitized[1] == "\n" then
+					sanitized = sanitized:sub(2)
+				end
+
+				newline = sanitized[-1] == "\n"
+			end
+
+			send_array[i] = sanitized
 		else
 			send_array[i] = ""
 		end
