@@ -240,7 +240,7 @@ local function printColorVarArg(chip, ply, typeids, ...)
 					sanitized = sanitized:sub(2)
 				end
 
-				newline = sanitized[-1] == "\n"
+				newline = sanitized == "" or sanitized[-1] == "\n"
 			end
 
 			send_array[i] = sanitized
@@ -358,10 +358,6 @@ e2function void entity:printColor(array arr)
 	if not isOwner(self, this) then return end
 
 	if not check_delay( self.player ) then return end
-
-	table.insert(typeids, 1, "v")
-	table.insert(typeids, 2, "s")
-	table.insert(typeids, 3, "v")
 
 	table.insert(arr, 1, Vector(220, 100, 100))
 	table.insert(arr, 2, "(Expression 2) ")
