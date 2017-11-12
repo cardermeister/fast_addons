@@ -319,7 +319,7 @@ e2function void entity:printColor(...)
 
 	if not check_delay( self.player ) then return end
 
-	PrintTable(typeids)
+	table.insert(typeids, 1, "s")
 	printColorVarArg(nil, this, typeids, "[" .. self.player:Nick() .. "] ", ...)
 end
 
