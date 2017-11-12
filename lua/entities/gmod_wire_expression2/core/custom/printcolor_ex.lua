@@ -319,6 +319,8 @@ e2function void entity:printColor(...)
 
 	if not check_delay( self.player ) then return end
 
+	local args = {...}
+	PrintTable(args)
 	printColorVarArg(nil, this, typeids, "[" .. self.player:Nick() .. "] ", ...)
 end
 
