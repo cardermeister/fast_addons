@@ -257,7 +257,11 @@ end
 
 local printColor_types = {
 	number = tostring,
-	string = tostring,
+	string = function(s)
+		return s
+			:match("^[ \t]*(.-)[ \t]*$")
+			:gsub("(%s)%s+", function(match) return match[1] end)
+	end,
 	Vector = function(v) return Color(v[1],v[2],v[3]) end,
 	table = function(tbl)
 		for i,v in pairs(tbl) do
@@ -295,7 +299,6 @@ local function printColorArray(chip, ply, arr)
 		end
 	end
 
-	PrintTable(send_array)
 	net.Start("wire_expression2_printColor")
 		net.WriteEntity(chip)
 		net.WriteTable(send_array)
