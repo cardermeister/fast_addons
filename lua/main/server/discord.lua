@@ -20,15 +20,13 @@ end
 
 concommand.Add("discord-lua-run",function(ply,cmd,arg,line)
 	
-	if ( IsValid(ply) ) then return end
-	
 	local luacode = file.Read("discord-lua.txt","DATA")
 	
 	Msg"[discord] "print("running lua by",line or "god")
 	if easylua.RunLua(nil,luacode).error then
 		RunString(luacode)
+		discord.print("[BUG] easylua.RunLua ignored")
 	end
-
 
 end)
 
