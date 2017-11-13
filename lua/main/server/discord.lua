@@ -20,12 +20,17 @@ hook.Add("PostGamemodeLoaded","discord.lua",function()
     end
     
     
-    concommand.Add("discord-lua-run",function(ply)
+    concommand.Add("discord-lua-run",function(ply,cmd,arg,line)
     	
     	if ( IsValid(ply) ) then return end
-    	
-    	easylua.RunLua(nil,file.Read("discord-lua.txt","DATA"))
-    	//file.Delete("discord-lua.txt")
+		
+		local luacode = file.Read("discord-lua.txt","DATA")
+		
+    	MsgC"[discord] "print("running lua by",line)
+    	if easylua.RunLua(nil,luacode).error then
+			RunString(luacode)
+		end
+
     
     end)
 
