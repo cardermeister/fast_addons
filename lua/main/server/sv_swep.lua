@@ -1,5 +1,3 @@
-ChatAddText(Color(255,255,255),"MODDED",debug.getinfo(1,"S").source)
-
 local META = FindMetaTable'Player'
 function META:IsCheater() 
 	return self:GetNWBool('cheater') or false
