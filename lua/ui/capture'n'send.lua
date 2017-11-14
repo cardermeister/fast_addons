@@ -12,7 +12,7 @@ local ands = function(a)
 		else         s = s..' and '..n
 		end
 		
-	end
+	end 
 	
 	return s
 end
