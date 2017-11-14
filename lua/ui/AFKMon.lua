@@ -117,7 +117,7 @@ if CLIENT then
 		local max=MAX_AFK:GetInt()
 		local var=Now()-max
 		local me=LocalPlayer()
-		if (last_mouse < var and last_input < var) or last_focus < Now()-5 then
+		if (last_mouse < var and last_input < var) or last_focus < var then
 			if not local_afk then
 				local_afk = true
 				SetAFKMode(me, true )
