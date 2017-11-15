@@ -23,10 +23,18 @@ concommand.Add("discord-lua-run",function(ply,cmd,arg,line)
 	local luacode = file.Read("discord-lua.txt","DATA")
 	
 	Msg"[discord] "print("running lua by",line or "god")
-	local error = easylua.RunLua(nil,luacode,line).error
-	if error then
-		discord.print("[ERR] "+error)
+	
+	local func = CompileString( luacode, line, false )
+	if type(func) == "function" then
+
+			local args = {pcall(func)}
+
+			if args[1] == false then
+				discord.print("ERROR: "+args[2])
+			end
+
 	end
+
 
 end)
 
