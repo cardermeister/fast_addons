@@ -119,7 +119,12 @@ iin.AddCommand('goto',function(ply,line)
     
     local x,y,z = line:match("(%-?%d+%.*%d*)[,%s]%s-(%-?%d+%.*%d*)[,%s]%s-(%-?%d+%.*%d*)")
     if x and y and z then
-    	ply:SetPos(Vector(tonumber(x),tonumber(y),tonumber(z)))
+    	x, y, z =
+    		math.Clamp(tonumber(x), -32767, 32768),
+    		math.Clamp(tonumber(y), -32767, 32768),
+    		math.Clamp(tonumber(z), -32767, 32768)
+
+    	ply:SetPos(Vector(x, y, z))
     	iin_Msg(nil,Color(255,187,0)," ● ",ply,Color(255,255,255),' goto Vector('..x..','..y..','..z..')',Color(255,255,255),'.')
     	return
     end
@@ -440,38 +445,38 @@ iin.AddCommand("w",function(ply,line)
 	http.Fetch("http://api.wolframalpha.com/v2/query?input="..urlencode(line).."&appid=K677A9-RYWJPVUUJK",function(s)
 		
 		
-		local finded = false
+		local found = false
 		for i,k in string.gmatch( s,"<plaintext>(.-)</plaintext>") do 
 			all:ChatPrint(i)
-			finded = true
+			found = true
 		end
 		
-		if not finded then
+		if not found then
 
 			for i,k in string.gmatch( s,"desc=%'(.-)%'") do 
 				all:ChatPrint(i)
-				finded = true
+				found = true
 			end
 		
-			if not finded then
+			if not found then
 				
 				for i,k in string.gmatch( s,"<tip text=%'(.-)%'") do 
 					all:ChatPrint(i)
-					finded = true
+					found = true
 				end
 				
-				if not finded then 
+				if not found then 
 						
 						local mean = s:match("<didyoumeans count=%'(.-)%'>")
-						if tonumber(mean)>0 then	
+						if mean and tonumber(mean)>0 then	
 							for i=1,mean do
 								local strmean = s:match("<didyoumean score=.->(.-)</didyoumean>")
 								all:ChatPrint("Did you mean: "..strmean)
 							end
-							--finded = true
+							--found = true
 						end
 						
-						if not finded then
+						if not found then
 						--	print(s)
 							all:ChatPrint("Your search returns no results.")
 						end
@@ -483,6 +488,35 @@ iin.AddCommand("w",function(ply,line)
 	
 end)
 
+-- Original code taken from http://wiki.garrysmod.com/page/GM/EntityEmitSound example
+hook.Add("EntityEmitSound", "TimeWarpSounds", function(data)
+
+	local pitch = data.Pitch
+
+	if game.GetTimeScale() ~= 1 then
+		pitch = pitch * game.GetTimeScale()
+	end
+
+	if GetConVarNumber("host_timescale") ~= 1 and GetConVarNumber("sv_cheats") >= 1 then
+		pitch = pitch * GetConVarNumber("host_timescale")
+	end
+
+	if pitch ~= data.Pitch then
+		data.Pitch = math.Clamp(pitch, 0, 255)
+		return true
+	end
+
+end)
+
+iin.AddCommand("timescale", function(ply, line)
+	local timescale = tonumber(line:match"^%s*(%S+)")
+	if timescale then
+		timescale = math.Clamp(0.1, 10)
+		game.SetTimeScale(timescale)
+	else
+		iin.error(ply, "Enter time scale.")
+	end
+end, "devs")
 
 
 
