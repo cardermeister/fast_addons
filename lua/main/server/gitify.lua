@@ -25,10 +25,12 @@ local function gitify(json)
 		
 		local sha = k.id
 		
-		http.Fetch("https://gitlab.com/api/v4/projects/4541032/repository/commits/"..sha,
-		function(a)
-			func(k,util.JSONToTable(a))
-		end,function(s) func(k) end,{["Private-Token"]="9BtwmHamzRwiLdsijELR"})
+		//http.Fetch("https://gitlab.com/api/v4/projects/4541032/repository/commits/"..sha,
+		//function(a)
+		//	func(k,util.JSONToTable(a))
+		//end,function(s)
+		func(k)
+		//end,{["Private-Token"]="9BtwmHamzRwiLdsijELR"})
 		
 	end
 	
