@@ -511,7 +511,7 @@ end)
 iin.AddCommand("timescale", function(ply, line)
 	local timescale = tonumber(line:match"^%s*(%S+)")
 	if timescale then
-		timescale = math.Clamp(0.1, 10)
+		timescale = math.Clamp(timescale, 0.1, 10)
 		game.SetTimeScale(timescale)
 	else
 		iin.error(ply, "Enter time scale.")
