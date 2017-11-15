@@ -235,7 +235,7 @@ local printColor_typeids = {
 	e = function(e) return IsValid(e) and e:IsPlayer() and e or "" end,
 }
 
-local function printColorVarArg(chip, ply, typeids, ...)
+local function printColorVarArg(chip, todriver, ply, typeids, ...)
 	if not IsValid(ply) then return end
 
 	local send_array = { ... }
@@ -261,6 +261,7 @@ local function printColorVarArg(chip, ply, typeids, ...)
 
 	net.Start("wire_expression2_printColor")
 		net.WriteEntity(chip)
+		net.WriteBool(todriver)
 		net.WriteTable(send_array)
 	net.Send(ply)
 end
@@ -284,7 +285,7 @@ local printColor_types = {
 	Player = function(e) return IsValid(e) and e:IsPlayer() and e or "" end,
 }
 
-local function printColorArray(chip, ply, arr)
+local function printColorArray(chip, todriver, ply, arr)
 	if (not IsValid(ply)) then return; end
 
 	local send_array = {}
@@ -310,6 +311,7 @@ local function printColorArray(chip, ply, arr)
 
 	net.Start("wire_expression2_printColor")
 		net.WriteEntity(chip)
+		net.WriteBool(todriver)
 		net.WriteTable(send_array)
 	net.Send(ply)
 end
@@ -318,14 +320,14 @@ end
 --- Works like [[chat.AddText]](...). Parameters can be any amount and combination of numbers, strings, player entities, color vectors (both 3D and 4D).
 e2function void printColor(...)
 	if check_delay(self.player, self.player) then
-		printColorVarArg(nil, self.player, typeids, ...)
+		printColorVarArg(nil, false, self.player, typeids, ...)
 	end
 end
 
 --- Like printColor(...), except taking an array containing all the parameters.
 e2function void printColor(array arr)
 	if check_delay(self.player, self.player) then
-		printColorArray(nil, self.player, arr)
+		printColorArray(nil, false, self.player, arr)
 	end
 end
 
@@ -340,7 +342,7 @@ e2function void entity:printColorDriver(...)
 
 	if not check_delay( self.player, driver ) then return end
 
-	printColorVarArg(self.entity, driver, typeids, ...)
+	printColorVarArg(self.entity, true, driver, typeids, ...)
 end
 
 --- Like printColor(R), except printing in <this>'s driver's chat area instead of yours.
@@ -354,7 +356,7 @@ e2function void entity:printColorDriver(array arr)
 
 	if not check_delay( self.player, driver ) then return end
 
-	printColorArray(self.entity, driver, arr)
+	printColorArray(self.entity, true, driver, arr)
 end
 
 e2function void entity:printColor(...)
@@ -367,7 +369,7 @@ e2function void entity:printColor(...)
 	table.insert(typeids, 2, "s")
 	table.insert(typeids, 3, "v")
 
-	printColorVarArg(nil, this, typeids, Vector(220, 100, 100), "(Expression 2) ", Vector(255, 255, 255), ...)
+	printColorVarArg(nil, false, this, typeids, Vector(220, 100, 100), "(Expression 2) ", Vector(255, 255, 255), ...)
 end
 
 e2function void entity:printColor(array arr)
@@ -380,7 +382,7 @@ e2function void entity:printColor(array arr)
 	table.insert(arr, 2, "(Expression 2) ")
 	table.insert(arr, 3, Vector(255, 255, 255))
 
-	printColorArray(nil, this, arr)
+	printColorArray(nil, false, this, arr)
 end
 
 e2function void array:printColor(...)
@@ -396,7 +398,7 @@ e2function void array:printColor(...)
 	for i, ply in ipairs(this) do
 		if isentity(ply) and ply:IsValid() and ply:IsPlayer() then
 			if not sentTo[ply] and isOwner(self, ply) and check_delay( self.player, ply ) then
-				printColorVarArg(nil, ply, typeids, unpack(args))
+				printColorVarArg(nil, false, ply, typeids, unpack(args))
 				sentTo[ply] = true
 			end
 		end
@@ -415,7 +417,7 @@ e2function void array:printColor(array arr)
 	for i, ply in ipairs(this) do
 		if isentity(ply) and ply:IsValid() and ply:IsPlayer() then
 			if not sentTo[ply] and isOwner(self, ply) and check_delay( self.player, ply ) then
-				printColorArray(nil, ply, arr)
+				printColorArray(nil, false, ply, arr)
 				sentTo[ply] = true
 			end
 		end
