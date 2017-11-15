@@ -34,7 +34,7 @@ concommand.Add("discord-lua-run",function(ply,cmd,arg,line)
 			end
 
 	else
-		discord.print("ERROR: "+args[2])
+		discord.print("ERROR: "+func)
 	end
 
 
