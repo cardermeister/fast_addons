@@ -42,7 +42,7 @@ local function HUDPaint()
 	surface.SetTextColor(255,255,255,frac*255)
 	surface.SetDrawColor(255,255,255,frac*255)
 	
-	local txt = outafk and last or string.format("Away %.2d:%.2d:%.2d",h,m,s)
+	local txt = outafk and last or string.format("Отошёл %.2d:%.2d:%.2d",h,m,s)
 	last=txt
 	
 	local tw,th = surface.GetTextSize(txt)
