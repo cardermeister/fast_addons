@@ -488,14 +488,20 @@ iin.AddCommand("w",function(ply,line)
 	
 end)
 
+
 iin.AddCommand("timescale", function(ply, line)
-	local timescale = tonumber(line:match"^%s*(%S+)")
-	if timescale then
-		timescale = math.Clamp(timescale, 0.1, 10)
-		game.SetTimeScale(timescale)
-	else
-		iin.error(ply, "Enter time scale.")
+	if line then
+		local timescale = tonumber(line:match"^%s*(%S+)")
+
+		if timescale then
+			timescale = math.Clamp(timescale, 0.1, 10)
+			game.SetTimeScale(timescale)
+			
+			return
+		end
 	end
+
+	iin.error(ply, "Enter time scale.")
 end, "devs")
 
 
