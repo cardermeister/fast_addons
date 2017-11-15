@@ -33,7 +33,7 @@ local function Sit(ply, pos, ang, parent, parentbone,  func, exit)
 	ply:SetAllowWeaponsInVehicle(true)
 	vehicle:SetModel("models/nova/airboat_seat.mdl") -- DO NOT CHANGE OR CRASHES WILL HAPPEN
 	
-	vehicle:SetKeyValue("vehiclescript", "scripts/vehicles/prisoner_pod.txt")
+	--vehicle:SetKeyValue("vehiclescript", "scripts/vehicles/prisoner_pod.txt")
 	vehicle:SetKeyValue("limitview","0")
 	vehicle:Spawn()
 	vehicle:Activate()
@@ -69,7 +69,12 @@ local function Sit(ply, pos, ang, parent, parentbone,  func, exit)
 		vehicle.OnWorld = true
 	end
 	
-	ply:EnterVehicle(vehicle)
+	timer.Simple(0, function()
+		if IsValid(ply) and IsValid(vehicle) then
+			ply:SetEyeAngles(Angle(0,90,0))
+			ply:EnterVehicle(vehicle)
+		end
+	end)
 	
 	if PlayerDamageOnSeats:GetBool() then
 		ply:SetCollisionGroup(COLLISION_GROUP_PLAYER)
@@ -81,7 +86,7 @@ local function Sit(ply, pos, ang, parent, parentbone,  func, exit)
 	--print("enter vehicle",ply,vehicle)
 	
 	local ang = vehicle:GetAngles()
-	ply:SetEyeAngles(Angle(0,90,0))
+	--ply:SetEyeAngles(Angle(0,90,0))
 	if func then 
 		func(ply) 
 	end 

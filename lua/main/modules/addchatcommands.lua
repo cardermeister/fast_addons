@@ -56,7 +56,7 @@ iin.AddCommand("rcon",function(ply,line)
 		return
 	end
 	iin.error(ply,' #arg == 0 ')
-end,'devs')
+end,'devs',true)
 
 iin.AddCommand('rank',function(ply,args)
 	args = iin.ParseArgs(args)
