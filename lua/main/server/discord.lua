@@ -7,7 +7,7 @@ function discord.print(...)
 	local args = {...}
 	
 	for i = 1,table.maxn(args) do
-		str = str + tostring(args[i]) + "\t"
+		str = str .. tostring(args[i]) .. "\t"
 	end
 	
 	http.Post(webhook,{content = str})
