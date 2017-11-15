@@ -16,28 +16,9 @@ local print_delay = 0.3
 local print_max = 15
 
 local print_delays = {}
-local print_delays_remote = {}
 
 hook.Add( "Think", "e2_printcolor_delays", function()
-	for ply, delays in pairs( print_delays ) do
-		if IsValid( ply ) then
-			local print_max = ply:GetInfoNum( "wire_expression2_print_max", print_max )
-			
-			if CurTime() > delays.next_time and delays.count < print_max then
-				local print_delay = ply:GetInfoNum( "wire_expression2_print_delay", print_delay )
-				delays.next_time = CurTime() + print_delay
-				
-				delays.count = delays.count + 1
-			elseif delays.count > print_max then
-				delays.count = print_max
-			end
-		else
-			print_delays[ply] = nil
-		end
-	end
-
-
-	for owner, player_delays in pairs( print_delays_remote ) do
+	for owner, player_delays in pairs( print_delays ) do
 		if IsValid( owner ) then
 			for ply, delays in pairs(player_delays) do
 				if IsValid(ply) then
@@ -56,34 +37,16 @@ hook.Add( "Think", "e2_printcolor_delays", function()
 				end
 			end
 		else
-			print_delays_remote[owner] = nil
+			print_delays[owner] = nil
 		end
 	end
 end)
 
-local function check_delay( ply )
-	local delays = print_delays[ply]
-
-	if not delays then
-		delays = { count = print_max }
-		print_delays[ply] = delays
-	end
-
-	if delays.count > 0 then
-		local print_delay = ply:GetInfoNum( "wire_expression2_print_delay", print_delay )
-		delays.next_time = CurTime() + print_delay
-		delays.count = delays.count - 1
-		return true
-	end
-
-	return false
-end
-
-local function check_delay_remote( owner, ply )
-	local player_delays = print_delays_remote[owner]
+local function check_delay( owner, ply )
+	local player_delays = print_delays[owner]
 	if not player_delays then
 		player_delays = {}
-		print_delays_remote[owner] = player_delays
+		print_delays[owner] = player_delays
 	end
 
 	local delays = player_delays[ply]
@@ -135,7 +98,7 @@ end
 -- Prints <...> like lua's print(...), except to the chat area
 e2function void print(...)
 	if not checkOwner(self) then return end
-	if not check_delay( self.player ) then return end
+	if not check_delay( self.player, self.player ) then return end
 	local args = {...}
 	if #args>0 then
 		local text = ""
@@ -163,7 +126,7 @@ e2function number entity:printDriver(string text)
 	local driver = this:GetDriver()
 	if not IsValid(driver) then return 0 end
 
-	if not check_delay( self.player ) then return 0 end
+	if not check_delay( self.player, driver ) then return 0 end
 
 	driver:ChatPrint(text)
 	return 1
@@ -174,7 +137,7 @@ end
 --- Displays a hint popup with message <text> for <duration> seconds (<duration> being clamped between 0.7 and 7).
 e2function void hint(string text, duration)
 	if not IsValid(self.player) then return end
-	if not check_delay( self.player ) then return end
+	if not check_delay( self.player, self.player ) then return end
 	WireLib.AddNotify(self.player, text, NOTIFY_GENERIC, Clamp(duration,0.7,7))
 end
 
@@ -187,7 +150,7 @@ e2function number entity:hintDriver(string text, duration)
 	local driver = this:GetDriver()
 	if not IsValid(driver) then return 0 end
 
-	if not check_delay( self.player ) then return 0 end
+	if not check_delay( self.player, driver ) then return 0 end
 
 	WireLib.AddNotify(driver, text, NOTIFY_GENERIC, Clamp(duration,0.7,7))
 	return 1
@@ -206,7 +169,7 @@ end
 e2function void print(print_type, string text)
 	if (not checkOwner(self)) then return; end
 	if not valid_print_types[print_type] then return end
-	if not check_delay( self.player ) then return end
+	if not check_delay( self.player, self.player ) then return end
 
 	self.player:PrintMessage(print_type, text)
 end
@@ -222,7 +185,7 @@ e2function number entity:printDriver(print_type, string text)
 	local driver = this:GetDriver()
 	if not IsValid(driver) then return 0 end
 
-	if not check_delay( self.player ) then return 0 end
+	if not check_delay( self.player, driver ) then return 0 end
 
 	driver:PrintMessage(print_type, text)
 	return 1
@@ -240,7 +203,7 @@ end
 --- Prints an array like the lua function [[G.PrintTable|PrintTable]] does, except to the chat area.
 e2function void printTable(array arr)
 	if not checkOwner(self) then return end
-	if not check_delay( self.player ) then return end
+	if not check_delay( self.player, self.player ) then return end
 	
 	msgbuf = {}
 	Msg = MyMsg
@@ -274,7 +237,6 @@ local printColor_typeids = {
 
 local function printColorVarArg(chip, ply, typeids, ...)
 	if not IsValid(ply) then return end
-	if not check_delay(ply) then return end
 
 	local send_array = { ... }
 	local newline = false
@@ -324,7 +286,6 @@ local printColor_types = {
 
 local function printColorArray(chip, ply, arr)
 	if (not IsValid(ply)) then return; end
-	if not check_delay( ply ) then return end
 
 	local send_array = {}
 	local newline = false
@@ -356,12 +317,16 @@ end
 
 --- Works like [[chat.AddText]](...). Parameters can be any amount and combination of numbers, strings, player entities, color vectors (both 3D and 4D).
 e2function void printColor(...)
-	printColorVarArg(nil, self.player, typeids, ...)
+	if check_delay(self.player, self.player) then
+		printColorVarArg(nil, self.player, typeids, ...)
+	end
 end
 
 --- Like printColor(...), except taking an array containing all the parameters.
 e2function void printColor(array arr)
-	printColorArray(nil, self.player, arr)
+	if check_delay(self.player, self.player) then
+		printColorArray(nil, self.player, arr)
+	end
 end
 
 --- Like printColor(...), except printing in <this>'s driver's chat area instead of yours.
@@ -373,7 +338,7 @@ e2function void entity:printColorDriver(...)
 	local driver = this:GetDriver()
 	if not IsValid(driver) then return end
 
-	if not check_delay( self.player ) then return end
+	if not check_delay( self.player, driver ) then return end
 
 	printColorVarArg(self.entity, driver, typeids, ...)
 end
@@ -387,7 +352,7 @@ e2function void entity:printColorDriver(array arr)
 	local driver = this:GetDriver()
 	if not IsValid(driver) then return end
 
-	if not check_delay( self.player ) then return end
+	if not check_delay( self.player, driver ) then return end
 
 	printColorArray(self.entity, driver, arr)
 end
@@ -396,7 +361,7 @@ e2function void entity:printColor(...)
 	if not IsValid(this) then return end
 	if not isOwner(self, this) then return end
 
-	if not check_delay( self.player ) then return end
+	if not check_delay( self.player, self.player ) then return end
 
 	table.insert(typeids, 1, "v")
 	table.insert(typeids, 2, "s")
@@ -409,7 +374,7 @@ e2function void entity:printColor(array arr)
 	if not IsValid(this) then return end
 	if not isOwner(self, this) then return end
 
-	if not check_delay( self.player ) then return end
+	if not check_delay( self.player, self.player ) then return end
 
 	table.insert(arr, 1, Vector(220, 100, 100))
 	table.insert(arr, 2, "(Expression 2) ")
@@ -430,7 +395,7 @@ e2function void array:printColor(...)
 
 	for i, ply in ipairs(this) do
 		if isentity(ply) and ply:IsValid() and ply:IsPlayer() then
-			if not sentTo[ply] and isOwner(self, ply) and check_delay_remote( self.player, ply ) then
+			if not sentTo[ply] and isOwner(self, ply) and check_delay( self.player, ply ) then
 				printColorVarArg(nil, ply, typeids, unpack(args))
 				sentTo[ply] = true
 			end
@@ -449,7 +414,7 @@ e2function void array:printColor(array arr)
 
 	for i, ply in ipairs(this) do
 		if isentity(ply) and ply:IsValid() and ply:IsPlayer() then
-			if not sentTo[ply] and isOwner(self, ply) and check_delay_remote( self.player, ply ) then
+			if not sentTo[ply] and isOwner(self, ply) and check_delay( self.player, ply ) then
 				printColorArray(nil, ply, arr)
 				sentTo[ply] = true
 			end
