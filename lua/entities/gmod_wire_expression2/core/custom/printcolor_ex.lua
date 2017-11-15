@@ -369,3 +369,43 @@ e2function void entity:printColor(array arr)
 
 	printColorArray(nil, this, arr)
 end
+
+e2function void array:printColor(...)
+	if not IsValid(this) then return end
+	if not isOwner(self, this) then return end
+
+	if not check_delay( self.player ) then return end
+
+	this.prf = this.prf + 5 * #arr
+
+	table.insert(typeids, 1, "v")
+	table.insert(typeids, 2, "s")
+	table.insert(typeids, 3, "v")
+
+	local args = {Vector(220, 100, 100), "(Expression 2) ", Vector(255, 255, 255), ...}
+	
+	for i, ply in ipairs(arr) do
+		if isentity(ply) and ply:IsValid() and ply:IsPlayer() then
+			printColorVarArg(nil, this, typeids, unpack(args))
+		end
+	end
+end
+
+e2function void array:printColor(array arr)
+	if not IsValid(this) then return end
+	if not isOwner(self, this) then return end
+
+	if not check_delay( self.player ) then return end
+
+	this.prf = this.prf + 5 * #arr
+
+	table.insert(arr, 1, Vector(220, 100, 100))
+	table.insert(arr, 2, "(Expression 2) ")
+	table.insert(arr, 3, Vector(255, 255, 255))
+
+	for i, ply in ipairs(arr) do
+		if isentity(ply) and ply:IsValid() and ply:IsPlayer() then
+			printColorArray(nil, this, arr)
+		end
+	end
+end
