@@ -373,7 +373,7 @@ end
 e2function void array:printColor(...)
 	if not check_delay( self.player ) then return end
 
-	self.prf = self.prf + 5 * #arr
+	self.prf = self.prf + 5 * #this
 
 	table.insert(typeids, 1, "v")
 	table.insert(typeids, 2, "s")
@@ -382,7 +382,7 @@ e2function void array:printColor(...)
 	local args = {Vector(220, 100, 100), "(Expression 2) ", Vector(255, 255, 255), ...}
 	local sentTo = {}
 
-	for i, ply in ipairs(arr) do
+	for i, ply in ipairs(this) do
 		if isentity(ply) and ply:IsValid() and ply:IsPlayer() then
 			if not sentTo[ply] and isOwner(self, ply) then
 				printColorVarArg(nil, ply, typeids, unpack(args))
@@ -395,7 +395,7 @@ end
 e2function void array:printColor(array arr)
 	if not check_delay( self.player ) then return end
 
-	self.prf = self.prf + 5 * #arr
+	self.prf = self.prf + 5 * #this
 
 	table.insert(arr, 1, Vector(220, 100, 100))
 	table.insert(arr, 2, "(Expression 2) ")
@@ -403,7 +403,7 @@ e2function void array:printColor(array arr)
 
 	local sentTo = {}
 
-	for i, ply in ipairs(arr) do
+	for i, ply in ipairs(this) do
 		if isentity(ply) and ply:IsValid() and ply:IsPlayer() then
 			if not sentTo[ply] and isOwner(self, ply) then
 				printColorArray(nil, ply, arr)
