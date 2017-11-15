@@ -19,18 +19,20 @@ end
 
 local function gitify(json)
 
-	json = util.JSONToTable(json).payload.commits
+	json = util.JSONToTable(json).payload
+	local projectid = json.project_id
+	json = json.commits
 	
 	for i,k in pairs(json) do
 		
 		local sha = k.id
 		
-		//http.Fetch("https://gitlab.com/api/v4/projects/4541032/repository/commits/"..sha,
-		//function(a)
-		//	func(k,util.JSONToTable(a))
-		//end,function(s)
+		http.Fetch(("https://gitlab.com/api/v4/projects/%s/repository/commits/%s"):format(projectid,sha),
+		function(a)
+			func(k,util.JSONToTable(a))
+		end,function(s)
 		func(k)
-		//end,{["Private-Token"]="9BtwmHamzRwiLdsijELR"})
+		end,{["Private-Token"]="9BtwmHamzRwiLdsijELR"})
 		
 	end
 	
