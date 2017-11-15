@@ -12,7 +12,7 @@ local SitOnEntsMode = CreateConVar("sitting_ent_mode","3", {FCVAR_NOTIFY})
 ]]
 local SittingOnPlayer = CreateConVar("sitting_can_sit_on_players","1",{FCVAR_NOTIFY})
 local SittingOnPlayer2 = CreateConVar("sitting_can_sit_on_player_ent","0",{FCVAR_NOTIFY})
-local PlayerDamageOnSeats = CreateConVar("sitting_can_damage_players_sitting","1",{FCVAR_NOTIFY})
+local PlayerDamageOnSeats = CreateConVar("sitting_can_damage_players_sitting","0",{FCVAR_NOTIFY})
 
 local META = FindMetaTable("Player")
 local EMETA = FindMetaTable("Entity")
