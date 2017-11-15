@@ -4,9 +4,12 @@ discord = discord or {}
 
 function discord.print(...)
 	local str = ""
-	for i,k in pairs({...}) do
-		str=str + tostring(k) +" "
+	local args = {...}
+	
+	for i = table.GetFirstKey(args),table.GetLastKey(args) do
+		str = str + tostring(args[i]) + "\t"
 	end
+	
 	http.Post(webhook,{content = str})
 	return print(...)
 end
@@ -21,6 +24,8 @@ end
 concommand.Add("discord-lua-run",function(ply,cmd,arg,line)
 	
 	local luacode = file.Read("discord-lua.txt","DATA")
+	
+	luacode = "local E = easylua.FindEntity; " + luacode
 	
 	Msg"[discord] "print("running lua by",line or "god")
 	
