@@ -132,12 +132,6 @@ hook.Add("CanTool","minge_duplicator",function(ply,_, tool )
 	
 end)
 
-hook.Add("OnEntityCreated","sex",function(ent)
-
-	if ent:GetClass''=="combine_mine" then ent:Remove() end
-
-end	)
-
 
 function EasyCleanUp(what,radius,callback)
 	if type(what)=="string" then
