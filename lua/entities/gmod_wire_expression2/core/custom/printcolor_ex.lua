@@ -16,6 +16,7 @@ local print_delay = 0.3
 local print_max = 15
 
 local print_delays = {}
+local print_delays_remote = {}
 
 hook.Add( "Think", "e2_printcolor_delays", function()
 	for ply, delays in pairs( print_delays ) do
@@ -34,6 +35,30 @@ hook.Add( "Think", "e2_printcolor_delays", function()
 			print_delays[ply] = nil
 		end
 	end
+
+
+	for owner, player_delays in pairs( print_delays_remote ) do
+		if IsValid( owner ) then
+			for ply, delays in pairs(player_delays) do
+				if IsValid(ply) then
+					local print_max = owner:GetInfoNum( "wire_expression2_print_max", print_max )
+					
+					if CurTime() > delays.next_time and delays.count < print_max then
+						local print_delay = owner:GetInfoNum( "wire_expression2_print_delay", print_delay )
+						delays.next_time = CurTime() + print_delay
+						
+						delays.count = delays.count + 1
+					elseif delays.count > print_max then
+						delays.count = print_max
+					end
+				else
+					player_delays[ply] = nil
+				end
+			end
+		else
+			print_delays_remote[owner] = nil
+		end
+	end
 end)
 
 local function check_delay( ply )
@@ -42,6 +67,29 @@ local function check_delay( ply )
 	if not delays then
 		delays = { count = print_max }
 		print_delays[ply] = delays
+	end
+
+	if delays.count > 0 then
+		local print_delay = ply:GetInfoNum( "wire_expression2_print_delay", print_delay )
+		delays.next_time = CurTime() + print_delay
+		delays.count = delays.count - 1
+		return true
+	end
+
+	return false
+end
+
+local function check_delay_remote( owner, ply )
+	local player_delays = print_delays_remote[owner]
+	if not player_delays then
+		player_delays = {}
+		print_delays_remote[owner] = player_delays
+	end
+
+	local delays = player_delays[ply]
+	if not delays then
+		delays = { count = print_max }
+		player_delays[ply] = delays
 	end
 
 	if delays.count > 0 then
@@ -371,10 +419,6 @@ e2function void entity:printColor(array arr)
 end
 
 e2function void array:printColor(...)
-	if not check_delay( self.player ) then return end
-
-	self.prf = self.prf + 5 * #this
-
 	table.insert(typeids, 1, "v")
 	table.insert(typeids, 2, "s")
 	table.insert(typeids, 3, "v")
@@ -382,9 +426,11 @@ e2function void array:printColor(...)
 	local args = {Vector(220, 100, 100), "(Expression 2) ", Vector(255, 255, 255), ...}
 	local sentTo = {}
 
+	self.prf = self.prf + 5 * #this
+
 	for i, ply in ipairs(this) do
 		if isentity(ply) and ply:IsValid() and ply:IsPlayer() then
-			if not sentTo[ply] and isOwner(self, ply) then
+			if not sentTo[ply] and isOwner(self, ply) and check_delay_remote( self.player, ply ) then
 				printColorVarArg(nil, ply, typeids, unpack(args))
 				sentTo[ply] = true
 			end
@@ -393,19 +439,17 @@ e2function void array:printColor(...)
 end
 
 e2function void array:printColor(array arr)
-	if not check_delay( self.player ) then return end
-
-	self.prf = self.prf + 5 * #this
-
 	table.insert(arr, 1, Vector(220, 100, 100))
 	table.insert(arr, 2, "(Expression 2) ")
 	table.insert(arr, 3, Vector(255, 255, 255))
 
 	local sentTo = {}
 
+	self.prf = self.prf + 5 * #this
+
 	for i, ply in ipairs(this) do
 		if isentity(ply) and ply:IsValid() and ply:IsPlayer() then
-			if not sentTo[ply] and isOwner(self, ply) then
+			if not sentTo[ply] and isOwner(self, ply) and check_delay_remote( self.player, ply ) then
 				printColorArray(nil, ply, arr)
 				sentTo[ply] = true
 			end
