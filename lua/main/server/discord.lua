@@ -26,7 +26,7 @@ concommand.Add("discord-lua-run",function(ply,cmd,arg,line)
 	
 	local func = CompileString( luacode, line, false )
 	if type(func) == "function" then
-
+			setfenv(func, easylua.EnvMeta)
 			local args = {pcall(func)}
 
 			if args[1] == false then
