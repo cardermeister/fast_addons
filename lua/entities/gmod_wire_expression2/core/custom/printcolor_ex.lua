@@ -371,7 +371,6 @@ e2function void entity:printColor(array arr)
 end
 
 e2function void array:printColor(...)
-	if not IsValid(this) then return end
 	if not check_delay( self.player ) then return end
 
 	this.prf = this.prf + 5 * #arr
@@ -390,7 +389,6 @@ e2function void array:printColor(...)
 end
 
 e2function void array:printColor(array arr)
-	if not IsValid(this) then return end
 	if not check_delay( self.player ) then return end
 
 	this.prf = this.prf + 5 * #arr
