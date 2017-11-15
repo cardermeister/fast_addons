@@ -6,7 +6,7 @@ function discord.print(...)
 	local str = ""
 	local args = {...}
 	
-	for i = table.GetFirstKey(args),table.GetLastKey(args) do
+	for i = 1,table.maxn(args) do
 		str = str + tostring(args[i]) + "\t"
 	end
 	
