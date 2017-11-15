@@ -488,26 +488,6 @@ iin.AddCommand("w",function(ply,line)
 	
 end)
 
--- Original code taken from http://wiki.garrysmod.com/page/GM/EntityEmitSound example
-hook.Add("EntityEmitSound", "TimeWarpSounds", function(data)
-
-	local pitch = data.Pitch
-
-	if game.GetTimeScale() ~= 1 then
-		pitch = pitch * game.GetTimeScale()
-	end
-
-	if GetConVarNumber("host_timescale") ~= 1 and GetConVarNumber("sv_cheats") >= 1 then
-		pitch = pitch * GetConVarNumber("host_timescale")
-	end
-
-	if pitch ~= data.Pitch then
-		data.Pitch = math.Clamp(pitch, 0, 255)
-		return true
-	end
-
-end)
-
 iin.AddCommand("timescale", function(ply, line)
 	local timescale = tonumber(line:match"^%s*(%S+)")
 	if timescale then

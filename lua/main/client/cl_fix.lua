@@ -49,3 +49,28 @@ concommand.Add("vgui_cleanup", function()
 		end
 	end
 end, nil, "Removes every panel that you have left over (like that errored DFrame filling up your screen)")
+
+-- Taken from http://wiki.garrysmod.com/page/GM/EntityEmitSound example
+hook.Add("EntityEmitSound", "TimeWarpSounds", function(data)
+
+	local pitch = data.Pitch
+
+	if game.GetTimeScale() ~= 1 then
+		pitch = pitch * game.GetTimeScale()
+	end
+
+	if GetConVarNumber("host_timescale") ~= 1 and GetConVarNumber("sv_cheats") >= 1 then
+		pitch = pitch * GetConVarNumber("host_timescale")
+	end
+
+	if pitch ~= data.Pitch then
+		data.Pitch = math.Clamp(pitch, 0, 255)
+		return true
+	end
+
+	if CLIENT and engine.GetDemoPlaybackTimeScale() ~= 1 then
+		data.Pitch = math.Clamp(data.Pitch * engine.GetDemoPlaybackTimeScale(), 0, 255)
+		return true
+	end
+
+end)
