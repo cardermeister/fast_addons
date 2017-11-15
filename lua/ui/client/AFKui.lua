@@ -13,7 +13,7 @@ local PopModelMatrix = cam.PopModelMatrix
 local PushModelMatrix = cam.PushModelMatrix
 local surface=surface
 local LocalPlayer=LocalPlayer
-local cl_afkui = 1--CreateClientConVar("cl_afkui","1",true,false)
+local cl_afkui = CreateClientConVar("cl_afkui","1",true,false)
 local matrix = Matrix()
 local matrixAngle = Angle(0, 0, 0)
 local matrixScale = Vector(0, 0, 0)
@@ -42,7 +42,7 @@ local function HUDPaint()
 	surface.SetTextColor(255,255,255,frac*255)
 	surface.SetDrawColor(255,255,255,frac*255)
 	
-	local txt = outafk and last or string.format("Отошел %.2d:%.2d:%.2d",h,m,s)
+	local txt = outafk and last or string.format("Away %.2d:%.2d:%.2d",h,m,s)
 	last=txt
 	
 	local tw,th = surface.GetTextSize(txt)
@@ -81,7 +81,7 @@ end
 
 local function afkage(afk)
 	if afk then
-		if not tobool(cl_afkui) then return end
+		if not cl_afkui:GetBool() then return end
 		inafk=Now()
 		outafk = false
 		hook.Add("HUDPaint",Tag,HUDPaint)

@@ -1,7 +1,8 @@
 local Tag="AFKMon"
 local Now=SysTime
 
-local MAX_AFK = CreateConVar("mp_afktime","90",{ FCVAR_REPLICATED, FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_GAMEDLL },"Seconds until flagged as afk")
+local mp_afktime = CreateConVar("mp_afktime","90",{ FCVAR_REPLICATED, FCVAR_NOTIFY },"Seconds until flagged as afk")
+
 local LocalPlayer=LocalPlayer
 
 local ignoreinput=false
@@ -25,7 +26,7 @@ local function ModeChanged(id,isafk)
 	end
 	
 	local tstamp_old = tstamp[ id ] and (Now()-tstamp[ id ]) or 0
-	local tstamp_new = Now() - (isafk and MAX_AFK:GetInt() or 0)
+	local tstamp_new = Now() - (isafk and mp_afktime:GetInt() or 0)
 	tstamp[ id ] = tstamp_new
 	
 	-- to make any AFK inputs go away
@@ -37,7 +38,7 @@ local function ModeChanged(id,isafk)
 end
 
 local function SetAFKMode(pl,afk)
-	pl:SetNetData(Tag,(afk and true) or false)
+	pl:SetNetData(Tag,(afk and true) or nil)
 end
 
 FindMetaTable("Player").IsAFK = function(s) return s:GetNetData(Tag) or false end
@@ -45,6 +46,7 @@ FindMetaTable("Player").AFKTime = function(s) return Now() - (tstamp[s:UserID() 
 
 hook.Add("NetData",Tag,function(pl,k,isafk)
 	if k==Tag and (isafk==true or isafk==false or isafk==nil) then
+		
 		ModeChanged(pl,isafk)
 
 		if SERVER then return true end
@@ -52,23 +54,50 @@ hook.Add("NetData",Tag,function(pl,k,isafk)
 	end
 end)
 
+local sv_afk_sound = SERVER and CreateConVar("sv_afk_sound","1")
+local sv_afk_lock = SERVER and CreateConVar("sv_afk_lock","0")
 
 hook.Add('AFK',Tag,function(pl,afk,id,len)
 	if SERVER then
 		if afk then
-			pl:EmitSound("replay/cameracontrolmodeexited.wav")
+			local _ = sv_afk_sound:GetBool() and pl:EmitSound("replay/cameracontrolmodeexited.wav")
+			local afkl = sv_afk_lock:GetInt()
+			if afkl and afkl>=1 then
+				local can_lock = not pl:IsFrozen() and pl.afk_freezing~=false
+								
+				if can_lock then
+					pl.afk_lock = true
+					-- 2 minutes so that player can not cheat by becoming invulnerable suddenly
+					timer.Create("afk"..pl:EntIndex(),afkl>1.1 and afkl or 120,1,function()
+						if not pl:IsValid() then return end
+						pl:Lock()
+						pl.afk_lock = true
+					end)
+				else
+					-- pl.afk_lock = false
+				end
+			end
 		else
-			pl:EmitSound("replay/cameracontrolmodeentered.wav")
+			local _ = sv_afk_sound:GetBool() and pl:EmitSound("replay/cameracontrolmodeentered.wav")
+			
+			if pl.afk_lock then
+				timer.Remove("afk"..pl:EntIndex())
+				pl:UnLock()
+				pl.afk_lock = false
+			end
 		end
 		return
 	end
 	
+	-- skip join spam
+	if net.IsPlayerVarsBurst and net.IsPlayerVarsBurst() then return end
+	
 	Msg"[AFK] "
 	local name = (IsValid( pl ) and pl:Name() or id)
 	if afk then
-		print(name..' is now afk (was present for '..string.NiceTime(len or 0)..')')
+		print(name..' away (present for '..string.NiceTime(len or 0)..')')
 	else
-		print(name..' is no longer afk (was away for '..string.NiceTime(len or 0)..')')
+		print(name..' back (away for '..string.NiceTime(len or 0)..')')
 	end
 	
 
@@ -81,9 +110,7 @@ hook.Add('AFK',Tag,function(pl,afk,id,len)
 end)
 
 if CLIENT then
-		
-	if system.IsLinux() then return end	
-	
+
 	local local_afk
 
 ----- Input tracking ----
@@ -114,10 +141,10 @@ if CLIENT then
 			last_focus = Now()
 		end
 	
-		local max=MAX_AFK:GetInt()
+		local max=mp_afktime:GetInt()
 		local var=Now()-max
 		local me=LocalPlayer()
-		if (last_mouse < var and last_input < var) or last_focus < var then
+		if (last_mouse < var and last_input < var) or last_focus < Now()-5 then
 			if not local_afk then
 				local_afk = true
 				SetAFKMode(me, true )
@@ -156,7 +183,10 @@ if CLIENT then
 		--for _,x in pairs{"KEY_A","KEY_E","KEY_I","KEY_O","KEY_U","KEY_Q","KEY_W","KEY_S","KEY_D"} do keyarray[x]=true lastarray[x]=false end
 		local isdown=input.IsKeyDown
 		local function CheckStuff(UCMD)
-
+			
+			--TODO: Move to Think hook for less spam
+			--TODO: Check for ctrl,shift keys
+			
 			if oldkeys~=UCMD:GetButtons() then
 				InputReceived()
 				oldkeys = UCMD:GetButtons()
@@ -205,7 +235,7 @@ if CLIENT then
 				return
 			end
 			if isdown(15)~=last_15 then
-				last_ = isdown(15)
+				last_15 = isdown(15)
 				InputReceived()
 				return
 			end
