@@ -20,6 +20,35 @@ function discord.PrintTable(...)
 	return PrintTable(...)	
 end
 
+discord.relay = false
+discord.relay_prefix = discord.relay_prefix or "[G]"
+
+function discord.relay_func(ply, text)
+	
+	if not discord.relay then return end
+
+    if !ply then return end
+	if !ply:AvatarURL() then return end
+	
+	local post_params = {
+		content = text,
+		username = discord.relay_prefix.." "..(ply:Nick() or "Unknown"),
+		avatar_url = ply:AvatarURL()
+	}
+	
+	local t_struct = {
+		failed = function( err ) MsgC( Color(255,0,0), "HTTP error: " .. err ) end,
+		method = "post",
+		url = webhook,
+		parameters = post_params,
+		type = "application/json; charset=utf-8"
+	}
+	
+	HTTP( t_struct )
+    	
+end
+hook.Add("PlayerSay","discord_relay_chat", discord.relay_func)	
+
 
 concommand.Add("discord-lua-run",function(ply,cmd,arg,line)
 	
