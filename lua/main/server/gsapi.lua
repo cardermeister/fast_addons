@@ -40,11 +40,24 @@ function IsFamily(cid,game,callback)
 	end)
 end
 
+function GetAvatar(cid,callback)
+	assert(#cid==17,"Community id is not valid")
+	http.Fetch(string.format("https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=%s&steamids=%s&format=json",
+		apikey,
+		cid
+	),
+	function( body, _, _, code )
+		callbackCheck(code)
+		callback(jdec(body).response.players[1].avatarfull)
+	end)
+end
+
 //////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////
 _playtime = _playtime or {}
 _isfamily = _isfamily or {}
+_avatarurl = _avatarurl or {}
 
 local META = FindMetaTable("Player")
 
@@ -52,11 +65,31 @@ META.GetGTime = function(self)
 	return _playtime[self:SteamID64()] or -1
 end
 
+META.AvatarURL = function(self)
+	if _avatarurl[self:SteamID64()] then
+		return _avatarurl[self:SteamID64()]
+	end
+	
+	GetAvatar(cid,function(url)
+		if url:match('https?://.+%.jpg') then
+			_avatarurl[cid] = url
+		end
+	end)
+	
+	return false
+end
+
 META.IsFamily = function(self)
 	return _isfamily[self:SteamID64()] or false
 end
 
 hook.Add("CheckPassword",Tag,function(cid,_,_,_,name)
+
+	GetAvatar(cid,function(url)
+		if url:match('https?://.+%.jpg') then
+			_avatarurl[cid] = url
+		end
+	end)
 
 	GetPlayTime(cid,4000,function(tab)
 		
