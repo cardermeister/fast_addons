@@ -66,8 +66,11 @@ META.GetGTime = function(self)
 end
 
 META.AvatarURL = function(self)
-	if _avatarurl[self:SteamID64()] then
-		return _avatarurl[self:SteamID64()]
+
+	local cid = self:SteamID64()
+	
+	if _avatarurl[cid] then
+		return _avatarurl[cid]
 	end
 	
 	GetAvatar(cid,function(url)
