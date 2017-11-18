@@ -95,9 +95,9 @@ hook.Add('AFK',Tag,function(pl,afk,id,len)
 	Msg"[AFK] "
 	local name = (IsValid( pl ) and pl:Name() or id)
 	if afk then
-		print(name..' away (present for '..string.NiceTime(len or 0)..')')
+		print(name..' is away (present for '..string.NiceTime(len or 0)..')')
 	else
-		print(name..' back (away for '..string.NiceTime(len or 0)..')')
+		print(name..' is back (away for '..string.NiceTime(len or 0)..')')
 	end
 	
 
