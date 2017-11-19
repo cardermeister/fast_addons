@@ -10,13 +10,16 @@ function discord.print(...)
 		str = str .. tostring(args[i]) .. "\t"
 	end
 	
+	local func = CompileString( str, "", false )
+	if type(func)=='function' then str='```lua\n'..str:Left(1980)..'\n```' else str='```Markdown\n'..str:Left(1980)..'\n```' end
+	
 	http.Post(webhook,{content = str})
 	return print(...)
 end
 
 function discord.PrintTable(...)
 	
-	http.Post(webhook,{content = table.ToString(...,nil,true)})
+	http.Post(webhook,{content = "```Markdown\n"..table.ToString(...,nil,true):Left(1980).."\n```"})
 	return PrintTable(...)	
 end
 
@@ -49,6 +52,14 @@ function discord.relay_func(ply, text)
 end
 hook.Add("PlayerSay","discord_relay_chat", discord.relay_func)	
 
+local env = {
+    print = discord.print,
+    PrintTable = discord.PrintTable,
+   //GetFunctionRaw = function(...) return '```lua\n'..GetFunctionRaw(...)..'```' end
+}
+local meta = {}
+meta.__index = _G
+setmetatable(env, meta)
 
 concommand.Add("discord-lua-run",function(ply,cmd,arg,line)
 	
@@ -60,7 +71,7 @@ concommand.Add("discord-lua-run",function(ply,cmd,arg,line)
 	
 	local func = CompileString( luacode, line, false )
 	if type(func) == "function" then
-	
+			setfenv(func, env)
 			local args = {pcall(func)}
 
 			if args[1] == false then
