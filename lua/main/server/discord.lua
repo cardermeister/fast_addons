@@ -55,7 +55,7 @@ hook.Add("PlayerSay","discord_relay_chat", discord.relay_func)
 local env = {
 	print = discord.print,
 	PrintTable = discord.PrintTable,
-	GetFunctionRaw = function(...) return GetFunctionRaw(...):gsub("```","` ` `") end
+	GetFunctionRaw = function(...) return GetFunctionRaw(...):gsub("```","` ` `")[1] end
 }
 local meta = {}
 meta.__index = _G
