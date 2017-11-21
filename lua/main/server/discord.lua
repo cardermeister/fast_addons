@@ -5,10 +5,13 @@ discord = discord or {}
 function discord.print(...)
 	local str = ""
 	local args = {...}
+	local maxn = table.maxn(args)
 	
-	for i = 1,table.maxn(args) do
+	for i = 1,maxn do
 		str = str .. tostring(args[i]) .. "\t"
 	end
+	
+	if maxn == nil then str = 'nil' end
 	
 	local func = CompileString( str, "", false )
 	if type(func)=='function' then str='```lua\n'..str:Left(1980)..'\n```' else str='```Markdown\n'..str:Left(1980)..'\n```' end
