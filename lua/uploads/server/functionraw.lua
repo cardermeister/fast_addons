@@ -17,7 +17,7 @@ function GetFunctionRaw( func )
 		ret[#ret +1] = lines[i]
 	end
 	
-	ret[#ret +1] = string.format("-- %s %i:%i", src, info.linedefined, info.lastlinedefined)
+	ret[#ret +1] = string.format("--[%i:%i] %s", info.linedefined, info.lastlinedefined, src)
 	
 	return table.concat( ret, "\n" )
 end
