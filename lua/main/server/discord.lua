@@ -69,11 +69,9 @@ do
 			return var
 		end
 
-		if not nils [key] then -- uh oh
-			var = easylua.FindEntity(key)
-			if var:IsValid() then
-				return var
-			end
+		var = easylua.FindEntity(key)
+		if var:IsValid() then
+			return var
 		end
 
 		return nil
