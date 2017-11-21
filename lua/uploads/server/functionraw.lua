@@ -40,7 +40,7 @@ function GetFunctionRaw( func )
 	end
 	
 	
-	table.insert(ret, 1, string.format("--[%i:%i] %s", info.linedefined, info.lastlinedefined, src))
-	
+	table.insert(ret, 1, string.format("-- [%i:%i] %s", info.linedefined, info.lastlinedefined, src))
+
 	return table.concat( ret, "\n" )
 end
