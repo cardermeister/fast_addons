@@ -7,11 +7,17 @@ function discord.print(...)
 	local args = {...}
 	local maxn = table.maxn(args)
 	
-	for i = 1,maxn do
-		str = str .. tostring(args[i]) .. "\t"
-	end
+	if maxn>0 then
+		
+		for i = 1,maxn do
+			str = str .. tostring(args[i]) .. "\t"
+		end
+		
+	else
+		
+		str = 'nil'
 	
-	if not maxn then str = 'nil' end
+	end
 	
 	local func = CompileString( str, "", false )
 	if type(func)=='function' then str='```lua\n'..str:Left(1980)..'\n```' else str='```Markdown\n'..str:Left(1980)..'\n```' end
