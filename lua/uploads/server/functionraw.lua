@@ -13,26 +13,31 @@ function GetFunctionRaw( func )
 	
 	
 	local lines = string.Explode( "\n", fileRaw )
-	local minIndentations
+	
+	local minIndents = math.huge
+	local needToTrimIndents = true
 	
 	for i = info.linedefined, info.lastlinedefined do
 		local line = lines[i]
-		local _, tabs = line:gsub("^\t*", "")
 		
-		if tabs ~= 0 then
-			if minIndentations then
-				minIndentations = math.min(tabs, minIndentations)
-			else
-				minIndentations = tabs
+		if line:Trim(" ") ~= "" then
+			local tabs = line:match("^\t+")
+			
+			if needToTrimIndents then
+				if tabs then
+					minIndents = math.min(#tabs, minIndents)
+				else
+					needToTrimIndents = false
+				end
 			end
+			
+			ret[#ret +1] = line
 		end
-		
-		ret[#ret +1] = line
 	end
 	
 	
-	if minIndentations then
-		local removePattern = "^" .. string.rep("\t", minIndentations)
+	if needToTrimIndents then
+		local removePattern = "^" .. string.rep("\t", minIndents)
 		
 		for i, line in ipairs(ret) do
 			ret[i] = line:gsub(removePattern, "")
@@ -41,6 +46,6 @@ function GetFunctionRaw( func )
 	
 	
 	table.insert(ret, 1, string.format("-- [%i:%i] %s", info.linedefined, info.lastlinedefined, src))
-
+	
 	return table.concat( ret, "\n" )
 end
