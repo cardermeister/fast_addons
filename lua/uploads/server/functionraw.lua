@@ -1,4 +1,4 @@
-function GetFunctionRaw( func, src )
+function GetFunctionRaw( func )
 	assert( isfunction( func ), "bad argument #1 to 'GetFunctionRaw' (function expected, got " .. type( func ) .. ")" )
 	
 	local ret = {}
@@ -6,11 +6,7 @@ function GetFunctionRaw( func, src )
 	local info = debug.getinfo( func, "S" )
 	if info.what ~= "Lua" then return end
 	
-	if not src then
-		src = info.short_src
-	end
-	
-	local fileRaw = file.Read( src, "GAME" )
+	local fileRaw = file.Read( src, "GAME" ) or file.Read( src, "LUA" )
 	if fileRaw == nil then return end
 	
 	local lines = string.Explode( "\n", fileRaw )
@@ -19,7 +15,7 @@ function GetFunctionRaw( func, src )
 		ret[#ret +1] = lines[i]
 	end
 	
-	ret[#ret +1] = "-- "..src
+	ret[#ret +1] = "-- " .. src
 	
 	return table.concat( ret, "\n" )
 end
