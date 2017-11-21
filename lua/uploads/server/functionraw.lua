@@ -19,5 +19,7 @@ function GetFunctionRaw( func, src )
 		ret[#ret +1] = lines[i]
 	end
 	
+	ret[#ret +1] = "-- "..src
+	
 	return table.concat( ret, "\n" )
 end
