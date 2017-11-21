@@ -11,13 +11,36 @@ function GetFunctionRaw( func )
 	local fileRaw = file.Read( src, "GAME" ) or file.Read( src, "LUA" )
 	if fileRaw == nil then return end
 	
+	
 	local lines = string.Explode( "\n", fileRaw )
+	local minIndentations
 	
 	for i = info.linedefined, info.lastlinedefined do
-		ret[#ret +1] = lines[i]
+		local line = lines[i]
+		local _, tabs = line:gsub("^\t*", "")
+		
+		if tabs ~= 0 then
+			if minIndentations then
+				minIndentations = math.min(tabs, minIndentations)
+			else
+				minIndentations = tabs
+			end
+		end
+		
+		ret[#ret +1] = line
 	end
 	
-	ret[#ret +1] = string.format("--[%i:%i] %s", info.linedefined, info.lastlinedefined, src)
+	
+	if minIndentations then
+		local removePattern = "^" .. string.rep("\t", minIndentations)
+		
+		for i, line in ipairs(ret) do
+			ret[i] = line:gsub(removePattern, "")
+		end
+	end
+	
+	
+	table.insert(ret, 1, string.format("--[%i:%i] %s", info.linedefined, info.lastlinedefined, src))
 	
 	return table.concat( ret, "\n" )
 end
