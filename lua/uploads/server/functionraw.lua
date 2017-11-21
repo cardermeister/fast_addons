@@ -4,9 +4,9 @@ function GetFunctionRaw( func )
 	local ret = {}
 	
 	local info = debug.getinfo( func, "S" )
-	if info.what ~= "Lua" then return end
+	if info.what ~= "Lua" then return "[C]" end
 	
-	local src = info.src
+	local src = info.short_src
 
 	local fileRaw = file.Read( src, "GAME" ) or file.Read( src, "LUA" )
 	if fileRaw == nil then return end
