@@ -6,6 +6,8 @@ function GetFunctionRaw( func )
 	local info = debug.getinfo( func, "S" )
 	if info.what ~= "Lua" then return end
 	
+	local src = info.src
+
 	local fileRaw = file.Read( src, "GAME" ) or file.Read( src, "LUA" )
 	if fileRaw == nil then return end
 	
