@@ -52,14 +52,41 @@ function discord.relay_func(ply, text)
 end
 hook.Add("PlayerSay","discord_relay_chat", discord.relay_func)	
 
-local env = {
-	print = discord.print,
-	PrintTable = discord.PrintTable,
-	GetFunctionRaw = function(...) local ret,num = string.gsub(GetFunctionRaw(...),"```","") return ret end
-}
-local meta = {}
-meta.__index = _G
-setmetatable(env, meta)
+
+do 
+	local meta = {}
+	
+	local env = {
+		print = discord.print,
+		PrintTable = discord.PrintTable,
+		GetFunctionRaw = function(...) local ret,num = string.gsub(GetFunctionRaw(...),"```","") return ret end
+	}
+	
+	function meta:__index(key)
+		local var = _G[key]
+
+		if var ~= nil then
+			return var
+		end
+
+		if not nils [key] then -- uh oh
+			var = easylua.FindEntity(key)
+			if var:IsValid() then
+				return var
+			end
+		end
+
+		return nil
+	end
+	
+	
+	function meta:__newindex(key, value)
+		_G[key] = value
+	end
+	
+	discord.metatable = setmetatable(env, meta)
+	
+end
 
 concommand.Add("discord-lua-run",function(ply,cmd,arg,line)
 	
@@ -71,7 +98,7 @@ concommand.Add("discord-lua-run",function(ply,cmd,arg,line)
 	
 	local func = CompileString( luacode, line, false )
 	if type(func) == "function" then
-			setfenv(func, env)
+			setfenv(func, discord.metatable)
 			local args = {pcall(func)}
 
 			if args[1] == false then
