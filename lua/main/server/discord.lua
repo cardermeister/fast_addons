@@ -11,7 +11,7 @@ function discord.print(...)
 		str = str .. tostring(args[i]) .. "\t"
 	end
 	
-	if maxn == nil then str = 'nil' end
+	if not maxn then str = 'nil' end
 	
 	local func = CompileString( str, "", false )
 	if type(func)=='function' then str='```lua\n'..str:Left(1980)..'\n```' else str='```Markdown\n'..str:Left(1980)..'\n```' end
