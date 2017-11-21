@@ -30,9 +30,9 @@ function GetFunctionRaw( func )
 					needToTrimIndents = false
 				end
 			end
-			
-			ret[#ret +1] = line
 		end
+		
+		ret[#ret +1] = line
 	end
 	
 	
