@@ -119,9 +119,6 @@ local methods = {
 	["printm"] = "self",
 	["table"]  = "table",
 	["keys"]   = "keys",
-//	["sl"]
-//	["slc"]
-//	["slm"]
 }
 
 local col_server = Color(191, 159, 127)
