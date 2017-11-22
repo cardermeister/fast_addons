@@ -10,7 +10,7 @@ local function func(repo_name,k,commit_add)
 	if (#k.removed>0) then buff = {color_white,"\t┕ ",Color(255,0,0),"Removed: ",color_white} for j,v in pairs(k.removed) do local zap = "" if(j>1)then zap=", " end table.insert(buff,zap..v) end ChatAddText(unpack(buff))  end
 
 	if istable(commit_add) then
-		ChatAddText("Total: ",Color(0,255,0),commit_add.stats.additions," additions",color_white," and ",Color(255,0,0),commit_add.stats.deletions," deletions",color_white,".")
+		ChatAddText("Summary ",Color(0,191,255),commit_add.changes.." changes",color_white,", ",Color(0,255,0),commit_add.insertions," additions",color_white," and ",Color(255,0,0),commit_add.deletions," deletions",color_white,".")
 	end
 
 	ChatAddText("")
@@ -19,21 +19,16 @@ end
 
 local function gitify(json)
 
-	json = util.JSONToTable(json).payload
+	json = util.JSONToTable(json)
+	local commit_add = json.summary
+	json = json.payload
 	local repo_name = json.repository.name
-	local projectid = json.project_id
+	
 	json = json.commits
 	
 	for i,k in pairs(json) do
 		
-		local sha = k.id
-		
-		http.Fetch(("https://gitlab.com/api/v4/projects/%s/repository/commits/%s"):format(projectid,sha),
-		function(a)
-			func(repo_name,k,util.JSONToTable(a))
-		end,function(s)
-		func(repo_name,k)
-		end,{["Private-Token"]="9BtwmHamzRwiLdsijELR"})
+		func(repo_name,k,commit_add)
 		
 	end
 	
