@@ -1,4 +1,4 @@
-local function func(repo_name,k,commit_add)
+local function func(repo_name,k)
 	
 	local message = k.message:gsub("\n"," ")
 	
@@ -9,11 +9,6 @@ local function func(repo_name,k,commit_add)
 	if (#k.modified>0) then buff = {color_white,"\t┕ ",Color(255,191,0),"Modified: ",color_white} for j,v in pairs(k.modified) do local zap = "" if(j>1)then zap=", " end table.insert(buff,zap..v) end ChatAddText(unpack(buff))  end
 	if (#k.removed>0) then buff = {color_white,"\t┕ ",Color(255,0,0),"Removed: ",color_white} for j,v in pairs(k.removed) do local zap = "" if(j>1)then zap=", " end table.insert(buff,zap..v) end ChatAddText(unpack(buff))  end
 
-	if istable(commit_add) then
-		ChatAddText("Summary ",Color(0,191,255),commit_add.changes.." changes",color_white,", ",Color(0,255,0),commit_add.insertions," additions",color_white," and ",Color(255,0,0),commit_add.deletions," deletions",color_white,".")
-	end
-
-	ChatAddText("")
 	
 end
 
@@ -28,10 +23,13 @@ local function gitify(json)
 	
 	for i,k in pairs(json) do
 		
-		func(repo_name,k,commit_add)
+		func(repo_name,k)
 		
 	end
 	
+	if istable(commit_add) then
+		ChatAddText("Summary ",Color(0,191,255),commit_add.changes.." changes",color_white,", ",Color(0,255,0),commit_add.insertions," additions",color_white," and ",Color(255,0,0),commit_add.deletions," deletions",color_white,".\n")
+	end
 	
 end
 
