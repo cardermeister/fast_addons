@@ -231,12 +231,5 @@ else -- server
 		ply:SetCustomTitle(str)
 
 	end)
-	--[[L33T ADMIN MOD ]]
-		hook.Add("l33t_Initialized","NameTags",function()
-		l33t = l33t or {}
-		l33t.AddCommand("title",function(ply,line)
-		ply:SetCustomTitle(line)
-		end) 
-	end)
-	--[[LEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEET]]
+	
 end
