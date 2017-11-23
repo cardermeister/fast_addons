@@ -228,7 +228,7 @@ else -- server
 			end
 		end
 
-		ply:SetCustomTitle(str)
+		ply:SetCustomTitle(str) 
 
 	end)
 	
