@@ -1,6 +1,49 @@
 local webhook = "https://discordapp.com/api/webhooks/378116447605620736/z8UAE5XXQMAlpLCbvM8gd25jh17Jopg6rVGNkvvfgvlbgc65J5cgJ69U--SRdkg5FCD8"
 
+local discord_auth = "discord_auth.txt"
+if not file.Exists(discord_auth,"DATA") then file.Write(discord_auth,util.TableToJSON({})) end
+
+local discord_auth_json = util.JSONToTable(file.Read(discord_auth,"DATA"))
+PrintTable(discord_auth_json)
+
 discord = discord or {}
+
+
+
+function discord.auth_request(ply)
+	
+	local isauthed = discord_auth_json[ply:SteamID()]
+	//util.Base64Encode(me:SteamID():gsub("STEAM","AUTHD")) // QVVUSERfMDoxOjIyNDc3OTc2
+	
+	if ( (not isauthed) or (#isauthed~=18) ) then
+		
+		local token = util.Base64Encode(ply:SteamID():gsub("STEAM","AUTHD"))
+		
+		discord_auth_json[ply:SteamID()] = token
+		file.Write(discord_auth,util.TableToJSON(discord_auth_json))
+			
+		Msg"[discord] "print(ply,"request discord auth with token:",token)
+		return
+	end
+		
+	Msg"[discord] "print(ply,"already link profile with id:",discord_auth_json[ply:SteamID()])
+end
+
+function discord.auth_request(token,discordid)
+	
+	local finded = table.KeyFromValue(discord_auth_json,token)
+	
+	if finded then
+		
+		discord_auth_json[finded] = discordid
+		
+		Msg"[discord] "print(ply,"successfuly linked profile to discord:",discordid)
+		
+	end
+	
+end
+
+
 
 function discord.print(...)
 	local str = ""
@@ -62,6 +105,7 @@ end
 hook.Add("PlayerSay","discord_relay_chat", discord.relay_func)	
 
 
+
 do 
 	local meta = {}
 	
@@ -119,4 +163,4 @@ concommand.Add("discord-lua-run",function(ply,cmd,arg,line)
 
 end)
 
-discord.print("[INIT] discord.lua successfully loaded") 
+//discord.print("[INIT] discord.lua successfully loaded") 
