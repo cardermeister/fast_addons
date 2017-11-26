@@ -29,7 +29,7 @@ function discord.auth_request(ply)
 	Msg"[discord] "print(ply,"already link profile with id:",discord_auth_json[ply:SteamID()])
 end
 
-function discord.auth_request(token,discordid)
+function discord.auth_apply(token,discordid)
 	
 	local finded = table.KeyFromValue(discord_auth_json,token)
 	
@@ -37,9 +37,11 @@ function discord.auth_request(token,discordid)
 		
 		discord_auth_json[finded] = discordid
 		
-		Msg"[discord] "print(ply,"successfuly linked profile to discord:",discordid)
-		
+		Msg"[discord] "print(finded,"successfuly linked profile to discord:",discordid)
+		return
 	end
+	
+	Msg"[discord] "print("auth error",discordid)
 	
 end
 
@@ -163,4 +165,4 @@ concommand.Add("discord-lua-run",function(ply,cmd,arg,line)
 
 end)
 
-//discord.print("[INIT] discord.lua successfully loaded") 
+discord.print("[INIT] discord.lua successfully loaded") 
