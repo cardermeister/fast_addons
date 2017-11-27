@@ -36,6 +36,7 @@ function discord.auth_apply(token,discordid)
 	if finded then
 		
 		discord_auth_json[finded] = discordid
+		file.Write(discord_auth,util.TableToJSON(discord_auth_json))
 		
 		Msg"[discord] "print(finded,"successfuly linked profile to discord:",discordid)
 		return
