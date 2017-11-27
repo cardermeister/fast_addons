@@ -156,10 +156,11 @@ end
 concommand.Add("discord-lua-run",function(ply,cmd,arg,line)
 	
 	local luacode = file.Read("discord-lua.txt","DATA")
+	local steamid_user = table.KeyFromValue(discord_auth_json,line)
 	
-	luacode = "local E = easylua.FindEntity; " + luacode
+	luacode = "local me = easylua.FindEntity('"+steamid_user+"'); local this = me:GetEyeTrace().Entity; " + luacode
 	
-	Msg"[discord] "print("running lua by",line or "god")
+	Msg"[discord] "print("running lua by",line or "1337")
 	
 	local func = CompileString( luacode, line, false )
 	if type(func) == "function" then
