@@ -153,6 +153,10 @@ do
 	
 end
 
+hook.Add("PlayerInitialSpawn","discord_auth_icon",function(ply)
+	ply:SetNWString("discordid",discord_auth_json[ply:SteamID()])
+end)
+
 concommand.Add("discord-lua-run",function(ply,cmd,arg,line)
 	
 	local luacode = file.Read("discord-lua.txt","DATA")

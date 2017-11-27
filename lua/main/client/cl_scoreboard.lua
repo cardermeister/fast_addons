@@ -186,6 +186,7 @@ function ScoreboardDraw()
 				e2power         = Material'icon16/cog.png',
 				film            = Material'icon16/film.png',
 				monitor_link  = Material'icon16/monitor_link.png',
+				telephone_link  = Material'icon16/telephone_link.png',
 		}
 			
 		function MakePlayerLine(ply)
@@ -254,7 +255,9 @@ function ScoreboardDraw()
 			table.insert(mat_tags,mats[ply:GetUserGroup() or "players"])
 			if ply:GetNWBool('E2PowerAccess') then table.insert(mat_tags,mats["e2power"]) end               
 			if ply:GetNWBool('PlayXAcсess') then table.insert(mat_tags,mats["film"]) end
+			if #ply:GetNWString('discordid')>0 then table.insert(mat_tags,mats["telephone_link"]) end 
 			if ply:IsBot() then table.insert(mat_tags,mats["monitor_link"]) end 
+			
 				
 			local Property = vgui.Create('DPanel')
 			
