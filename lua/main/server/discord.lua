@@ -4,11 +4,18 @@ local discord_auth = "discord_auth.txt"
 if not file.Exists(discord_auth,"DATA") then file.Write(discord_auth,util.TableToJSON({})) end
 
 local discord_auth_json = util.JSONToTable(file.Read(discord_auth,"DATA"))
-PrintTable(discord_auth_json)
 
 discord = discord or {}
 
+local function ReadFuncClose(callback)
 
+	discord_auth_json = util.JSONToTable(file.Read(discord_auth,"DATA"))
+		callback()
+	file.Write(discord_auth,util.TableToJSON(discord_auth_json))
+
+end
+
+//function discord.auth_flush() file.Write(discord_auth,util.TableToJSON({})) discord_auth_json = {} end
 
 function discord.auth_request(ply)
 	
@@ -19,14 +26,17 @@ function discord.auth_request(ply)
 		
 		local token = util.Base64Encode(ply:SteamID():gsub("STEAM","AUTHD"))
 		
-		discord_auth_json[ply:SteamID()] = token
-		file.Write(discord_auth,util.TableToJSON(discord_auth_json))
+		ReadFuncClose(function()
+			discord_auth_json[ply:SteamID()] = token
+		end)
+		
+		ply:ChatPrint("discord: !auth "..token)
 			
 		Msg"[discord] "print(ply,"request discord auth with token:",token)
 		return
 	end
 		
-	Msg"[discord] "print(ply,"already link profile with id:",discord_auth_json[ply:SteamID()])
+	Msg"[discord] "print(ply,"already linked to discordid:",discord_auth_json[ply:SteamID()])
 end
 
 function discord.auth_apply(token,discordid)
@@ -35,10 +45,11 @@ function discord.auth_apply(token,discordid)
 	
 	if finded then
 		
-		discord_auth_json[finded] = discordid
-		file.Write(discord_auth,util.TableToJSON(discord_auth_json))
+		ReadFuncClose(function()
+			discord_auth_json[finded] = discordid
+		end)
 		
-		Msg"[discord] "print(finded,"successfuly linked profile to discord:",discordid)
+		Msg"[discord] "print(finded,"successfully linked own account to discord:",discordid)
 		return
 	end
 	
