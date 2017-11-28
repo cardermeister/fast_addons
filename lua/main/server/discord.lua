@@ -94,6 +94,7 @@ discord.relay_prefix = discord.relay_prefix or "[G]"
 
 function discord.relay_func(ply, text)
 	
+	if text == "!auth" then discord.auth_request(ply) return end
 	if not discord.relay then return end
 
     if !ply then return end
