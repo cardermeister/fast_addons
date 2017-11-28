@@ -1,3 +1,6 @@
+hook.Add("Initialize", "chathud_image_html_override", function()
+
+
 if _G.chathud_image_html and _G.chathud_image_html:IsValid() then
 	_G.chathud_image_html:Remove()
 end
@@ -245,4 +248,7 @@ hook.Add("OnPlayerChat", "chathud_image_url", function(ply, str)
 			queue_image(url, ply)
 		end
 	end
-end) 
+end)
+
+
+end)
