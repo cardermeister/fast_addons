@@ -171,7 +171,7 @@ if CLIENT then
 			local tsw, tsh = surface.GetTextSize(ts)
 
 			cam.Start3D2D(head_pos, angles, 0.3 * scale * font_scale)
-				draw_text(, Color(102, 204, 102), -(tsw/2), -spacing * tsh / spacing - 30)
+				draw_text(ts, Color(102, 204, 102), -(tsw/2), -spacing * tsh / spacing - 110)
 				draw_text(s..("."):rep(math.Round(math.abs(math.sin(CurTime()*1.2)*3))), Color(102, 102, 204), -(w/2), -spacing * h / spacing)
 			cam.End3D2D()
 		end
