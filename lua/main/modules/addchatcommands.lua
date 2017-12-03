@@ -58,6 +58,15 @@ iin.AddCommand("rcon",function(ply,line)
 	iin.error(ply,' #arg == 0 ')
 end,'devs',true)
 
+iin.AddCommand("raw",function(ply,line)
+	if line and #line>0 then
+		iin_Msg(nil,Color(255,187,0)," ● ",ply,Color(255,255,255),'@',Color(207, 110, 90),'raw',Color(255,255,255),': '..line)
+		print(GetFunctionRaw(_G[line]))
+		return
+	end
+	iin.error(ply,' #arg == 0 ')
+end,'devs',true)
+
 iin.AddCommand('rank',function(ply,args)
 	args = iin.ParseArgs(args)
 	local id = FindEntity(args[1])
