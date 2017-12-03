@@ -184,3 +184,7 @@ concommand.Add("discord-lua-run",function(ply,cmd,arg,line)
 end)
 
 discord.print("[INIT] discord.lua successfully loaded") 
+
+hook.Add('iin_Initialized','serverstartdiscordnotify',function()
+	discord.print("[SERVER] Successfully Initialized") 
+end)
