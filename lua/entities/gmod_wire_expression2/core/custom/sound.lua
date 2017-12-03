@@ -203,6 +203,7 @@ e2function void soundURLload(string id, string url, number volume, number noplay
 end
 
 --[[
+
 For the specified player
 Won't implement as it is useless and abusable
 
@@ -213,6 +214,7 @@ end
 e2function void entity:soundURLload(string id, string url, number volume, number noplay)
 	LoadSound(self.entity, id, url, volume, noplay, nil, this)
 end
+
 ]]
 
 e2function void soundURLplay(number id)
