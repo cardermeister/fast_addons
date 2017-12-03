@@ -1,171 +1,366 @@
--- made by [G-moder]FertNoN
+local tag = "E2SoundURL"
 
-local mr = math.Round
-local net = net
+local SOUNDURL_PURGE = 0
+local SOUNDURL_LOAD = 1
+local SOUNDURL_PLAYPAUSE = 2
+local SOUNDURL_VOLUME = 3
+local SOUNDURL_SETPOS = 4
+local SOUNDURL_PARENT = 5
+local SOUNDURL_DELETE = 6
 
-CreateClientConVar( "wire_expression2_soundurl_enable", "1", true, false )  
-CreateClientConVar( "wire_expression2_soundurl_maxPerSecond", "3", true, false )  
-CreateClientConVar( "wire_expression2_soundurl_maxSoundCount", "5", true, false )  
-CreateClientConVar( "wire_expression2_soundurl_block", "SteamID,", false, false ) 
-local tempSound = 0
-local E2SoundParToEnt=nil
+local cv_enable = CreateClientConVar("wire_expression2_soundurl_enable", "1", true, false)
+local cv_maxPerSecond = CreateClientConVar("wire_expression2_soundurl_maxPerSecond", "3", true, false)
+local cv_maxSoundCount = CreateClientConVar("wire_expression2_soundurl_maxSoundCount", "5", true, false)
+local cv_blocked = CreateClientConVar("wire_expression2_soundurl_block", "SteamID,", false, false)
 
-local function ClearSoundURL(ent)
-	for i,k in pairs(ent.E2PAudStreams) do
-		if E2SoundParToEnt!=nil then E2SoundParToEnt[k]=nil end
-		k:Stop()
-		k = nil
+
+local ParentedSounds = {}
+local fftTable = {}
+
+
+local URLSound
+do
+	local IGModAudioChannel = FindMetaTable("IGModAudioChannel")
+	local META = {}
+
+	function META:__index(key)
+		local ret = META[key]
+
+		if ret ~= nil then
+			return ret
+		end
+
+		return IGModAudioChannel[key]
 	end
-	ent.E2PAudStreams = {}
-end 
- 
-concommand.Add( "wire_expression2_soundurl", function(ply,cmd,argm)
-	if tonumber(argm[1]) == 0 then 
-		RunConsoleCommand("wire_expression2_soundurl_enable","0")
-		RunConsoleCommand("wire_expression2_soundurl_stopall")
-	else
-		RunConsoleCommand("wire_expression2_soundurl_enable","1")
-	end
-end )
 
-concommand.Add( "wire_expression2_soundurl_stopall", function(ply,cmd,argm)
-	timer.Destroy( "e2ParentSoundURL" ) E2SoundParToEnt = nil
-	local expression2 = ents.FindByClass("gmod_wire_expression2")
-	for k,v in pairs(expression2) do
-		ClearSoundURL(v)
+	function META:Play()
+		if self.audio then
+			self.audio:Play()
+		else
+			self.play = true
+		end
 	end
-end )
 
-local function StartTimer()
-	timer.Create("e2ParentSoundURL",0.1,0,function() 
-		if table.Count(E2SoundParToEnt) == 0 then E2SoundParToEnt=nil timer.Destroy( "e2ParentSoundURL" ) return end 
-		for k,v in pairs(E2SoundParToEnt) do
-			if v:IsValid() then 
-				k:SetPos(v:GetPos())
+	function META:Pause()
+		if self.audio then
+			self.audio:Pause()
+		else
+			self.play = false
+		end
+	end
+
+	function META:SetVolume(volume)
+		if self.audio then
+			self.audio:SetVolume(volume)
+		else
+			self.volume = volume
+		end
+	end
+
+	function META:SetPos(pos)
+		if self.audio then
+			self.audio:SetPos(pos)
+		else
+			self.pos = pos
+		end
+	end
+
+	function META:SetParent(targ)
+		if self.audio then
+			ParentedSounds[self] = targ
+		else
+			self.parent = targ
+		end
+	end
+
+	function META:Stop()
+		if self.audio then
+			self.audio:Stop()
+		else
+			self.stop = true
+		end
+	end
+
+	function META:FFT(dest, samples)
+		if self.audio then
+			self.audio:FFT(dest, samples)
+		end
+	end
+
+	function META:IsValid()
+		return IsValid(self.audio)
+	end
+
+	function META:AttachAudio(audio)
+		self.audio = audio
+	end
+
+	function META:AttachOldAudio(audio)
+		self.oldaudio = audio
+	end
+
+	function META:ApplyParameters()
+		local audio = self.audio
+		if not audio then return end
+
+		if self.stop then
+			audio:Stop()
+		else
+			if self.play ~= nil then
+				if self.play then
+					audio:Play()
+				else
+					audio:Pause()
+				end
+			end
+
+			if self.volume then
+				audio:SetVolume(self.volume)
+			end
+
+			if self.pos then
+				audio:SetPos(self.pos)
+			end
+
+			if self.parent then
+				ParentedSounds[self] = self.parent
 			end
 		end
-	end) 
+	end
+
+	function URLSound()
+		return setmetatable({}, META)
+	end
 end
 
-local function SoundURL(msg)
-	local ent =		msg:ReadEntity()
-	local fft =		msg:ReadEntity()
-	local ply =		msg:ReadEntity()
-	local id = 		msg:ReadString()
-	if id:len()==0 then id = msg:ReadLong() end
-	local cmd = 	msg:ReadChar()
-	
-	local Block = GetConVarString("wire_expression2_soundurl_block") 
-	if Block:len()>10 then 
-		Block = string.Explode(',',Block) 
-		for k=1,#Block do
-			if ply:SteamID()==Block[k] then return end
-		end
+
+local function ReadCompressedString()
+	local isCompressed = net.ReadBool()
+
+	return isCompressed
+		and util.Decompress( net.ReadData(net.ReadUInt(16)) )
+		or net.ReadString()
+end
+
+
+local function ClearURLSounds(soundTable)
+	for id, audio in pairs(soundTable) do
+		audio:Stop()
+		ParentedSounds[audio] = nil
 	end
-		
-	if cmd==1 then
-		if  GetConVarNumber( "wire_expression2_soundurl_enable" )==0 then return end
-		if tempSound>GetConVarNumber( "wire_expression2_soundurl_maxPerSecond" ) then return end
-		tempSound=tempSound+1
-		if tempSound==1 then timer.Simple( 1, function() tempSound=0 end) end
-		
-		local volume = 	msg:ReadChar()
-		local url = 	msg:ReadString()
-		local noplay = 	msg:ReadChar()
-		local pos = 	msg:ReadVector()
-		local tar = 	msg:ReadEntity()
-		local param = "3d"
+end
 
-		if noplay!=0 then param = "3d noplay" end
-		if pos==Vector(0,0,0) and tar==nil then param = " "
-			if noplay!=0 then param = "noplay" end 
+local function ClearURLSoundsAll()
+	local chips = ents.FindByClass("gmod_wire_expression2")
+
+	for i, chip in ipairs(chips) do
+		ClearURLSounds(chip.E2URLSounds)
+	end
+end
+
+
+concommand.Add("wire_expression2_soundurl_stopall", ClearURLSoundsAll)
+
+concommand.Add("wire_expression2_soundurl", function(ply, cmd, args)
+	if tonumber(args[1]) == 0 then 
+		cv_enable:SetBool(false)
+		ClearURLSoundsAll()
+	else
+		cv_enable:SetBool(true)
+	end
+end)
+
+
+
+net.Receive(tag, function()
+	local operation = net.ReadUInt(3)
+	local chip = net.ReadEntity()
+
+
+	if operation == SOUNDURL_PURGE then
+		local soundTable = chip.E2URLSounds
+		if soundTable then ClearURLSounds(chip.E2URLSounds) end
+
+		return
+	end
+
+	local id = net.ReadString()
+
+	if operation == SOUNDURL_LOAD then
+		if not chip:IsValid() then return end
+		if not chip.E2URLSounds then chip.E2URLSounds = {} end
+
+		local owner = net.ReadEntity()
+
+
+		do -- Limit checks
+			-- enable
+			if not cv_enable:GetBool() then return end
+
+
+			-- MaxSoundCount
+			local soundCount = table.Count(chip.E2URLSounds)
+			if chip.E2URLSounds[id] then soundCount = soundCount-1 end
+			if soundCount >= cv_maxSoundCount:GetInt() then return end
+
+
+			-- MaxPerSecond
+			local soundBurst = chip.E2URLSoundBurst or 0
+			if soundBurst >= cv_maxPerSecond:GetInt() then return end
+			chip.E2URLSoundBurst = soundBurst + 1
+
+			timer.Simple(1, function()
+				if chip:IsValid() then
+					chip.E2URLSoundBurst = chip.E2URLSoundBurst - 1
+				end
+			end)
+
+
+			-- Blocked SteamID's
+			local blocked = cv_blocked:GetString()
+			if #blocked > 10 then
+				blocked = string.Explode(",", blocked)
+
+				for i, SteamID in ipairs(blocked) do
+					if SteamID == owner:SteamID() then return end
+				end
+			end
 		end
 
-		sound.PlayURL(url,param,function(AudStream) 
-			if AudStream==nil then return end
-			if ent==nil then AudStream:Stop() return end
-			if not ent:IsValid() then AudStream:Stop() return end
-			if ent.E2PAudStreams==nil then ent.E2PAudStreams={} end
-			if ent.E2PAudStreams[id]!=nil then 
-				if ent.E2PAudStreams[id]:IsValid() then ent.E2PAudStreams[id]:Stop() end end
-			if table.Count(ent.E2PAudStreams)>GetConVarNumber("wire_expression2_soundurl_maxSoundCount")-2 then AudStream:Stop() return end
-			if LocalPlayer()==fft then
-				local index = ent:EntIndex()
-				local tname = 'SoundFFT'..id..index
-				timer.Create(tname,0.1,0,function()
-					if !ent or !ent.E2PAudStreams or !ent.E2PAudStreams[id] then
-						timer.Destroy(tname)
-					else
-						local tblfft = {}
-						ent.E2PAudStreams[id]:FFT(tblfft,0)
-						local count = #tblfft
-						local str = ""
-						for i=1,count do
-							local roundd = mr(tblfft[i]*255)
-							if i!=count then
-								str = str..roundd..' '
-							else
-								str = str..roundd
-							end
-						end
-						net.Start('FFTSendToServer')
-						net.WriteTable({index,id,str})
-						net.SendToServer()
+
+		local url = ReadCompressedString()
+		local volume = net.ReadFloat()
+		local noplay = net.ReadBool()
+
+		local targIsEntity = net.ReadBool()
+		local targ = targIsEntity and net.ReadEntity() or net.ReadVector()
+
+		local urlSound = URLSound()
+		if chip.E2URLSounds[id] then
+			urlSound:AttachOldAudio(chip.E2URLSounds[id])
+		end
+		chip.E2URLSounds[id] = urlSound
+
+
+		sound.PlayURL(url, noplay and "3d noplay" or "3d", function(audio)
+			if not audio then return end
+
+			urlSound:AttachAudio(audio)
+			if urlSound.oldaudio then urlSound.oldaudio:Stop() end
+
+			if not chip:IsValid() then
+				urlSound:Stop()
+				return
+			end
+
+
+			urlSound:SetVolume(volume)
+
+
+			if targIsEntity then
+				urlSound:SetParent(targ)
+			else
+				urlSound:SetPos(targ)
+			end
+
+
+			urlSound:ApplyParameters()
+
+
+			chip:CallOnRemove(tag, function()
+				local soundTable = chip.E2URLSounds
+
+				timer.Simple(0, function() -- Full update message fix (can be sent to client due to lags)
+					if not chip:IsValid() then
+						ClearURLSounds(soundTable)
 					end
 				end)
+			end)
+
+
+			if LocalPlayer() == owner then
+				local timername = string.format("%s.%i.%i", tag, chip:EntIndex(), id)
+
+				timer.Create(timername, 0.1, 0, function()
+					if not chip.E2URLSounds or not chip.E2URLSounds[id] then
+						timer.Remove(timername)
+						return
+					end
+
+					chip.E2URLSounds[id]:FFT(fftTable, 0)
+					if not fftTable[1] then return end
+
+					net.Start(tag)
+						net.WriteEntity(chip)
+						net.WriteString(id)
+						
+						for i = 1, 128 do
+							net.WriteUInt(math.Round(fftTable[i]*255), 8)
+						end
+					net.SendToServer()
+
+					fftTable[1] = nil -- Invalidate fft table for next use
+				end)
 			end
-			ent.E2PAudStreams[id]=AudStream
-			AudStream=nil
-			ent:CallOnRemove("ClearSoundURL", ClearSoundURL,ent)
-			if tar!=nil then if tar:IsValid() then 	
-				if E2SoundParToEnt==nil then StartTimer() E2SoundParToEnt={} end
-				if E2SoundParToEnt[ent.E2PAudStreams[id]]==nil then E2SoundParToEnt[ent.E2PAudStreams[id]]={} end
-				E2SoundParToEnt[ent.E2PAudStreams[id]]=tar
-				pos = tar:GetPos()
-			end end
-			ent.E2PAudStreams[id]:SetPos(pos)
 		end)
-		return
-	end
-	
-	if cmd==0 then
-		if ent.E2PAudStreams!=nil then  
-			ClearSoundURL(ent) return
+	else
+		local sounds = chip.E2URLSounds
+		if not sounds then return end
+
+		local audio = sounds[id]
+		if not audio then return end
+
+
+		if operation == SOUNDURL_PLAYPAUSE then
+			local play = net.ReadBool()
+
+			if play then audio:Play()
+			else audio:Pause() end
+
+		elseif operation == SOUNDURL_VOLUME then
+			local volume = net.ReadFloat()
+			audio:SetVolume(volume)
+
+		elseif operation == SOUNDURL_SETPOS then
+			local pos = net.ReadVector()
+			audio:SetPos(pos)
+
+		elseif operation == SOUNDURL_PARENT then
+			local targ = net.ReadEntity()
+			audio:SetParent(targ)
+
+		elseif operation == SOUNDURL_DELETE then
+			audio:Stop()
+			ParentedSounds[audio] = nil
+
 		end
 	end
-	
-	if ent.E2PAudStreams==nil then return end
-	if ent.E2PAudStreams[id]==nil then return end
-	if not ent.E2PAudStreams[id]:IsValid() then return end
-	
-	if cmd==2 then
-		ent.E2PAudStreams[id]:Play() return
-	end
-	
-	if cmd==3 then
-		ent.E2PAudStreams[id]:Pause() return
-	end
-	
-	if cmd==4 then
-		ent.E2PAudStreams[id]:SetVolume(msg:ReadChar()/100) return
-	end
-	
-	if cmd==5 then
-		ent.E2PAudStreams[id]:SetPos(msg:ReadVector()) return
-	end
-	
-	if cmd==6 then
-		if E2SoundParToEnt!=nil then E2SoundParToEnt[ent.E2PAudStreams[id]]=nil end
-		ent.E2PAudStreams[id]:Stop()
-		ent.E2PAudStreams[id]=nil
-		return
-	end
-	
-	if cmd==7 then
-		if E2SoundParToEnt==nil then StartTimer() E2SoundParToEnt={} end
-		if E2SoundParToEnt[ent.E2PAudStreams[id]]==nil then E2SoundParToEnt[ent.E2PAudStreams[id]]={} end
-		E2SoundParToEnt[ent.E2PAudStreams[id]] = msg:ReadEntity()
-	end
-end
+end)
 
-usermessage.Hook("e2soundURL", SoundURL )
+
+hook.Add("Tick", tag .. ".ParentSounds", function()
+	for audio, parent in pairs(ParentedSounds) do
+		if parent:IsValid() then
+			audio:SetPos(parent:GetPos())
+		end
+	end
+end)
+
+
+
+E2Helper.Descriptions["soundURLPurge"] = "Stop all the URL sounds"
+E2Helper.Descriptions["soundURLload"] = "Load the URL sound"
+E2Helper.Descriptions["soundURLplay"] = "Play the URL sound"
+E2Helper.Descriptions["soundURLpause"] = "Pause the URL sound"
+E2Helper.Descriptions["soundURLvolume"] = "Set the URL sound volume"
+E2Helper.Descriptions["soundURLpos"] = "Set the URL sound position"
+E2Helper.Descriptions["soundURLparent"] = "Parent the URL sound"
+E2Helper.Descriptions["soundURLdelete"] = "Delete/stop the URL sound"
+
+E2Helper.Descriptions["soundFFT"] =
+	"Returns an FFT (Fast Fourier transform) array of the URL sound with 128 samples.\n" ..
+	"Entity is a chip that created the URL sound.\n" ..
+	"http://wiki.garrysmod.com/page/IGModAudioChannel/FFT"
+
+E2Helper.Descriptions["soundPlayAll(snn)"] = "Emits the sound on every player entity"
+E2Helper.Descriptions["soundPlayWorld(svnnn)"] = "Play sound at specific position"
