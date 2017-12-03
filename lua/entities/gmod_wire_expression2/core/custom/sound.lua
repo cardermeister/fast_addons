@@ -160,10 +160,10 @@ local function DeleteSound(chip, id)
 end
 
 
-local function SoundFFT(chip, id)
+local function SoundFFT(context, chip, id)
 	if not chip:IsValid() then return {} end
 	if chip:GetClass() ~= "gmod_wire_expression2" then return {} end
-	if not isOwner(self, chip) then return {} end
+	if not isOwner(context, chip) then return {} end
 
 
 	local fftTable, fftTableCopy = chip.E2URLSoundFFTs[tostring(id)], {}
@@ -271,11 +271,11 @@ end
 __e2setcost(200)
 
 e2function array entity:soundFFT(number id)
-	return SoundFFT(this, id)
+	return SoundFFT(self, this, id)
 end
 
 e2function array entity:soundFFT(string id)
-	return SoundFFT(this, id)
+	return SoundFFT(self, this, id)
 end
 
 
