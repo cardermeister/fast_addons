@@ -148,7 +148,7 @@ function ScoreboardDraw()
 		local yos = p:Add('DHTML')
 		yos:SetPos(800-200,-8   )
 		yos:SetSize(200,116     )
-		yos:SetHTML([[ <img src="http://195.2.252.214/files/yo_bg2.png" height=100/> ]])
+		yos:SetHTML([[ <img src="http://195.2.252.214/images/yo_bg2.png" height=100/> ]])
 		
 			local rest = yos:Add('DButton')
 			rest:SetSize(200,116)
@@ -163,7 +163,7 @@ function ScoreboardDraw()
 		local yos_bg = p:Add('DHTML')
 		yos_bg:SetPos(800-316-10,480-316-5)
 		yos_bg:SetSize(316+16,316+16)
-		yos_bg:SetHTML([[ <img src="http://195.2.252.214/files/yo_bg.png" width=316/> ]])
+		yos_bg:SetHTML([[ <img src="http://195.2.252.214/images/yo_bg.png" width=316/> ]])
 		
 		
 		
