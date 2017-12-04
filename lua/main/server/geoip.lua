@@ -1,6 +1,6 @@
 local Tag = "php_geoip"
 
-local apiurl = "http://195.2.252.214/files/phps/sxgeo/?ip="
+local apiurl = "http://195.2.252.214/php_projects/sxgeo/?ip="
 geoip = {}
 
 local Fetch = http.Fetch
