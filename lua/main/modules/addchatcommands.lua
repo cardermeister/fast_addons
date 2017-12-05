@@ -514,5 +514,14 @@ iin.AddCommand("timescale", function(ply, line)
 end, "devs")
 
 
+iin.AddCommand("raw",function(ply,line)
+	if line and #line>0 then
+		iin.Msg(nil,Color(255,187,0)," ● ",ply,Color(255,255,255),'@',Color(207, 110, 90),'raw',Color(255,255,255),': '..line)
+		RunString("print(GetFunctionRaw("..line.."))")
+		return
+	end
+	iin.error(ply,' #arg == 0 ')
+end,'devs',true)
+
 
 end) -- end HOOK.ADD
