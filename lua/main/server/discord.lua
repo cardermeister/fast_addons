@@ -24,7 +24,7 @@ function discord.auth_request(ply)
 	
 	if ( (not isauthed) or (#isauthed~=18) ) then
 		
-		local token = util.Base64Encode(ply:SteamID():gsub("STEAM","AUTHD"))
+		local token = "KEY-"..util.CRC(ply:SteamID():gsub("STEAM","AUTHD")).."-END"
 		
 		ReadFuncClose(function()
 			discord_auth_json[ply:SteamID()] = token
