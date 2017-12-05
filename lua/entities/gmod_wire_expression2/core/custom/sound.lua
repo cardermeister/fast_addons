@@ -98,7 +98,7 @@ local function LoadSound(chip, id, url, volume, noplay, targ)
 			net.WriteEntity(targ)
 		else -- Vector expected
 			net.WriteBool(false)
-			net.WriteVector(targ)
+			net.WriteVector(Vector(targ[1], targ[2], targ[3]))
 		end
 	net.Broadcast()
 end
