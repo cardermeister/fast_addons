@@ -107,7 +107,8 @@ end)
 local verbose_tools = {
 	creator = true,
 	paint = true,
-	inflator = true
+	inflator = true,
+	leafblower = true
 }
 
 local disallow_by_hours = {}

@@ -279,7 +279,7 @@ net.Receive(tag, function()
 
 
 			if LocalPlayer() == owner then
-				local timername = string.format("%s.%i.%i", tag, chip:EntIndex(), id)
+				local timername = string.format("%s.%i.%s", tag, chip:EntIndex(), id)
 
 				timer.Create(timername, 0.1, 0, function()
 					if not chip.E2URLSounds or not chip.E2URLSounds[id] then
