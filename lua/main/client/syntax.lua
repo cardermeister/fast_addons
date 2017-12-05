@@ -118,6 +118,7 @@ local methods = {
 	["printc"] = "clients",
 	["printm"] = "self",
 	["table"]  = "table",
+	["table2"]  = "table2",
 	["keys"]   = "keys",
 }
 
@@ -130,6 +131,7 @@ local colors = {
 	["print"] = col_server,
 	["printc"] = col_client,
 	["table"] = col_server,
+	["table2"] = col_server,
 	["keys"] = col_server
 }
 
@@ -141,7 +143,7 @@ hook.Add("OnPlayerChat", "syntax", function(player, message, team, dead)
 	local cmd, code = message:match("^!(l[bcms]?) (.*)$")
 
 	if not code then cmd, code = message:match("^!(print[bcm]?) (.*)$") end
-	if not code then cmd, code = message:match("^!(table) (.*)$") end
+	if not code then cmd, code = message:match("^!(table2?) (.*)$") end
 	if not code then cmd, code = message:match("^!(keys) (.*)$") end
 	if not code then cmd, code = message:match("^@(l[bcms]?) (.*)$") if code then silent=true end end
 	
