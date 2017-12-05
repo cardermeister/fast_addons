@@ -138,7 +138,7 @@ end
 
 
 local function ParentSound(chip, id, targ)
-	if not targ:IsValid() then return end
+	if not IsValid(targ) then return end
 
 	net.Start(tag)
 		net.WriteUInt(SOUNDURL_PARENT, 3) -- Operation
@@ -161,7 +161,7 @@ end
 
 
 local function SoundFFT(context, chip, id)
-	if not chip:IsValid() then return {} end
+	if not IsValid(chip) then return {} end
 	if chip:GetClass() ~= "gmod_wire_expression2" then return {} end
 	if not isOwner(context, chip) then return {} end
 
