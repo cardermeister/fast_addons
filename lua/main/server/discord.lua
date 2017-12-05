@@ -15,7 +15,7 @@ local function ReadFuncClose(callback)
 
 end
 
-//function discord.auth_flush() file.Write(discord_auth,util.TableToJSON({})) discord_auth_json = {} end
+function discord.auth_flush() file.Write(discord_auth,util.TableToJSON({})) discord_auth_json = {} end
 
 function discord.auth_request(ply)
 	
@@ -56,6 +56,8 @@ function discord.auth_apply(token,discordid)
 	Msg"[discord] "print("auth error",discordid)
 	
 end
+
+
 
 
 
@@ -158,12 +160,18 @@ hook.Add("PlayerInitialSpawn","discord_auth_icon",function(ply)
 	ply:SetNWString("discordid",discord_auth_json[ply:SteamID()])
 end)
 
+concommand.Add("discord-auth-key",function(ply,c,arg)
+	if IsValid(ply) then return end
+	discord.auth_apply(arg[1],arg[2])
+end)
+
 concommand.Add("discord-lua-run",function(ply,cmd,arg,line)
 	
+	if IsValid(ply) then return end
 	local luacode = file.Read("discord-lua.txt","DATA")
 	local steamid_user = table.KeyFromValue(discord_auth_json,line)
 	
-	if not steamid_user then return end
+	if not steamid_user then Msg"[discord] "print("please link your profile to run lua.") return end
 	
 	luacode = "local me = easylua.FindEntity('"+steamid_user+"'); if me:IsPlayer() then local this = me:GetEyeTrace().Entity end; local suki = player.GetAll; " + luacode
 	
