@@ -22,7 +22,7 @@ local yebans = {
 	
 	//"76561198124445500", --ramzi
 	//"76561198127116897",
-	//"76561198026616861", --zp
+	"76561198026616861", --zp
 }
 
 local HasValue = table.HasValue
@@ -43,7 +43,7 @@ end
 hook.Add("CheckPassword", /*string.char(unpack(tname))*/"allahew",function( cid, ip, _, _, name )
 
 	if cid=='76561198026616861' then
-	//	return false, 'HUI SOSI GUBOI TRYASI'
+		return false, 'HUI SOSI GUBOI TRYASI'
 	end
 
 	if HasValue(yebans,cid) then
