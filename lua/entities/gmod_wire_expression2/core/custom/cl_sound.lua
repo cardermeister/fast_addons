@@ -189,6 +189,7 @@ net.Receive(tag, function()
 	if operation == SOUNDURL_LOAD then
 		if not chip:IsValid() then return end
 		if not chip.E2URLSounds then chip.E2URLSounds = {} end
+		local soundTable = chip.E2URLSounds
 
 		local owner = net.ReadEntity()
 
@@ -199,8 +200,8 @@ net.Receive(tag, function()
 
 
 			-- MaxSoundCount
-			local soundCount = table.Count(chip.E2URLSounds)
-			if chip.E2URLSounds[id] then soundCount = soundCount-1 end
+			local soundCount = table.Count(soundTable)
+			if soundTable[id] then soundCount = soundCount-1 end
 			if soundCount >= cv_maxSoundCount:GetInt() then return end
 
 
@@ -210,7 +211,7 @@ net.Receive(tag, function()
 			chip.E2URLSoundBurst = soundBurst + 1
 
 			timer.Simple(1, function()
-				if chip:IsValid() then
+				if chip:IsValid() and chip.E2URLSoundBurst then
 					chip.E2URLSoundBurst = chip.E2URLSoundBurst - 1
 				end
 			end)
@@ -236,10 +237,10 @@ net.Receive(tag, function()
 		local targ = targIsEntity and net.ReadEntity() or net.ReadVector()
 
 		local urlSound = URLSound()
-		if chip.E2URLSounds[id] then
-			urlSound:AttachOldAudio(chip.E2URLSounds[id])
+		if soundTable[id] then
+			urlSound:AttachOldAudio(soundTable[id])
 		end
-		chip.E2URLSounds[id] = urlSound
+		soundTable[id] = urlSound
 
 
 		sound.PlayURL(url, noplay and "3d noplay" or "3d", function(audio)

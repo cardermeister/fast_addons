@@ -17,7 +17,8 @@ net.Receive(tag, function(len, ply)
 
 	if chip.player == ply then
 		local id = net.ReadString()
-		if not chip.E2URLSoundFFTs[id] then chip.E2URLSoundFFTs[id] = {} end
+		if not chip.E2URLSoundFFTs then chip.E2URLSoundFFTs = {[id] = {}}
+		elseif not chip.E2URLSoundFFTs[id] then chip.E2URLSoundFFTs[id] = {} end
 
 		local fftTable = chip.E2URLSoundFFTs[id]
 		for i = 1, 128 do
@@ -70,6 +71,11 @@ local function LoadSound(chip, id, url, volume, noplay, targ)
 
 
 	local soundBurst = chip.E2URLSoundBurst
+	if not soundBurst then
+		chip.E2URLSoundBurst = 0
+		soundBurst = 0
+	end
+
 	if soundBurst >= cv_maxPerSecond:GetInt() then return end
 	chip.E2URLSoundBurst = soundBurst + 1
 
@@ -163,6 +169,7 @@ end
 local function SoundFFT(context, chip, id)
 	if not IsValid(chip) then return {} end
 	if chip:GetClass() ~= "gmod_wire_expression2" then return {} end
+	if not chip.E2URLSoundFFTs then chip.E2URLSoundFFTs = {} end
 	if not isOwner(context, chip) then return {} end
 
 
