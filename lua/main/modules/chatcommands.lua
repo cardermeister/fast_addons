@@ -96,7 +96,13 @@ end, "devs")
 
 iin.AddCommand("keys", function(ply, line, target)
 	if not line or line=="" then return end
-	luadev.RunOnServer("for k, v in pairs(" .. line .. ") do print(k) end", nil, ply)
+	
+	luadev.RunOnServer(
+		[[local keys = table.GetKeys(]] .. line .. [[)
+		table.sort(keys, function(a, b) return a < b end)
+		for i, key in ipairs(keys) do
+			Msg(key, "\n")
+		end]], nil, ply)
 end, "devs")
 
 iin.AddCommand("printc", function(ply, line, target)
