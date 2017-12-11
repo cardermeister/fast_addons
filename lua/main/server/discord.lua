@@ -66,6 +66,10 @@ function discord.print(...)
 	local args = {...}
 	local maxn = table.maxn(args)
 	
+	if maxn==1 and type(args[1])=="table" then 
+		return discord.PrintTable(args[1])
+	end
+	
 	if maxn>0 then
 		
 		for i = 1,maxn do
