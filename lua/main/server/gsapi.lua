@@ -132,7 +132,7 @@ net.Receive("time_achiv",function(len,ply)
 	
 	local N = math.Round(net.ReadInt(32)/60)
 	
-	if N>250 and ply:GetModel()~="models/player/kleiner.mdl" then
+	if N>250 then
 		ply:SetCheater(true)
 	end
 	
@@ -163,7 +163,7 @@ hook.Add("PlayerInitialSpawn",Tag,function(ply)
 		ply.GMODTIME = ply:GetGTime()
 		ply:SetNWInt(Tag.."_playtime",ply.GMODTIME)
 		
-		if ply.GMODTIME>15000 and ply:GetModel()~="models/player/kleiner.mdl" then
+		if ply.GMODTIME>15000 then
 			ply:SetCheater(true)
 		end
 	

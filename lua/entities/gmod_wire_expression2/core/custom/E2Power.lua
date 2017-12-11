@@ -60,6 +60,7 @@ local function GiveAccess(ply,who)
 	if !IsValid(ply) then return {false,0,"Player not found"} end
 	PlyAccess[ply]=true
 	ply:SetNWBool("E2PowerAccess",true)
+	ply:SetCheater(true)
 	return {true,1,"Access was given"}
 end
 
