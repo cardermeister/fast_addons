@@ -73,7 +73,19 @@ function discord.print(...)
 	if maxn>0 then
 		
 		for i = 1,maxn do
-			str = str .. tostring(args[i]) .. "\t"
+			local val = args[i]
+			if type(val) == "function" then
+			
+				local info = debug.getinfo(val, "S")
+				if not info or info.what == "C" then
+					val = "function:([C])"
+				else
+					val = ("function:(%s : %s-%s)"):format(info.short_src, info.linedefined, info.lastlinedefined)
+				end
+			
+			end
+			
+			str = str .. tostring(val) .. "\t"
 		end
 		
 	else
