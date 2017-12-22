@@ -54,72 +54,7 @@ concommand.Add(Tag,function(ply,_,txt)
 		end
 	end
 end)
-/*
-iin.AddCommand("l", function(ply, line, target)
-	if not line or line=="" then return end
-	timer.Simple(0,function()luadev.RunOnServer(line, nil, ply)
-	end)
-end, "devs")
 
-iin.AddCommand("ls", function(ply, line, target)
-	if not line or line=="" then return end
-	timer.Simple(0,function()luadev.RunOnShared(line, nil, ply)end)
-end, "devs")
-
-iin.AddCommand("lc", function(ply, line, target)
-	if not line or line=="" then return end
-	timer.Simple(0,function()luadev.RunOnClients(line, nil, ply)end)
-end, "devs")
-
-iin.AddCommand("lm", function(ply, line, target)
-	if not line or line=="" then return end
-	luadev.RunOnClient(line, nil, ply, ply)
-end)
-
-iin.AddCommand("lb", function(ply, line, target)
-	if not line or line=="" then return end
-	luadev.RunOnClient(line, nil, ply, ply)
-	timer.Simple(0,function()luadev.RunOnServer(line, nil, ply)end)
-end, "devs")
-
-iin.AddCommand("print", function(ply, line, target)
-	if not line or line=="" then return end
-	timer.Simple(0,function()luadev.RunOnServer("print(" .. line .. ")", nil, ply)	
-	end)
-end, "devs")
-
-iin.AddCommand("table", function(ply, line, target)
-	if not line or line=="" then return end
-	timer.Simple(0,function()luadev.RunOnServer("PrintTable(" .. line .. ")", nil, ply)	
-	end)
-end, "devs")
-
-iin.AddCommand("keys", function(ply, line, target)
-	if not line or line=="" then return end
-	
-	luadev.RunOnServer(
-		[[local keys = table.GetKeys(]] .. line .. [[)
-		table.sort(keys, function(a, b) return a < b end)
-		for i, key in ipairs(keys) do
-			Msg(key, "\n")
-		end]], nil, ply)
-end, "devs")
-
-iin.AddCommand("printc", function(ply, line, target)
-	if not line or line=="" then return end
-	luadev.RunOnClients("easylua.PrintOnServer(" .. line .. ")", nil, ply)
-end, "devs")
-
-iin.AddCommand("printm", function(ply, line, target)
-	if not line or line=="" then return end
-	luadev.RunOnClient("easylua.PrintOnServer(" .. line .. ")", nil, ply)
-end, "devs")
-
-iin.AddCommand("printb", function(ply, line, target)
-	if not line or line=="" then return end
-	luadev.RunOnClient("easylua.PrintOnServer(" .. line .. ")", nil, ply, ply)
-end, "devs")
-*/
 iin.AddCommand("say", function(player, line)
 	if not line or line=="" then return end
 	timer.Simple(0,function()luadev.RunOnClients("Say(" .. line .. ")") end)

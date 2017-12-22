@@ -100,7 +100,11 @@ add("keys", function(ply, line, target)
 	if not line or line=="" then return end
 	if luadev.ValidScript then local valid,err = luadev.ValidScript('x('..line..')','keys') if not valid then return false,err end end
 
-	return luadev.RunOnServer("for k, v in pairs(" .. line .. ") do print(k) end",  X(ply,"keys"), {ply=ply})
+	return luadev.RunOnServer([[local keys = table.GetKeys(]] .. line .. [[)
+		table.sort(keys, function(a, b) return a < b end)
+		for i, key in ipairs(keys) do
+			print(key)
+		end]],  X(ply,"keys"), {ply=ply})
 end)
 
 add("printc", function(ply, line, target)
