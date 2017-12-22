@@ -156,7 +156,7 @@ function ScoreboardDraw()
 			rest.Paint = function() end
 			rest.DoRightClick = function()
 				local menu = DermaMenu()
-				menu:AddSubMenu( "cpp.Restart() (no changelevel)"):AddOption("ARE YOU SERIOUSLY",function() LocalPlayer():ConCommand("lua_run_sv if not cpp then require'wbcpp' end cpp.Restart()") end)
+				menu:AddSubMenu( "Restart (no changelevel)"):AddOption("ARE YOU SERIOUSLY",function() LocalPlayer():ConCommand("iin restart") end)
 				menu:Open()
 			end
 		

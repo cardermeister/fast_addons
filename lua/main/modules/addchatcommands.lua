@@ -247,8 +247,12 @@ iin.AddCommand('cleanup',function(ply,args)
 end,'admins')
 
 iin.AddCommand("restart",function(ply)
-	iin_Msg(nil,Color(255,187,0)," ● ",ply,Color(255,255,255),' restarted server.')
-	RunConsoleCommand("changelevel",game.GetMap())
+	for i=1,5 do 
+		iin_Msg(nil,Color(255,187,0)," ● ",ply,Color(255,255,255),' restarted server.')
+	end
+	timer.Simple(5,function()
+		RunConsoleCommand("_restart")
+	)
 end,'admins')
 
 iin.AddCommand("spawn",function(ply)
