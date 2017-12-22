@@ -252,7 +252,7 @@ iin.AddCommand("restart",function(ply)
 	end
 	timer.Simple(5,function()
 		RunConsoleCommand("_restart")
-	)
+	end)
 end,'admins')
 
 iin.AddCommand("spawn",function(ply)
