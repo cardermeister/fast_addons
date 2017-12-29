@@ -74,17 +74,3 @@ hook.Add("EntityEmitSound", "TimeWarpSounds", function(data)
 	end
 
 end)
-
-
-
-setmetatable(_G, _G)
-
-local trace, rawset = debug.Trace, rawset
-
-function __newindex(self, key, value)
-	if key == "i" then
-		trace()
-	end
-
-	rawset(self, key, value)
-end
