@@ -135,6 +135,7 @@ iin.AddCommand('goto',function(ply,line)
 
     	ply:SetPos(Vector(x, y, z))
     	iin_Msg(nil,Color(255,187,0)," ● ",ply,Color(255,255,255),' goto Vector('..x..','..y..','..z..')',Color(255,255,255),'.')
+    	ply.time_to_goto = CurTime()+1
     	return
     end
 
