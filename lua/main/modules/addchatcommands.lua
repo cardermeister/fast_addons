@@ -9,7 +9,7 @@ function iin.error(ply,str)
 	--log.file_append need plugin faka
 end
  
-iin.AddCommand("title",function(ply,line)ply:SetCustomTitle(line,true)end)
+iin.AddCommand("title",function(ply,line)ply:SetCustomTitle(line,true)end, nil, true)
 
 iin.AddCommand('stats',function()
 
@@ -84,7 +84,7 @@ iin.AddCommand('rank',function(ply,args)
 	else
 		iin.error(ply,'Ply not found.')	
 	end
-end,'owners')
+end,'owners', true)
 
 iin.AddCommand("hp",function(ply,args)
 	args = iin.ParseArgs(args)
@@ -101,7 +101,7 @@ iin.AddCommand("hp",function(ply,args)
 	elseif !hp then
 	iin.error(ply,'??WHERE HEALTH ARGs MAFAKA?? [!hp <Nick> <Hp>]')	
 	end
-end,'admins')
+end,'admins', true)
 
 
 iin.AddCommand("decals",function(ply)
@@ -116,7 +116,7 @@ BroadcastLua([[
 	end
 ]])
 iin_Msg(nil,Color(255,187,0)," ● ",ply,Color(255,255,255),' cleanup decals.')
-end,'admins')
+end,'admins', true)
 
 iin.AddCommand('goto',function(ply,line)
     
@@ -154,7 +154,7 @@ iin.AddCommand('goto',function(ply,line)
 	iin_Msg(nil,Color(255,187,0)," ● ",ply,Color(255,255,255),' goto ',ent:IsPlayer() and ent,Color(255,255,255),'.')
 	
 	ply.time_to_goto = CurTime()+1
-end)
+end, nil, true)
 
 iin.AddCommand('return',function(ply)
 	if not ply:Alive() then ply:Spawn() end
@@ -164,7 +164,7 @@ iin.AddCommand('return',function(ply)
 	else
 		iin.error(ply,'Last position not found.')
 	end
-end)
+end, nil, true)
 
 iin.AddCommand('tp',function(ply,line)
 	if not ply:Alive() then ply:Spawn() end
@@ -187,7 +187,7 @@ iin.AddCommand('tp',function(ply,line)
 		return
 	end
 	iin_Msg(nil,Color(255,187,0)," ● ",ply,Color(255,255,255),' teleported ',id:IsPlayer() and id or ply,Color(255,255,255),'.')
-end,'admins') 
+end,'admins', true) 
 
 iin.AddCommand('freeze',function(ply,args)
 args=iin.ParseArgs(args)
@@ -203,7 +203,7 @@ if id:IsPlayer() then
 else
 	iin.error(ply,'Ply not found.')
 end 
-end,'admins')
+end,'admins', true)
 
 iin.AddCommand('unfreeze',function(ply,args)
 local id = FindEntity(args)
@@ -213,7 +213,7 @@ if id:IsPlayer() then
 else
 	iin.error(ply,'Ply not found.')
 end 
-end,'admins')
+end,'admins', true)
 
 
 iin.AddCommand('crash',function(ply,args)
@@ -224,7 +224,7 @@ iin.AddCommand('crash',function(ply,args)
 	else
 		iin.error(ply,'Ply not found.')
 	end 
-end,'admins')
+end,'admins', true)
 
 iin.AddCommand('kill',function(ply,args)
 	local id = FindEntity(args)
@@ -234,7 +234,7 @@ iin.AddCommand('kill',function(ply,args)
 	else
 		iin.error(ply,'Ply not found.')
 	end 
-end,'admins')
+end,'admins', true)
 
 iin.AddCommand('cleanup',function(ply,args)
 	local id = FindEntity(args)
@@ -245,7 +245,7 @@ iin.AddCommand('cleanup',function(ply,args)
 	else
 		iin.error(ply,'Ply not found.')
 	end 
-end,'admins')
+end,'admins', true)
 
 iin.AddCommand("restart",function(ply)
 	for i=1,5 do 
@@ -254,7 +254,7 @@ iin.AddCommand("restart",function(ply)
 	timer.Simple(5,function()
 		RunConsoleCommand("_restart")
 	end)
-end,'admins')
+end,'admins', true)
 
 iin.AddCommand("spawn",function(ply)
 	ply:Spawn()
@@ -346,7 +346,7 @@ if id:IsPlayer() then
 else
 	iin.error(ply,'Ply not found.')
 end 
-end,'admins')
+end,'admins', true)
 
 iin.AddCommand('unragdoll',function(ply,args)
 	local id = FindEntity(args)
@@ -373,7 +373,7 @@ iin.AddCommand('unragdoll',function(ply,args)
 	else
 		iin.error(ply,'Ply not found.')
 	end 
-end,'admins')
+end,'admins', true)
 
 iin.AddCommand('gag',function(ply,args)
 	args = iin.ParseArgs(args)
@@ -402,7 +402,7 @@ iin.AddCommand('gag',function(ply,args)
 
 	end
 
-end,'admins')
+end,'admins', true)
 
 iin.AddCommand('ungag',function(ply,args)
 	local id = FindEntity(args)
@@ -413,7 +413,7 @@ iin.AddCommand('ungag',function(ply,args)
 	else
 		iin.error(ply,'Ply not found.')
 	end 
-end,'admins')
+end,'admins', true)
 
 
 local function gagHook( listener, talker )
@@ -436,10 +436,10 @@ local function cexec(ply,args)
 	iin.error(ply,'Ply not found [!console <Nick> <Command>]')
 end
 
-iin.AddCommand("cexxec",cexec,'devs')
-iin.AddCommand("cexec",cexec,'devs')
+iin.AddCommand("cexxec",cexec,'devs', true) -- why do we have this?
+iin.AddCommand("cexec",cexec,'devs', true)
 
-iin.AddCommand("lua",function(ply) ply:SendLua[[ShowLuabox()]] end)
+iin.AddCommand("lua",function(ply) ply:SendLua[[ShowLuabox()]] end) -- Throws an error
 
 --[==[ [0:1:22477976]Card STEAM_0:1:22477976 ran this script at 01/26/15 19:03:43 ]==] 
 local function urlencode(str)
@@ -516,7 +516,7 @@ iin.AddCommand("timescale", function(ply, line)
 	end
 
 	iin.error(ply, "Enter time scale.")
-end, "devs")
+end, "devs", true)
 
 
 iin.AddCommand("raw",function(ply,line)
