@@ -49,9 +49,12 @@ local function log(txt)
 end
 
 
-iin.AddCommand("ban", function(ply, args, name_line, reason)
-	if not reason then iin.error(ply,"Недостаточно аргументов функции {[1]=ply [2]=reason}") return end
+iin.AddCommand("ban",function(ply,args)
+
+	args = iin.ParseArgs(args)
+	if #args ~= 2 then iin.error(ply,"Недостаточно аргументов функции {[1]=ply [2]=reason}") return end
 	
+	local reason = args[2]
 	local pcolor
 	local name_line = args[1]
 	local player = easylua.FindEntity(name_line)
