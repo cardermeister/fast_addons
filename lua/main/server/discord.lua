@@ -101,6 +101,20 @@ function discord.print(...)
 	return print(...)
 end
 
+function discord.status()
+
+	local str = "```lua\n{\n"
+	
+	for i,k in pairs(player.GetAll()) do
+		
+		str = str + "\t" + "[" + k:EntIndex() + "] " + k:GetName() + " --" + k:SteamID() + "\n"
+			
+	end
+	
+	str = str + "}\n``` steam://connect/195.2.252.214:27015"
+	http.Post(webhook,{content = str})
+end
+
 function discord.PrintTable(...)
 	
 	http.Post(webhook,{content = "```Markdown\n"..table.ToString(...,nil,true):Left(1980).."\n```"})
