@@ -41,8 +41,8 @@ function iin.ChatCommands(ply,txt)
 end
 hook.Add("PlayerSay", "chatcmd", iin.ChatCommands)
  
-concommand.Add(Tag,function(ply,_,txt)
-	txt = table.concat(txt," ")
+concommand.Add(Tag, function(ply, _, _, argline)
+	--[[txt = table.concat(txt," ")
 	local cmd = txt:match("(.-) ") or txt:match(iin.Prefix.."(.+)") or ""
 	local line = txt:match(".- (.+)")
 	
@@ -52,7 +52,8 @@ concommand.Add(Tag,function(ply,_,txt)
 			iin.CallCommand(ply,cmd,line,line and iin.ParseArgs(line) or {})
 			return true
 		end
-	end
+	end]]
+	iin.ChatCommands(ply, argline)
 end)
 
 iin.AddCommand("say", function(player, line)
