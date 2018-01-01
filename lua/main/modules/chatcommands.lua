@@ -5,7 +5,7 @@ iin = iin or {}
 iin.Prefix = "!"
 local EchoCmds=CreateConVar( Tag.."_echo_luacmds", "1", { FCVAR_REPLICATED, FCVAR_ARCHIVE,FCVAR_NOTIFY} )
 
-function iin.AddCommand(cmd,callback,IsUserGroup(string groupname),hidechat)
+function iin.AddCommand(cmd,callback,group,hidechat)
 	iin.cmds = iin.cmds or {}
 	iin.cmds[cmd] = {callback = callback, group = group or "players", cmd = cmd, hidechat = hidechat or false}
 end
