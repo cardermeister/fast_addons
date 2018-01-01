@@ -12,7 +12,7 @@ end
 
 
 function iin.CallCommand(ply,cmd,line,args)
-cmd = iin.cmds[cmd]
+	cmd = iin.cmds[cmd]
 	local ok,err = pcall(function()
 		cmd.callback(ply,line,unpack(args))
 	end)
@@ -27,13 +27,13 @@ end
 function iin.ChatCommands(ply,txt)
 	if txt:sub(1, 1) == iin.Prefix then
 		local cmd = txt:match("^" .. iin.Prefix .. "(%S*)") or ""
-		local line = txt:match(iin.Prefix .. ".- (.+)")
+		local line = txt:match(iin.Prefix .. ".- (.+)") or ""
 		
 		cmd = cmd:lower()
 		local iincmd = iin.cmds[cmd]
 		if iincmd then
 			if ply:CheckGroupPower(iincmd.group) then
-				iin.CallCommand(ply, cmd, line, line and iin.ParseArgs(line))
+				iin.CallCommand(ply, cmd, line, iin.ParseArgs(line))
 				if iincmd.hidechat then return "" end
 			end
 		end
@@ -41,17 +41,15 @@ function iin.ChatCommands(ply,txt)
 end
 hook.Add("PlayerSay", "chatcmd", iin.ChatCommands)
  
-concommand.Add(Tag,function(ply, _, _, args)
-	args = iin.ParseArgs(args)
-
-	local cmd = table.remove(args, 1) or ""
-	local line = table.concat(args, " ")
+concommand.Add("iin",function(ply, _, _, args)
+	local cmd = args:match("^(%S*)") or ""
+	local line = args:match("^.- (.+)") or ""
 	
 	cmd = cmd:lower()
 	local iincmd = iin.cmds[cmd]
 	if iincmd then
 		if ply:CheckGroupPower(iincmd.group) then
-			iin.CallCommand(ply, cmd, line, line and iin.ParseArgs(line))
+			iin.CallCommand(ply, cmd, line, iin.ParseArgs(line))
 		end
 	end
 end)
