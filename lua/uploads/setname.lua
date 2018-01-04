@@ -5,7 +5,7 @@ if SERVER then
 	local function AllowedToSetName(ply,name)
 		if not ply:IsAdmin() then
 			if name then
-				if utf8.len( name ) > 32 then
+				if (utf8.len(name) or #name) > 32 then
 					ply:ChatPrint( "Слишком длинный ник." )
 					return
 				end
