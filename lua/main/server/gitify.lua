@@ -12,9 +12,15 @@ local function func(repo_name,k)
 	
 end
 
-local function gitify(json)
+local function gitify(response)
 
-	json = util.JSONToTable(json)
+	json = util.JSONToTable(response)
+
+	if not json then
+		error("Server response is not JSON: " .. tostring(response))
+		return
+	end
+
 	local commit_add = json.summary
 	json = json.payload
 	local repo_name = json.repository.name
