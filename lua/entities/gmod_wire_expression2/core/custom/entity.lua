@@ -48,7 +48,9 @@ local function createentitysfromE2(self,entity,pos,angles,freeze)
 	ent:SetPos(pos)
 	ent:CPPISetOwner(self.player)
 	ent:SetAngles(angles)
-	ent:SetOwner(self.player)
+	if not ent:IsNPC() then
+		ent:SetOwner(self.player)
+	end
 	ent:Spawn()
 	ent.e2co = true 
 	self.player:AddCleanup( "props", ent )
