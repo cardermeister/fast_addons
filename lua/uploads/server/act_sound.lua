@@ -37,7 +37,7 @@ local sounds = {
     [1641] = {
     'https://raw.githubusercontent.com/OldOverusedMeme/yeban/master/ban5.mp3',
     'https://raw.githubusercontent.com/OldOverusedMeme/gmod/master/zombik.mp3',
-	'https://raw.githubusercontent.com/ZpyduCat/sas/master/Sas/zombie_act.mp3'
+	'https://raw.githubusercontent.com/ZpyduCat/sas/master/Sasi/zombie_act.mp3'
     },
     [53] = 'https://raw.githubusercontent.com/OldOverusedMeme/yeban/master/ban6.mp3',
     [1613] = 'https://raw.githubusercontent.com/OldOverusedMeme/yeban/master/ban28.mp3',
@@ -74,9 +74,9 @@ local sounds = {
     [1614] = 'https://raw.githubusercontent.com/OldOverusedMeme/gmod/master/hivariant1.mp3',
     [1616] = {
 	'https://raw.githubusercontent.com/OldOverusedMeme/gmod/master/skare.mp3',
-	'https://raw.githubusercontent.com/ZpyduCat/sas/master/Sas/magak.mp3'
+	'https://raw.githubusercontent.com/ZpyduCat/sas/master/Sasi/magak.mp3'
 	},
-	[2020] = 'https://raw.githubusercontent.com/ZpyduCat/sas/master/Sas/give_pizdi.mp3',
+	[2020] = 'https://raw.githubusercontent.com/ZpyduCat/sas/master/Sasi/give_pizdi.mp3',
 	[2023] = 'https://raw.githubusercontent.com/OldOverusedMeme/yeban/master/ban60.mp3'
 }
 
