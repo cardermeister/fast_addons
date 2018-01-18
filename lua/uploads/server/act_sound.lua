@@ -62,7 +62,7 @@ local sounds = {
         'https://raw.githubusercontent.com/OldOverusedMeme/gmod/master/eblanlaugh.mp3',
         'https://aww.moe/oqmuk0.mp3',
         'https://aww.moe/mkskyu.mp3',
-		'https://raw.githubusercontent.com/ZpyduCat/sas/master/Sas/laugh_actick.mp3'
+		'https://raw.githubusercontent.com/ZpyduCat/sas/master/Sasi/laugh_actick.mp3'
     },
     [1617] = 'https://raw.githubusercontent.com/OldOverusedMeme/gmod/master/%D1%86%D0%BF.mp3',
     [1612] = 'https://raw.githubusercontent.com/OldOverusedMeme/gmod/master/kalnawel.mp3',
