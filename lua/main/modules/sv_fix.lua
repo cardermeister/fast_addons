@@ -99,6 +99,26 @@ hook.Add("OnEntityCreated","gmod_wire_expression2",function(ent)
 end)
 
 
+hook.Add("Initialize", "starfall_processor", function()
+	SF.Libraries.AddHook("initialize", function(instance)
+		if not instance.ppdata then return end
+		
+		local name
+		if not instance.ppdata.scriptnames then
+			name = "generic"
+		else
+			name = instance.ppdata.scriptnames.main or "generic"
+		end
+		
+		local chip = instance.data.entity
+		local owner = instance.player
+		
+		MsgC(Color(48, 206, 203), "[SF] ")
+		print(owner, "->", chip, "(", name, ")")
+	end)
+end)
+
+
 timer.Create("Gruppa",5*60,0,function()
 	ChatAddText(Color(68,255,68),"Наша группа: ",Color(161,161,255), "http://steamcommunity.com/groups/wire-build", Color(255,255,255))
 	ChatAddText(Color(68,255,68),"Join us in our Discord Channel: ",Color(161,161,255),"https://discord.gg/3wsBm3N")
