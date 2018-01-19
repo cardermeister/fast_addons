@@ -94,7 +94,7 @@ hook.Add("PlayerInitialSpawn",Tag,function(ply)
 	local ip = ply:IPAddress():match("(.-):")
 	local str = geoip[ip]
 	
-	ply:SetNWString("location",string.format("%s <%s>",ply:GeoipString("ru"),ip))
+	--ply:SetNWString("location",string.format("%s <%s>",ply:GeoipString("ru"),ip))
 	
 	if str and str.country and str.country.iso then
 		ply:SetNWString("ISO",str.country.iso or "NR")
