@@ -132,8 +132,8 @@ local verbose_tools = {
 }
 
 local disallow_by_hours = {}
-disallow_by_hours["duplicator"] = 1000
-disallow_by_hours["stacker"] = 1000
+disallow_by_hours["duplicator"] = 5000
+disallow_by_hours["stacker"] = 5000
 
 hook.Add("CanTool","minge_duplicator",function(ply,_, tool )
 	if not ply:IsPlayer() then return end
