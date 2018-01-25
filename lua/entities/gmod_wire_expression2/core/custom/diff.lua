@@ -129,13 +129,16 @@ Block["setteam"] = true
 Block["run_lua"] = true
 Block["point_servercommand"] = true
 Block["*"] = true
-Block['env_screenoverlay'] = true
-Block['onhealthchanged'] = true
-Block['onplayerpickup'] = true
-Block['game_end'] = true
-Block['lua_run'] = true
-Block['point_commentary_node'] = true
-Block['code'] = true
+Block["env_screenoverlay"] = true
+Block["onhealthchanged"] = true
+Block["onplayerpickup"] = true
+Block["game_end"] = true
+Block["lua_run"] = true
+Block["point_commentary_node"] = true
+Block["code"] = true
+Block["angles"] = true
+Block["origin"] = true
+Block["setparent"] = true
 
 
 __e2setcost(100)
