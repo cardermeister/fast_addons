@@ -10,7 +10,6 @@ local sbox_e2_maxentitys = CreateConVar( "sbox_e2_maxentitys", "-1", FCVAR_ARCHI
 local sbox_e2_maxentitys_persecond = CreateConVar( "sbox_e2_maxentitys_persecond", "12", FCVAR_ARCHIVE )
 local sbox_e2_entitycore = CreateConVar( "sbox_e2_entitycore", "2", FCVAR_ARCHIVE )
 
-local E2Helper = { Descriptions = {} }
 local E2totalspawnedentitys = 0
 local E2tempSpawnedEntitys = 0
 
@@ -27,7 +26,15 @@ end
 local function ValidAction(ply)
 	return sbox_e2_entitycore:GetInt()==2 or (sbox_e2_entitycore:GetInt()==1 and ply:IsAdmin())
 end
-local Blent = {"game_end","lua_run","point_commentary_node","combine_mine","env_entity_dissolver"}
+
+local Blent = {
+	"game_end",
+	"lua_run",
+	"point_commentary_node",
+	"combine_mine",
+	"env_entity_dissolver",
+	"prop_vehicle_crane"
+}
 
 --sql.Query([[CREATE TABLE IF NOT EXISTS 2somethingtest1337(Ply,Val)]])
 --globalentsss = {}
