@@ -28,16 +28,16 @@ net.Receive(tag, function(len, ply)
 end)
 
 
-local function WriteCompressedString(str)
+local function WriteCompressedString(str, chip)
 	if str:find("\0", 1, true) then
-		self.player:ChatPrint("Sound URL contains invalid characters (null byte)")
+		chip.player:ChatPrint("Sound URL contains invalid characters (null byte)")
 		return true
 	end
 
 	local c_str = util.Compress(str)
 
 	if c_str and #c_str > 1024 and #str > 1024 then
-		self.player:ChatPrint("Sound URL length is too long (>1024)")
+		chip.player:ChatPrint("Sound URL length is too long (>1024)")
 		return true
 	end
 
@@ -95,7 +95,7 @@ local function LoadSound(chip, id, url, volume, noplay, targ)
 		net.WriteEntity(chip)
 		net.WriteString(SafeID(id))
 		net.WriteEntity(chip.player)
-		if WriteCompressedString(url) then return end
+		if WriteCompressedString(url, chip) then return end
 		net.WriteFloat(volume)
 		net.WriteBool(noplay ~= 0)
 
