@@ -1,6 +1,6 @@
 local function func(repo_name,k)
 	
-	local message = k.message:gsub("\n"," ")
+	local message = k.message:gsub("\n","\n\t♢ ")
 	
 	
 	ChatAddText(Color(117, 113, 94),"["+repo_name+":master]",color_white," Commit from ",Color(255,140,113),k.author.name,color_white,"\n\t♢ ",message)
