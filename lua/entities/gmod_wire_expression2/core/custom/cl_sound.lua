@@ -309,7 +309,7 @@ net.Receive(tag, function()
 		if not sounds then return end
 
 		local audio = sounds[id]
-		if not audio then return end
+		if not IsValid(audio) then return end
 
 
 		if operation == SOUNDURL_PLAYPAUSE then
@@ -353,7 +353,7 @@ E2Helper.Descriptions["soundURLPurge"] = "Stop all the URL sounds"
 E2Helper.Descriptions["soundURLload"] = "Load the URL sound"
 E2Helper.Descriptions["soundURLplay"] = "Play the URL sound"
 E2Helper.Descriptions["soundURLpause"] = "Pause the URL sound"
-E2Helper.Descriptions["soundURLvolume"] = "Set the URL sound volume"
+E2Helper.Descriptions["soundURLvolume"] = "Set the URL sound volume, from 0 to 2 (200%)"
 E2Helper.Descriptions["soundURLpos"] = "Set the URL sound position"
 E2Helper.Descriptions["soundURLparent"] = "Parent the URL sound"
 E2Helper.Descriptions["soundURLdelete"] = "Delete/stop the URL sound"

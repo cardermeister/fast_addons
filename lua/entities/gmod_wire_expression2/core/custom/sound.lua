@@ -96,7 +96,7 @@ local function LoadSound(chip, id, url, volume, noplay, targ)
 		net.WriteString(SafeID(id))
 		net.WriteEntity(chip.player)
 		if WriteCompressedString(url, chip) then return end
-		net.WriteFloat(volume)
+		net.WriteFloat(math.Clamp(volume, 0, 2))
 		net.WriteBool(noplay ~= 0)
 
 		if targIsEntity then
@@ -127,7 +127,7 @@ local function VolumeSound(chip, id, volume)
 
 		net.WriteEntity(chip)
 		net.WriteString(SafeID(id))
-		net.WriteFloat(volume)
+		net.WriteFloat(math.Clamp(volume, 0, 2))
 	net.Broadcast()
 end
 
