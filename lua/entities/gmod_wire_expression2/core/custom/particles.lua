@@ -156,7 +156,7 @@ end
 e2function array particlesList()
 	local result = {[0] = Particles[0]}
 
-	for k, v in ipairs(tbl) do
+	for k, v in ipairs(Particles) do
 		result[k] = v
 	end
 
