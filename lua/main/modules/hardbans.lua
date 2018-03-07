@@ -108,8 +108,8 @@ hook.Add("CheckPassword","RainbowBans",function( cid,_,_,_, name )
 	for i,k in pairs(iin.BannedUsers) do
 		
 		if k.cid == cid then
-			log(name.." try to join")
-			return false,k.reason	
+			log(name .. " try to join - " .. cid)
+			return false, k.reason	
 		end
 		
 	end

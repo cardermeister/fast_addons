@@ -46,6 +46,8 @@ local function MakePropNoEffect(...)
 end
 
 function PropCore.CreateProp(self,model,pos,angles,freeze)
+	if not IsValid(self.player) then return end
+	
 	if(!util.IsValidModel(model) || !util.IsValidProp(model) || not PropCore.ValidSpawn() )then
 		return nil
 	end
@@ -149,6 +151,7 @@ e2function entity propSpawn(entity template, vector pos, angle rot, number froze
 end
 
 e2function number propCanSpawn()
+	if not IsValid(self.player) then return end
 	if self.player:GetCount( "props" ) >= (GetConVarNumber("sbox_maxprops") > 0 and GetConVarNumber("sbox_maxprops") or self.player:GetCount( "props" )+1) then return 0 end
 	if E2tempSpawnedProps >= sbox_E2_maxPropsPerSecond:GetInt() then return 0 end
 	if E2totalspawnedprops >= (sbox_E2_maxProps:GetInt() > 0 and sbox_E2_maxProps:GetInt() or E2totalspawnedprops+1) then return 0 end
@@ -339,17 +342,20 @@ local function parent_check( child, parent, self )
 end
 
 e2function void entity:setParent(entity ent)
-	if !IsValid(this) then return end
-	if !isOwner(self,this)  then return end
-	if !IsValid(ent) then return end
-	if !isOwner(self,ent)  then return end
-	if !parent_check( this, ent, self ) then return end
-	this:SetParent( ent )
+	if not IsValid(this) then return end
+	if this:IsPlayer() then return end
+	if not isOwner(self, this) then return end
+	if not IsValid(ent) then return end
+	if not isOwner(self, ent) then return end
+	if not parent_check(this, ent, self) then return end
+
+	this:SetParent(ent)
 end
 
 e2function void entity:unParent()
-	if !IsValid(this) then return end
-	if !isOwner(self,this)  then return end
+	if not IsValid(this) then return end
+	if not isOwner(self, this) then return end
+
 	this:SetParent()
 end
 

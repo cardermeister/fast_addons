@@ -24,7 +24,10 @@ local function ValidSpawn()
 end
 
 local function ValidAction(ply)
-	return sbox_e2_entitycore:GetInt()==2 or (sbox_e2_entitycore:GetInt()==1 and ply:IsAdmin())
+	if not IsValid(ply) then return false end
+	if sbox_e2_entitycore:GetInt() == 2 then return true end
+	
+	return sbox_e2_entitycore:GetInt() == 1 and ply:IsAdmin()
 end
 
 local Blent = {

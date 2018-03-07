@@ -159,32 +159,31 @@ hook.Add("PlayerInitialSpawn", "E2Power_CheckPlayer", function(ply)
 end)
 
 
+if not E2Power.isOwnerOld then
+	E2Power.isOwnerOld = isOwner
+	isOwnerOld = isOwner
+end
+
+
 function isOwner(self, entity)
 	local player = self.player
 	if PlyAccess[player] then return true end
-	--if BlackList[player:SteamID()] then return false end
+
 	local owner = getOwner(self, entity)
 	if not IsValid(owner) then return false end
+
 	return owner == player
 end
 
-function E2Lib.isOwner(self, entity)
-	local player = self.player
-	if PlyAccess[player] then return true end
-	--if BlackList[player:SteamID()] then return false end
-	local owner = getOwner(self, entity)
-	if not IsValid(owner) then return false end
-	return owner == player
-end
 
 E2Power.PlyHasAccess = PlyHasAccess
 E2Power.findPlayer = findPlayer
 ------------------------------------------------------------CONSOLE COMMAND
-concommand.Add( "e2power_all_remove_access", function(who)
-	for _,ply in pairs(player.GetAll()) do
-		RemoveAccess(ply,who)
+concommand.Add("e2power_all_remove_access", function(who)
+	for _, ply in ipairs(player.GetAll()) do
+		RemoveAccess(ply, who)
 	end
-end )
+end)
 
 	
 
