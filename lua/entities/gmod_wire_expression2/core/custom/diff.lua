@@ -420,8 +420,8 @@ e2function void entity:viewPunch(angle rot)
 	if not isOwner(self, this) then return end
 
 	this:ViewPunch(Angle(
-		math.Clamp(rot[1], -180, 180)
-		math.Clamp(rot[2], -180, 180)
+		math.Clamp(rot[1], -180, 180),
+		math.Clamp(rot[2], -180, 180),
 		math.Clamp(rot[3], -180, 180)
 	))
 end
