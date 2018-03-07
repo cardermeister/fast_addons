@@ -189,8 +189,8 @@ local function done(x,y,xx,yy)
 	
 	local lt=time()
 	local q = 80
-	hook.Add("PostRender", tag, function()
-		hook.Remove("PostRender", tag)
+	hook.Add("PostRender", Tag, function()
+		hook.Remove("PostRender", Tag)
 		local cap = capture(x,y,w,h,q)
 		
 		local okay=true
