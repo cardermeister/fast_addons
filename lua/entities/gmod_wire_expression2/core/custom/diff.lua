@@ -269,7 +269,7 @@ for typename, shortname in pairs(typemaps) do
 		if not this.e2data then this.e2data = {} end
 
 		this.e2data[name] = value
-	end, {"name", "value"})
+	end, 20, {"name", "value"})
 
 	registerFunction("getVar" .. typename, "e:s", shortname, function(self, args)
 		local op1, op2 = args[2], args[3]
@@ -287,7 +287,7 @@ for typename, shortname in pairs(typemaps) do
 		end
 
 		return value
-	end, {"name"})
+	end, 20, {"name"})
 end
 
 e2function void entity:setVar(string name, ...)
