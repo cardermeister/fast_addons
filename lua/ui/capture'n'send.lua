@@ -189,35 +189,38 @@ local function done(x,y,xx,yy)
 	
 	local lt=time()
 	local q = 80
-	local cap = capture(x,y,w,h,q)
-	
-	local okay=true
-	while string.len(cap) > (2^16-1) do
-		if (time()-lt)>1 then PE'TIME EXCEEDED UGH!!1 BAILING OUT!!1' okay=false break end
-		q=q-10
-		PS('trying lower res... ',q)
-		cap = capture(x,y,w,h,q)
-	end
-	
-	if not okay then PE(Format('NOT SENDING, TOO HUGE (%u)(%0.2fs)',string.len(cap),time()-lt)) cap=nil return end
-	
-	-- cap = base64.encode(cap) -- :( let the send-ee decode :(
-	PS(Format('Captured! (%0.2fs)',time()-lt))
-	print(x,y,w,h)
-	
-	if autosend and (#autosend>0) then
-		sendto(cap,autosend) autosend=nil cap=nil
-	else
-		local frame = vgui.Create("SCAP_SendToFrame")
-		local cap = cap -- uh, variable scope fix?
-
-		function frame:OnPlayerSelected(ply)
-			frame:Remove()
-			sendto(cap, {ply}) -- TODO multiple - selection
+	hook.Add("PostRender", tag, function()
+		hook.Remove("PostRender", tag)
+		local cap = capture(x,y,w,h,q)
+		
+		local okay=true
+		while string.len(cap) > (2^16-1) do
+			if (time()-lt)>1 then PE'TIME EXCEEDED UGH!!1 BAILING OUT!!1' okay=false break end
+			q=q-10
+			PS('trying lower res... ',q)
+			cap = capture(x,y,w,h,q)
 		end
-	end
-	
-	autosend=nil cap=nil
+		
+		if not okay then PE(Format('NOT SENDING, TOO HUGE (%u)(%0.2fs)',string.len(cap),time()-lt)) cap=nil return end
+		
+		-- cap = base64.encode(cap) -- :( let the send-ee decode :(
+		PS(Format('Captured! (%0.2fs)',time()-lt))
+		print(x,y,w,h)
+		
+		if autosend and (#autosend>0) then
+			sendto(cap,autosend) autosend=nil cap=nil
+		else
+			local frame = vgui.Create("SCAP_SendToFrame")
+			local cap = cap -- uh, variable scope fix?
+
+			function frame:OnPlayerSelected(ply)
+				frame:Remove()
+				sendto(cap, {ply}) -- TODO multiple - selection
+			end
+		end
+		
+		autosend=nil cap=nil
+	end)
 end
 
 local wasdown
