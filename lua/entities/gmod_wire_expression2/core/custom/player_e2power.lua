@@ -172,7 +172,7 @@ local function ragdollPlayer(ply)
 	return ragdoll
 end
 
-local function unragdollPlayer(ply)
+local function unragdollPlayer(ply, respawn)
 	ply:SetParent()
 	ply:UnSpectate()
 
@@ -180,14 +180,16 @@ local function unragdollPlayer(ply)
 	ply.ragdoll = nil
 	ragdoll.ragdolledPly = nil -- To make EntityRemoved not be called
 
-	local pos = ragdoll:GetPos()
-	pos.z = pos.z + 10
+	if not respawn then
+		local pos = ragdoll:GetPos()
+		pos.z = pos.z + 10
 
-	ply:Spawn()
-	ply:SetPos(pos)
-	local yaw = ragdoll:GetAngles().yaw
-	ply:SetAngles(Angle(0, yaw, 0))
-	ply:SetVelocity(ragdoll:GetVelocity())
+		ply:Spawn()
+		ply:SetPos(pos)
+		local yaw = ragdoll:GetAngles().yaw
+		ply:SetAngles(Angle(0, yaw, 0))
+		ply:SetVelocity(ragdoll:GetVelocity())
+	end
 
 	ragdoll:Remove()
 end
@@ -204,7 +206,7 @@ e2function entity entity:playerRagdoll()
 	if not IsValid(this.ragdoll) then
 		return ragdollPlayer(this)
 	else
-		unragdollPlayer(this)
+		unragdollPlayer(this, true)
 		return this
 	end
 end
@@ -289,7 +291,7 @@ hook.Add("EntityRemoved", "UnragdollPlayer", function(ent)
 	if ent:GetClass() ~= "prop_ragdoll" then return end
 	if not IsValid(ent.ragdolledPly) then return end
 
-	unragdollPlayer(ent.ragdolledPly)
+	unragdollPlayer(ent.ragdolledPly, true)
 end)
 
 hook.Add("PlayerDisconnected", "RemoveRagdoll", function(ply)
@@ -300,12 +302,12 @@ end)
 
 hook.Add("PostPlayerDeath", "UnragdollPlayer", function(ply)
 	if IsValid(ply.ragdoll) then
-		unragdollPlayer(ply)
+		unragdollPlayer(ply, false)
 	end
 end)
 
 hook.Add("PlayerSpawn", "UnragdollPlayer", function(ply)
 	if IsValid(ply.ragdoll) then
-		unragdollPlayer(ply)
+		unragdollPlayer(ply, false)
 	end
 end)
