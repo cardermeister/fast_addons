@@ -178,6 +178,7 @@ local function unragdollPlayer(ply)
 
 	local ragdoll = ply.ragdoll
 	ply.ragdoll = nil
+	ragdoll.ragdolledPly = nil -- To make EntityRemoved not be called
 
 	local pos = ragdoll:GetPos()
 	pos.z = pos.z + 10
