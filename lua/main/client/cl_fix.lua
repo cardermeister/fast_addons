@@ -75,19 +75,21 @@ hook.Add("EntityEmitSound", "TimeWarpSounds", function(data)
 
 end)
 
-SF.Libraries.AddHook("postload", function()
-	local P = {}
-	P.id = "owneronly"
-	P.name = "Console Commands"
-	P.settingsoptions = {"Only You", "No one"}
-	P.defaultsetting = 2
+hook.Add("Initialize", "SF.console.command", function()
+	SF.Libraries.AddHook("postload", function()
+		local P = {}
+		P.id = "owneronly"
+		P.name = "Console Commands"
+		P.settingsoptions = {"Only You", "No one"}
+		P.defaultsetting = 2
 
-	P.checks = {
-		function(instance, target, key)
-			return LocalPlayer() == instance.player
-		end,
-		function() return false end
-	}
+		P.checks = {
+			function(instance, target, key)
+				return LocalPlayer() == instance.player
+			end,
+			function() return false end
+		}
 
-	SF.Permissions.registerCustomProvider(P, {"console.command"}, true)
+		SF.Permissions.registerCustomProvider(P, {"console.command"}, true)
+	end)
 end)
