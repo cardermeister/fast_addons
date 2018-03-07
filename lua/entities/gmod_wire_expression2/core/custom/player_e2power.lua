@@ -288,7 +288,7 @@ e2function number entity:plyGetJumpPower()
 end
 
 hook.Add("EntityRemoved", "UnragdollPlayer", function(ent)
-	if ent:GetClass() ~= "prop_ragdoll" then return end
+	if not ent:GetClass():IsRagdoll() then return end
 	if not IsValid(ent.ragdolledPly) then return end
 
 	unragdollPlayer(ent.ragdolledPly, true)
