@@ -75,7 +75,13 @@ hook.Add("EntityEmitSound", "TimeWarpSounds", function(data)
 
 end)
 
+local _SF
 hook.Add("Initialize", "SF.console.command", function()
+	if not _SF then
+		if not SF then return end
+		_SF = SF
+	end
+	
 	local P = {}
 	P.id = "owneronly"
 	P.name = "Console Commands"
@@ -89,5 +95,5 @@ hook.Add("Initialize", "SF.console.command", function()
 		function() return false end
 	}
 
-	SF.Permissions.registerCustomProvider(P, {"console.command"}, true)
+	_SF.Permissions.registerCustomProvider(P, {"console.command"}, true)
 end)
