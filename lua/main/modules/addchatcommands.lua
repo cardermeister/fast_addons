@@ -305,7 +305,7 @@ if id:IsPlayer() then
 		ragdoll:Spawn()
 		ragdoll:Activate()
 		v:SetParent(ragdoll)
-		local j = 1
+		local j = 0
 		while true do 
 			local phys_obj = ragdoll:GetPhysicsObjectNum(j)
 			if phys_obj then
@@ -326,17 +326,17 @@ if id:IsPlayer() then
 			v:SetParent()
 			v:UnSpectate()
 			local ragdoll = v.ragdoll
-			v.ragdoll = nil 
-			if ragdoll:IsValid() then 	
-				local pos = ragdoll:GetPos()
-				pos.z = pos.z + 10 
-				v:Spawn()
-				v:SetPos(pos)
-				v:SetVelocity(ragdoll:GetVelocity())
-				local yaw = ragdoll:GetAngles().yaw
-				v:SetAngles(Angle(0,yaw,0))
-				ragdoll:Remove()
-			end
+			v.ragdoll = nil
+
+			ragdoll.ragdolledPly = nil
+			local pos = ragdoll:GetPos()
+			pos.z = pos.z + 10 
+			v:Spawn()
+			v:SetPos(pos)
+			v:SetVelocity(ragdoll:GetVelocity())
+			local yaw = ragdoll:GetAngles().yaw
+			v:SetAngles(Angle(0,yaw,0))
+			ragdoll:Remove()
 		end
 	end)
 	iin_Msg(nil,Color(255,187,0)," ● ",ply,Color(255,255,255),' ragdolled ',id,Color(255,255,255)," for "..string.NiceTime(time)..'.')

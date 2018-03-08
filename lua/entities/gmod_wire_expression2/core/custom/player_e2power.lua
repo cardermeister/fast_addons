@@ -153,14 +153,10 @@ local function ragdollPlayer(ply)
 	ply:SetParent(ragdoll)
 
 	local velocity = ply:GetVelocity()
-	local i = 0
 
-	while true do
+	for i = 0, ragdoll:GetPhysicsObjectCount() - 1 do
 		local phys = ragdoll:GetPhysicsObjectNum(i)
-		if not phys then break end
-
 		phys:SetVelocity(velocity)
-		i = i + 1
 	end
 
 	ply:Spectate(OBS_MODE_CHASE)
@@ -303,13 +299,13 @@ hook.Add("PlayerDisconnected", "RemoveRagdoll", function(ply)
 end)
 
 hook.Add("PostPlayerDeath", "UnragdollPlayer", function(ply)
-	if IsValid(ply.ragdoll) then
+	if IsValid(ply.ragdoll) and ply.ragdolledWithE2 then
 		unragdollPlayer(ply, false)
 	end
 end)
 
 hook.Add("PlayerSpawn", "UnragdollPlayer", function(ply)
-	if IsValid(ply.ragdoll) and ply.ragdolledWithE2 then
+	if IsValid(ply.ragdoll) then
 		unragdollPlayer(ply, false)
 	end
 end)
