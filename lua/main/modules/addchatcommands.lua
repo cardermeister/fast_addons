@@ -304,16 +304,11 @@ if id:IsPlayer() then
 		ragdoll:SetModel(v:GetModel())
 		ragdoll:Spawn()
 		ragdoll:Activate()
+		v.preventSpawn = true
 		v:SetParent(ragdoll)
-		local j = 0
-		while true do 
-			local phys_obj = ragdoll:GetPhysicsObjectNum(j)
-			if phys_obj then
-				phys_obj:SetVelocity(velocity)
-				j = j + 1
-			else
-				break
-			end
+		for i = 0, ragdoll:GetPhysicsObjectNum() - 1 do
+			local phys_obj = ragdoll:GetPhysicsObjectNum(i)
+			phys_obj:SetVelocity(velocity)
 		end
 		v:Spectate(OBS_MODE_CHASE)
 		v:SpectateEntity(ragdoll)
@@ -323,12 +318,13 @@ if id:IsPlayer() then
 	if time and time>0 then timer.Simple(time,function() 
 		local v = id
 		if IsValid(v.ragdoll) then
+			v.preventSpawn = false
 			v:SetParent()
 			v:UnSpectate()
 			local ragdoll = v.ragdoll
 			v.ragdoll = nil
-
 			ragdoll.ragdolledPly = nil
+
 			local pos = ragdoll:GetPos()
 			pos.z = pos.z + 10 
 			v:Spawn()
@@ -353,20 +349,21 @@ iin.AddCommand('unragdoll',function(ply,args)
 	if id:IsPlayer() then
 		local v = id
 		if IsValid(v.ragdoll) then
+			v.preventSpawn = false
 			v:SetParent()
 			v:UnSpectate()
 			local ragdoll = v.ragdoll
 			v.ragdoll = nil 
-			if ragdoll:IsValid() then 	
-				local pos = ragdoll:GetPos()
-				pos.z = pos.z + 10 
-				v:Spawn()
-				v:SetPos(pos)
-				v:SetVelocity(ragdoll:GetVelocity())
-				local yaw = ragdoll:GetAngles().yaw
-				v:SetAngles(Angle(0,yaw,0))
-				ragdoll:Remove()
-			end
+			ragdoll.ragdolledPly = nil
+
+			local pos = ragdoll:GetPos()
+			pos.z = pos.z + 10 
+			v:Spawn()
+			v:SetPos(pos)
+			v:SetVelocity(ragdoll:GetVelocity())
+			local yaw = ragdoll:GetAngles().yaw
+			v:SetAngles(Angle(0,yaw,0))
+			ragdoll:Remove()
 		end		
 		
 		iin_Msg(nil,Color(255,187,0)," ● ",ply,Color(255,255,255),' unragdoll ',id,Color(255,255,255),'.')
@@ -374,6 +371,10 @@ iin.AddCommand('unragdoll',function(ply,args)
 		iin.error(ply,'Ply not found.')
 	end 
 end,'admins', true)
+
+hook.Add("PlayerDeathThink", "iinPreventSpawn", function(ply)
+	if ply.preventSpawn then return false end
+end)
 
 iin.AddCommand('gag',function(ply,args)
 	args = iin.ParseArgs(args)
