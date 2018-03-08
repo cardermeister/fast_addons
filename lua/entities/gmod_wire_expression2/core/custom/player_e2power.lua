@@ -168,6 +168,7 @@ local function ragdollPlayer(ply)
 	ply:StripWeapons()
 
 	ply.ragdoll = ragdoll
+	ply.ragdolledWithE2 = true
 
 	return ragdoll
 end
@@ -178,6 +179,7 @@ local function unragdollPlayer(ply, respawn)
 
 	local ragdoll = ply.ragdoll
 	ply.ragdoll = nil
+	ply.ragdolledWithE2 = false
 	ragdoll.ragdolledPly = nil -- To make EntityRemoved not be called
 
 	if respawn then
@@ -307,7 +309,7 @@ hook.Add("PostPlayerDeath", "UnragdollPlayer", function(ply)
 end)
 
 hook.Add("PlayerSpawn", "UnragdollPlayer", function(ply)
-	if IsValid(ply.ragdoll) then
+	if IsValid(ply.ragdoll) and ply.ragdolledWithE2 then
 		unragdollPlayer(ply, false)
 	end
 end)
