@@ -306,7 +306,7 @@ if id:IsPlayer() then
 		ragdoll:Activate()
 		v.preventSpawn = true
 		v:SetParent(ragdoll)
-		for i = 0, ragdoll:GetPhysicsObjectNum() - 1 do
+		for i = 0, ragdoll:GetPhysicsObjectCount() - 1 do
 			local phys_obj = ragdoll:GetPhysicsObjectNum(i)
 			phys_obj:SetVelocity(velocity)
 		end
