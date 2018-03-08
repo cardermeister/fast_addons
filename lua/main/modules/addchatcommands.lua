@@ -376,6 +376,10 @@ hook.Add("PlayerDeathThink", "iinPreventSpawn", function(ply)
 	if ply.preventSpawn then return false end
 end)
 
+hook.Add("PlayerSpawn", "iinPreventSpawn", function(ply)
+	ply.preventSpawn = false
+end)
+
 iin.AddCommand('gag',function(ply,args)
 	args = iin.ParseArgs(args)
 	local id = FindEntity(args[1])
