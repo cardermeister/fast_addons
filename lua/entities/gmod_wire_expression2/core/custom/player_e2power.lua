@@ -194,7 +194,7 @@ local function unragdollPlayer(ply, respawn)
 	ragdoll:Remove()
 end
 
-__e2setcost(15000)
+__e2setcost(1500)
 e2function entity entity:playerRagdoll()
 	if not IsValid(this) then return end
 	if not this:IsPlayer() then return end
