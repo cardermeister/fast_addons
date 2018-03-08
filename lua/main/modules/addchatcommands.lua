@@ -304,6 +304,9 @@ if id:IsPlayer() then
 		ragdoll:SetModel(v:GetModel())
 		ragdoll:Spawn()
 		ragdoll:Activate()
+		ragdoll:CPPISetOwner(ply)
+		ragdoll:SetOwner(v)
+
 		v.preventSpawn = true
 		v:SetParent(ragdoll)
 		for i = 0, ragdoll:GetPhysicsObjectCount() - 1 do

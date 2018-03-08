@@ -149,6 +149,7 @@ local function ragdollPlayer(ply)
 	ragdoll:Spawn()
 	ragdoll:Activate()
 	ragdoll:CPPISetOwner(ply)
+	ragdoll:SetOwner(ply)
 
 	ply:SetParent(ragdoll)
 
