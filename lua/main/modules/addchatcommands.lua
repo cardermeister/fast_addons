@@ -76,10 +76,10 @@ iin.AddCommand('rank',function(ply,args)
 	if id:IsPlayer() then
 		if validgruop then
 			id:SetUserGroup(group,write)
-			iin_Msg(nil,Color(255,187,0)," ● ",ply,Color(255,255,255),' set usergroup ',id,Color(255,255,255),' to '..group..(write and " and save to file" or "")..'.')
+			iin_Msg(nil,Color(255,187,0)," ● ",ply,Color(255,255,255),' set usergroup of ',id,Color(255,255,255),' to '..group..(write and " and save to file" or "")..'.')
 	
 		else
-			iin.error(ply,'This group not valid :c')	
+			iin.error(ply,'This group is not valid :c')	
 		end
 	else
 		iin.error(ply,'Ply not found.')	
@@ -372,7 +372,7 @@ iin.AddCommand('unragdoll',function(ply,args)
 			ragdoll:Remove()
 		end		
 		
-		iin_Msg(nil,Color(255,187,0)," ● ",ply,Color(255,255,255),' unragdoll ',id,Color(255,255,255),'.')
+		iin_Msg(nil,Color(255,187,0)," ● ",ply,Color(255,255,255),' unragdolled ',id,Color(255,255,255),'.')
 	else
 		iin.error(ply,'Ply not found.')
 	end 
@@ -420,11 +420,50 @@ iin.AddCommand('ungag',function(ply,args)
 	if id:IsPlayer() then
 		id.gagged = false
 		
-		iin_Msg(nil,Color(255,187,0)," ● ",ply,Color(255,255,255),' ungag ',id,Color(255,255,255),'.')
+		iin_Msg(nil,Color(255,187,0)," ● ",ply,Color(255,255,255),' ungagged ',id,Color(255,255,255),'.')
 	else
 		iin.error(ply,'Ply not found.')
 	end 
 end,'admins', true)
+
+iin.AddCommand("mute", function(ply, args)
+	args = iin.ParseArgs(args)
+	local id = FindEntity(args[1])
+	local time = string.DateFormat(args[2] or "0")
+
+	if id:IsPlayer() then
+		id.muted = true
+
+		if time and time ~= 0 and time < 60*60 then
+			timer.Simple(time, function()
+				id.muted = false
+			end)
+
+			iin_Msg(nil, Color(255, 187, 0), " ● ", ply, Color(255, 255, 255), " muted ", id, Color(255, 255, 255), " for " .. string.NiceTime(time) .. ".")
+		else
+			iin_Msg(nil, Color(255, 187, 0), " ● ", ply, Color(255, 255, 255), " muted ", id, Color(255, 255, 255))
+		end
+	else
+		iin.error(ply, "Player not found")
+	end
+end)
+
+iin.AddCommand("unmute", function(ply, args)
+	args = iin.ParseArgs(args)
+	local id = FindEntity(args[1])
+	local time = string.DateFormat(args[2] or "0")
+
+	if id:IsPlayer() then
+		id.muted = false
+		iin_Msg(nil, Color(255, 187, 0), " ● ", ply, Color(255, 255, 255), " unmuted ", id, Color(255, 255, 255), ".")
+	else
+		iin.error(ply, "Player not found")
+	end
+end)
+
+hook.Add("PlayerSay", "iinMute", function(ply)
+	if ply.muted then return "" end
+end)
 
 
 local function gagHook( listener, talker )
