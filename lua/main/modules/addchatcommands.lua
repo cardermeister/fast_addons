@@ -446,7 +446,7 @@ iin.AddCommand("mute", function(ply, args)
 	else
 		iin.error(ply, "Player not found")
 	end
-end)
+end, "admins", true)
 
 iin.AddCommand("unmute", function(ply, args)
 	args = iin.ParseArgs(args)
@@ -459,7 +459,7 @@ iin.AddCommand("unmute", function(ply, args)
 	else
 		iin.error(ply, "Player not found")
 	end
-end)
+end, "admins", true)
 
 hook.Add("PlayerSay", "iinMute", function(ply)
 	if ply.muted then return "" end
