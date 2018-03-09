@@ -562,7 +562,7 @@ end, "devs", true)
 
 iin.AddCommand("src",function(ply,line)
 	if line and #line>0 then
-		iin.Msg(nil,Color(255,187,0)," ● ",ply,Color(255,255,255),'@',Color(207, 110, 90),'raw',Color(255,255,255),': '..line)
+		iin.Msg(nil,Color(255,187,0)," ● ",ply,Color(255,255,255),'@',Color(207, 110, 90),'src',Color(255,255,255),': '..line)
 		RunString("print(GetFunctionSource("..line.."))")
 		return
 	end
