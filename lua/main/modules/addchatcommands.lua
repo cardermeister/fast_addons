@@ -157,6 +157,7 @@ iin.AddCommand('goto',function(ply,line)
 end, nil, true)
 
 iin.AddCommand('return',function(ply)
+	if ply.preventSpawn then return end
 	if not ply:Alive() then ply:Spawn() end
 	if ply.iin_tpprevious then
 		ply:SetPos(ply.iin_tpprevious)
@@ -257,7 +258,9 @@ iin.AddCommand("restart",function(ply)
 end,'admins', true)
 
 iin.AddCommand("spawn",function(ply)
-	ply:Spawn()
+	if not ply.preventSpawn then
+		ply:Spawn()
+	end
 end)
 
 iin.AddCommand("votekick",function(ply,line,target,reason)
