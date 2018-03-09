@@ -330,7 +330,7 @@ end
 e2function void setUndoName(string name)
 	if not IsValid(self.player) then return end
 
-	undo.Create(name)
+	undo.Create(string.JavascriptSafe(name))
 		undo.AddEntity(self.entity)
 		undo.SetPlayer(self.player)
 	undo.Finish()
@@ -341,7 +341,7 @@ e2function void entity:setUndoName(string name)
 	if not IsValid(self.player) then return end
 	if not isOwnerOld(self, this) then return end
 
-	undo.Create(name)
+	undo.Create(string.JavascriptSafe(name))
 		undo.AddEntity(this)
 		undo.SetPlayer(self.player)
 	undo.Finish()
@@ -350,7 +350,7 @@ end
 e2function void array:setUndoName(string name)
 	if not IsValid(self.player) then return end
 
-	undo.Create(name)
+	undo.Create(string.JavascriptSafe(name))
 		for k, v in pairs(this) do
 			if isentity(v) and IsValid(v) and isOwnerOld(self, v) then
 				undo.AddEntity(v)
