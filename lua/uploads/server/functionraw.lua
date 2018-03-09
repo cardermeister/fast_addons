@@ -1,5 +1,5 @@
-function GetFunctionRaw(func)
-	assert(isfunction(func), "bad argument #1 to 'GetFunctionRaw' (function expected, got " .. type(func) .. ")")
+function GetFunctionSource(func)
+	assert(isfunction(func), "bad argument #1 to 'GetFunctionSource' (function expected, got " .. type(func) .. ")")
 	
 	local ret = {}
 	

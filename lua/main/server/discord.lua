@@ -159,7 +159,7 @@ do
 	local env = {
 		print = discord.print,
 		PrintTable = discord.PrintTable,
-		GetFunctionRaw = function(...) local ret,num = string.gsub(GetFunctionRaw(...),"```","") return ret end
+		GetFunctionSource = function(...) local ret,num = string.gsub(GetFunctionSource(...),"```","") return ret end
 	}
 	
 	function meta:__index(key)
