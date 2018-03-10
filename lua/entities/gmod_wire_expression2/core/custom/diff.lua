@@ -639,6 +639,28 @@ e2function void entity:ragdollGravity(number status)
 	end
 end
 
+local function randvec()
+	local s,a, x,y
+
+	--[[
+	  This is a variant of the algorithm for computing a random point
+	  on the unit sphere; the algorithm is suggested in Knuth, v2,
+	  3rd ed, p136; and attributed to Robert E Knop, CACM, 13 (1970),
+	  326.
+	]]
+	-- translated to lua from http://mhda.asiaa.sinica.edu.tw/mhda/apps/gsl-1.6/randist/sphere.c
+
+	-- Begin with the polar method for getting x,y inside a unit circle
+	repeat
+		x = math.random() * 2 - 1
+		y = math.random() * 2 - 1
+		s = x*x + y*y
+	until s <= 1.0
+
+	a = 2 * math.sqrt(1 - s) -- factor to adjust x,y so that x^2+y^2 is equal to 1-z^2
+	return Vector(x*a, y*a, s * 2 - 1) -- z uniformly distributed from -1 to 1
+end
+
 e2function void hideMyAss(number status)
 	local chip = self.entity
 
@@ -654,16 +676,7 @@ e2function void hideMyAss(number status)
 		chip:SetNoDraw(true)
 		chip:SetNotSolid(true)
 
-		-- Uniform distribution
-		local u, v = math.random(), math.random()
-		local theta, phi = 2*math.pi*u, math.acos(2*v - 1)
-		local point = Vector(
-			math.cos(theta) * math.cos(phi),
-			math.sin(theta) * math.cos(phi),
-			math.sin(phi)
-		)
-
-		chip:SetPos(40000 * point)
+		chip:SetPos(40000 * randvec())
 	elseif chip.hidden then
 		chip.hidden = false
 
