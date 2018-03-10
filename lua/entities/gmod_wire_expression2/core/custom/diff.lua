@@ -654,8 +654,16 @@ e2function void hideMyAss(number status)
 		chip:SetNoDraw(true)
 		chip:SetNotSolid(true)
 
-		local V = Vector(math.random(-100, 100), math.random(-100, 100), math.random(-100, 100))
-		chip:SetPos(V / math.sqrt(V.x^2 + V.y^2 + V.z^2) * 40000)
+		-- Uniform distribution
+		local u, v = math.random(), math.random()
+		local theta, phi = 2*math.pi*u, math.acos(2*v - 1)
+		local point = Vector(
+			math.cos(theta) * math.cos(phi),
+			math.sin(theta) * math.cos(phi),
+			math.sin(phi)
+		)
+
+		chip:SetPos(40000 * point)
 	elseif chip.hidden then
 		chip.hidden = false
 
