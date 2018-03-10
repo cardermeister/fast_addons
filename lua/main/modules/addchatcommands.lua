@@ -22,7 +22,7 @@ iin.AddCommand('stats',function()
 	local cpu_per = math.Round(m1 * 100)
 	ChatAddText(Color(191,0,255),"[stats] ",Color(255,255,255),string.format("Server up %d days, %d hours, %d minutes. Map: %d hours. Used: %d%% mem, %d%% cpu.",d,h,m,math.Round(CurTime()/3600),swap_per,cpu_per))
 
-end)
+end, "admins", true)
 
 iin.AddCommand("kick",function(ply,args,target,reason)
 
