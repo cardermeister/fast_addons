@@ -13,6 +13,7 @@ hook.Add("RenderScreenspaceEffects","WeatherOverlay",function()
 	DrawColorModify(ScrColTab)
 end)
 
+/*
 function FixGrass()
 
 	timer.Simple(1,function()
@@ -34,7 +35,7 @@ hook.Add( "OnEntityCreated", "LocalPlayerValidating", function (ent)
 		hook.Remove( "OnEntityCreated", "LocalPlayerValidating")
 	end
 end)
-
+*/
 
 _chatAddText = _chatAddText or chat.AddText
 function chat.AddText(...)
