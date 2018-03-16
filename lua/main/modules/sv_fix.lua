@@ -119,7 +119,7 @@ hook.Add("Initialize", "starfall_processor", function()
 end)
 
 
-timer.Create("Gruppa",5*60,0,function()
+timer.Create("Gruppa",10*60,0,function()
 	ChatAddText(Color(68,255,68),"Наша группа: ",Color(161,161,255), "http://steamcommunity.com/groups/wire-build", Color(255,255,255))
 	ChatAddText(Color(68,255,68),"Join us in our Discord Channel: ",Color(161,161,255),"https://discord.gg/3wsBm3N")
 end)
@@ -145,7 +145,7 @@ hook.Add("CanTool","minge_duplicator",function(ply,_, tool )
 	
 	local disallow_test = disallow_by_hours[tool]
 	if disallow_test then
-		if t/60<disallow_test and not ply:IsAdmin() then
+		if t/60<disallow_test and not ply:IsAdmin() and not ply.pohui then
 			ply:ChatPrint('Этот инструмент ('..tool..') вам запрещен. Будет доступен после '..disallow_test..' часов в Garry\'sMod')
 			return false
 		end
