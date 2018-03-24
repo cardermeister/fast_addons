@@ -34,6 +34,20 @@ hook.Add( "OnEntityCreated", "LocalPlayerValidating", function (ent)
 	end
 end)
 
+function fast_html(w,h)
+	
+	w,h = w or ScrW()*3/4, h or ScrH()*3/4 
+	local panel = vgui.Create"DFrame"	
+	local html = vgui.Create("DHTML",panel)
+	panel:SetSize(w,h)
+	panel:Center()
+	html:SetSize(w,h-25)
+	html:SetPos(0,25)
+	panel:MakePopup()
+	
+	return html
+	
+end
 
 _chatAddText = _chatAddText or chat.AddText
 function chat.AddText(...)
