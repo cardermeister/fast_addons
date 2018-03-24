@@ -552,7 +552,7 @@ e2function void entity:giveAmmo(string type, number ammoCount)
 	if not this:IsPlayer() then return end
 	if not isOwner(self, this) then return end
 
-	this:GiveAmmo(count, type)
+	this:GiveAmmo(ammoCount, type)
 end
 
 e2function void entity:setAmmo(string type, number ammoCount)
