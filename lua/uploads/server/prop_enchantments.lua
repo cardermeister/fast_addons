@@ -17,6 +17,7 @@ FindMetaTable"Entity".MakeBlunt = function( ent1, ragdolltime )
 		if v:GetClass() == "player" and coldata.OurOldVelocity:Length() > Vector( 1000, 10, 10 ):Length() then 
 			local ragdoll = ents.Create( "prop_ragdoll" )
 			ragdoll.ragdolledPly = v
+			v.ragdoll = ragdoll
 			--https://raw.githubusercontent.com/OldOverusedMeme/yeban/master/ban17.mp3
 			--"https://raw.githubusercontent.com/OldOverusedMeme/gmod/master/magilu"..math.random(1,5)..".mp3"
 			v:PlayURL( "https://raw.githubusercontent.com/OldOverusedMeme/yeban/master/ban17.mp3" )
