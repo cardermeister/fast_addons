@@ -193,6 +193,7 @@ Blocked["code"] = true
 Blocked["angles"] = true
 Blocked["origin"] = true
 Blocked["setparent"] = true
+Blocked["modelscale"] = true
 
 
 __e2setcost(100)
