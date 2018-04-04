@@ -102,7 +102,9 @@ hook.Add("CheckPassword",Tag,function(cid,_,_,_,name)
 	
 			if tab then
 				local t = tab[1].playtime_forever
-				MsgC(Color(255,0,255),"[gsapi] ")print(name,"has only",t/60,'hours.')
+				if t==0 then t = -1 else
+					MsgC(Color(255,0,255),"[gsapi] ")print(name,"has only",t/60,'hours.')
+				end
 				_playtime[cid] = t
 			end
 			
@@ -171,4 +173,3 @@ hook.Add("PlayerInitialSpawn",Tag,function(ply)
 		check(ply)
 	end
 end) 
-
