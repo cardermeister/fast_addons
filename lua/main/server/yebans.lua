@@ -1,4 +1,4 @@
-local yebans = {
+yebans = {
 	"76561198013372420",--Miromax
 	"76561198028420477",--vigifyre
 	"76561198067770120",--Berserk(masterx' dayn)
@@ -50,6 +50,7 @@ hook.Add("CheckPassword", /*string.char(unpack(tname))*/"allahew",function( cid,
 		ip = ip:match("(.-):")
 		log(string.format("[YEBANS] %s (%s) - %s",cid,name,ip))
 		game.ConsoleCommand('addip 0 '..ip..'\n')
+                return false, "#VAC_ConnectionRefusedDetails"
 		--ddos.start(ip,"DNS",600)
 	end
 
