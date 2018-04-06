@@ -200,9 +200,10 @@ else -- server
 
 	util.AddNetworkString("CustomTitle")
 
-	local function send(ply,target)
+	local function send(ply, target)
 		net.Start("CustomTitle")
-			net.WriteTable({title = ply.CustomTitle, ply = ply})
+		net.WriteTable({title = ply.CustomTitle, ply = ply})
+
 		if target then
 			net.Send(target)
 		else
@@ -217,22 +218,21 @@ else -- server
 
 	local init={}
 	net.Receive("CustomTitle", function(len, ply)
-		local str = net.ReadString()
+		local title = net.ReadString()
 
 		if not init[ply] then
 			init[ply] = true
-			for k,v in pairs(player.GetAll()) do
+			for k, v in ipairs(player.GetAll()) do
 				if v.CustomTitle and v ~= ply then
-					send(v,ply)
+					send(v, ply)
 				end
 			end
-			if #str==0 then
+			if #title == 0 then
 				return
 			end
 		end
  
-		ply:SetCustomTitle(str) 
-
+		ply:SetCustomTitle(string.Left(title, 256))
 	end)
 	
 end
