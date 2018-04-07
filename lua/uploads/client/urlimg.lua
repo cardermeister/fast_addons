@@ -1,3 +1,5 @@
+local chathud_image_enable = CreateClientConVar("chathud_image_enable", "1")
+
 hook.Add("Initialize", "chathud_image_html_override", function()
 
 
@@ -193,6 +195,7 @@ t_bans["STEAM_0:1:123511712"] = true
 
 hook.Add("OnPlayerChat", "chathud_image_url", function(ply, str)
 	if not IsValid(ply) or str=="" then return end
+	if not chathud_image_enable:GetBool() then return end
 	
 	//local chathud_image_url = chathud_image_url:GetInt()	
 	//if chathud_image_url == 0 then return end

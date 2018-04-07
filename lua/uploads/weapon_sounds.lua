@@ -1,3 +1,5 @@
+local weapon_sounds = CreateClientConVar("weapon_sounds", "1")
+
 local weaponsounds = {
 	['ar2'] = {
 		'https://raw.githubusercontent.com/OldOverusedMeme/cancer/master/bum1.mp3',
@@ -22,6 +24,7 @@ local weaponsounds = {
 weaponsounds['pistol'] = weaponsounds["ar2"]
 
 local function zvuki_nah(tabl)
+	if not weapon_sounds:GetBool() then return end
 	local Ent = tabl.Entity
 	local SName = tabl.SoundName
 	local wepname = string.Explode('/',SName)[2]
