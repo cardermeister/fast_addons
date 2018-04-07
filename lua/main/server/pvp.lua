@@ -1,8 +1,10 @@
 local tag = "pvp"
 local changeModeDelay = 5
 
-game.ConsoleCommand("sbox_playershurtplayers 1\n")
-game.ConsoleCommand("sbox_godmode 0\n")
+hook.Add("Initialize", tag, function()
+	game.ConsoleCommand("sbox_playershurtplayers 1\n")
+	game.ConsoleCommand("sbox_godmode 0\n")
+end)
 
 if not OLD_UNLOCK then
 	local PLAYER = FindMetaTable("Player")
