@@ -140,6 +140,7 @@ iin.AddCommand('goto',function(ply,line)
 			ply:EmitSound("buttons/button15.wav")
 		else
 			ply:ChatPrint("The player has restricted !goto")
+			return
 		end
 	else
 		iin.error(ply,'Ply not found.')
