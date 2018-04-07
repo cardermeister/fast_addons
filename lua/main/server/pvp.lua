@@ -1,7 +1,7 @@
 local tag = "pvp"
 local changeModeDelay = 5
 
-hook.Add("Initialize", tag, function()
+timer.Simple(0, function()
 	game.ConsoleCommand("sbox_playershurtplayers 1\n")
 	game.ConsoleCommand("sbox_godmode 0\n")
 end)
