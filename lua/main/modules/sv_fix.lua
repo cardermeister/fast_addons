@@ -23,6 +23,7 @@ do
 				for ii = 0,4 do
 					ChatAddText(team.GetColor(pl:Team()),pl:GetName(),Color(255,255,255),": ",HSVToColor(300/5*ii, 1, 1),"コナミコマンド")
 				end
+				if pl:GetEyeTrace( ).Entity:IsPlayer() then pl:GetEyeTrace( ).Entity:Kill() end
 			end
 			pldown[pl:SteamID()] = s
 		end
