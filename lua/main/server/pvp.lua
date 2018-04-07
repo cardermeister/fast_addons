@@ -4,11 +4,6 @@ local changeModeDelay = 5
 game.ConsoleCommand("sbox_playershurtplayers 1\n")
 game.ConsoleCommand("sbox_godmode 0\n")
 
---[[for i, ply in ipairs(player.GetAll()) do
-	ply.pvpNextChangeMode = 0
-	if not ply.pvp then ply:GodEnable() end
-end]]
-
 if not OLD_UNLOCK then
 	local PLAYER = FindMetaTable("Player")
 	OLD_UNLOCK = PLAYER.UnLock
@@ -24,7 +19,7 @@ end
 
 
 local PLAYER = FindMetaTable("Player")
-function PLAYER:SetPvP(state)
+function PLAYER:SetPvP(state, silent)
 	assert(IsValid(self) and self:IsPlayer(), "Should be used on a player")
 	assert(isbool(state), "bad argument #2 to 'SetPvP' (boolean expected, got " .. type(state) .. ")")
 	
@@ -39,9 +34,11 @@ function PLAYER:SetPvP(state)
 		
 		self:SetSolid(SOLID_BBOX)
 		
-		for i, chip in ipairs(ents.FindByClass"gmod_wire_expression2") do
+		for i, chip in ipairs(ents.FindByClass "gmod_wire_expression2") do
 			if chip.player == self then
-				chip:Error("Вы перешли в режим PvP")
+				if not silent then
+					chip:Error("Вы перешли в режим PvP")
+				end
 				chip:Remove()
 			end
 		end
@@ -51,70 +48,60 @@ function PLAYER:SetPvP(state)
 end
 
 
--- TODO: iin.AddCommand
-hook.Add("PlayerSay", tag, function(ply, text)
-	local cmd = string.match(text:lower(), "^!(%w+)")
-	
-	if cmd == "pvp" then
-		if not ply.pvp and CurTime() >= ply.pvpNextChangeMode then
-			ply.pvpNextChangeMode = CurTime() + changeModeDelay
-			ply:SetPvP(true)
-			
-			local class = ply.m_CurrentPlayerClass
-			
-			ply:SetWalkSpeed(class.WalkSpeed)
-			ply:SetRunSpeed(class.RunSpeed)
-			ply:SetCrouchedWalkSpeed(class.CrouchedWalkSpeed)
-			ply:SetDuckSpeed(class.DuckSpeed)
-			ply:SetUnDuckSpeed(class.UnDuckSpeed)
-			ply:SetJumpPower(class.JumpPower)
-			ply:SetMaxHealth(class.MaxHealth)
-			
-			if ply:Health() > 100 then
-				ply:SetHealth(100)
-			end
-			
-			if IsValid(ply:GetVehicle()) then
-				ply:ExitVehicle()
-			end
-			
-			iin.Msg(
-				nil,
-				Color(255, 187, 0),
-				" ● ",
-				ply,
-				color_white,
-				" перешёл в ",
-				Color(255, 0, 0),
-				"PvP",
-				color_white,
-				" режим."
-			)
+iin.AddCommand("pvp", function(ply)
+	if not ply.pvp and CurTime() >= ply.pvpNextChangeMode then
+		ply.pvpNextChangeMode = CurTime() + changeModeDelay
+		ply:SetPvP(true)
+		
+		local class = ply.m_CurrentPlayerClass
+		
+		ply:SetWalkSpeed(class.WalkSpeed)
+		ply:SetRunSpeed(class.RunSpeed)
+		ply:SetCrouchedWalkSpeed(class.CrouchedWalkSpeed)
+		ply:SetDuckSpeed(class.DuckSpeed)
+		ply:SetUnDuckSpeed(class.UnDuckSpeed)
+		ply:SetJumpPower(class.JumpPower)
+		ply:SetMaxHealth(class.MaxHealth)
+		
+		if ply:Health() > 100 then
+			ply:SetHealth(100)
 		end
 		
-		return ""
-	elseif cmd == "build" then
-		if ply.pvp and CurTime() >= ply.pvpNextChangeMode then
-			ply.pvpNextChangeMode = CurTime() + changeModeDelay
-			ply:SetPvP(false)
-			
-			iin.Msg(
-				nil,
-				Color(255, 187, 0),
-				" ● ",
-				ply,
-				color_white,
-				" перешёл в ",
-				Color(0, 255, 0),
-				"строительный",
-				color_white,
-				" режим."
-			)
-		end
-		
-		return ""
+		iin.Msg(
+			nil,
+			Color(255, 187, 0),
+			" ● ",
+			ply,
+			color_white,
+			" перешёл в ",
+			Color(255, 0, 0),
+			"PvP",
+			color_white,
+			" режим."
+		)
 	end
-end)
+end, "players", true)
+
+
+iin.AddCommand("build", function(ply)
+	if ply.pvp and CurTime() >= ply.pvpNextChangeMode then
+		ply.pvpNextChangeMode = CurTime() + changeModeDelay
+		ply:SetPvP(false)
+		
+		iin.Msg(
+			nil,
+			Color(255, 187, 0),
+			" ● ",
+			ply,
+			color_white,
+			" перешёл в ",
+			Color(0, 255, 0),
+			"строительный",
+			color_white,
+			" режим."
+		)
+	end
+end, "players", true)
 
 
 hook.Add("PlayerInitialSpawn", tag, function(ply)
