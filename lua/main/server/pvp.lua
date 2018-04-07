@@ -18,6 +18,35 @@ if not OLD_UNLOCK then
 end
 
 
+--[[
+Determines the correct collective numeral for a number (in Russian language)
+Example usage:
+	declension(1, "секунда", "секунды", "секунд")
+	Result: секунда
+
+	declension(3, "секунда", "секунды", "секунд")
+	Result: секунды
+
+	declension(12, "секунда", "секунды", "секунд")
+	Result: секунд
+]]
+local function declension(number, a, b, c) -- Dunno how to name these
+	number = number % 100
+	
+	if not (number >= 10 and number <= 20) then
+		local decimal = number % 10
+		
+		if decimal == 1 then
+			return a
+		elseif decimal >= 2 and decimal <= 4 then
+			return b
+		end
+	end
+	
+	return c
+end
+
+
 local PLAYER = FindMetaTable("Player")
 function PLAYER:SetPvP(state, silent)
 	assert(IsValid(self) and self:IsPlayer(), "Should be used on a player")
@@ -85,9 +114,12 @@ iin.AddCommand("pvp", function(ply)
 			" режим."
 		)
 	else
+		local seconds = math.ceil(ply.pvpNextChangeMode - CurTime())
+
 		ply:ChatPrint(string.format(
-			"Подождите %d секунд, чтобы сменить режим",
-			math.ceil(ply.pvpNextChangeMode - CurTime())
+			"Подождите %d %s, чтобы сменить режим",
+			seconds,
+			declension(seconds, "секунду", "секунды", "секунд")
 		))
 	end
 end, "players", true)
@@ -116,9 +148,12 @@ iin.AddCommand("build", function(ply)
 			" режим."
 		)
 	else
+		local seconds = math.ceil(ply.pvpNextChangeMode - CurTime())
+
 		ply:ChatPrint(string.format(
-			"Подождите %d секунд, чтобы сменить режим",
-			math.ceil(ply.pvpNextChangeMode - CurTime())
+			"Подождите %d %s, чтобы сменить режим",
+			seconds,
+			declension(seconds, "секунду", "секунды", "секунд")
 		))
 	end
 end, "players", true)
