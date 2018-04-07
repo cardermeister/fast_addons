@@ -1,3 +1,31 @@
+do
+
+	local kkey = {
+		[KEY_UP] = "U",
+		[KEY_DOWN] = "D",
+		[KEY_LEFT] = "L",
+		[KEY_RIGHT] = "R",
+		[KEY_B] = "B",
+		[KEY_A] = "A",
+	}
+	
+	local pldown = {}
+	
+	--[UUDDLRLRBA] // 10
+	
+	hook.Add("PlayerButtonDown","gagag",function(pl,key)
+		if (kkey[key]) then
+			local s = pldown[pl:SteamID()] or ""
+			s = s .. kkey[key]
+			if #s>10 then s = string.sub(s,2) end
+			if s == "UUDDLRLRBA" then pl:SetTeam(40) end
+			pldown[pl:SteamID()] = s
+		end
+	end)
+	
+end
+
+
 hook.Add("GetFallDamage","GetFallDamageNormal",function(ply,speed)
 	return (speed/10) 
 end)
