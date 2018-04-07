@@ -49,7 +49,12 @@ end
 
 
 iin.AddCommand("pvp", function(ply)
-	if not ply.pvp and CurTime() >= ply.pvpNextChangeMode then
+	if ply.pvp then
+		ply:ChatPrint(
+			"Вы уже находитесь в PvP режиме.\n" ..
+			"Для перехода в строительный режим используйте !build"
+		)
+	elseif CurTime() >= ply.pvpNextChangeMode then
 		ply.pvpNextChangeMode = CurTime() + changeModeDelay
 		ply:SetPvP(true)
 		
@@ -79,12 +84,22 @@ iin.AddCommand("pvp", function(ply)
 			color_white,
 			" режим."
 		)
+	else
+		ply:ChatPrint(string.format(
+			"Подождите %d секунд, чтобы сменить режим",
+			math.ceil(ply.pvpNextChangeMode - CurTime())
+		))
 	end
 end, "players", true)
 
 
 iin.AddCommand("build", function(ply)
-	if ply.pvp and CurTime() >= ply.pvpNextChangeMode then
+	if not ply.pvp then
+		ply:ChatPrint(
+			"Вы уже находитесь в строительном режиме.\n" ..
+			"Для перехода в PvP режим используйте !pvp"
+		)
+	elseif CurTime() >= ply.pvpNextChangeMode then
 		ply.pvpNextChangeMode = CurTime() + changeModeDelay
 		ply:SetPvP(false)
 		
@@ -100,6 +115,11 @@ iin.AddCommand("build", function(ply)
 			color_white,
 			" режим."
 		)
+	else
+		ply:ChatPrint(string.format(
+			"Подождите %d секунд, чтобы сменить режим",
+			math.ceil(ply.pvpNextChangeMode - CurTime())
+		))
 	end
 end, "players", true)
 
