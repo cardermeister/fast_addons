@@ -110,8 +110,8 @@ iin_Msg(nil,Color(255,187,0)," ● ",ply,Color(255,255,255),' cleanup decals.')
 end,'admins', true)
 
 iin.AddCommand('goto',function(ply,line)
-    
-    if ply.time_to_goto and ply.time_to_goto>=CurTime() then return end
+    if ply.pvp then return end
+    if ply.time_to_goto and ply.time_to_goto >= CurTime() then return end
     
     ply.iin_tpprevious = ply:GetPos()
     if not ply:Alive() then ply:Spawn() end
@@ -133,11 +133,14 @@ iin.AddCommand('goto',function(ply,line)
     local ent = FindEntity(line)
 
 	if ent:IsPlayer() then
-
-	local dir = ent:GetAngles(); dir.p = 0; dir.r = 0; dir = (dir:Forward() * -100)
-	ply:SetPos(ent:GetPos() + dir)	
-	ply:SetEyeAngles((ent:EyePos() - ply:EyePos()):Angle())
-	ply:EmitSound("buttons/button15.wav")
+		if ent:GetInfo("allowgoto") ~= "0" or ply:Team() > ent:Team() then
+			local dir = ent:GetAngles(); dir.p = 0; dir.r = 0; dir = (dir:Forward() * -100)
+			ply:SetPos(ent:GetPos() + dir)	
+			ply:SetEyeAngles((ent:EyePos() - ply:EyePos()):Angle())
+			ply:EmitSound("buttons/button15.wav")
+		else
+			ply:ChatPrint("The player has restricted !goto")
+		end
 	else
 		iin.error(ply,'Ply not found.')
 		return 

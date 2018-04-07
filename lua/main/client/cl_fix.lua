@@ -1,3 +1,5 @@
+CreateClientConVar("allowgoto", "1", true, true, "Allows players to do !goto to you")
+
 local ScrColTab={
 	["$pp_colour_addr"]=0,
 	["$pp_colour_addg"]=0,
