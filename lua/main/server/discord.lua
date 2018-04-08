@@ -136,7 +136,7 @@ function discord.PrintTable(...)
 	return PrintTable(...)	
 end
 
-discord.relay = false
+discord.relay = true
 discord.relay_prefix = discord.relay_prefix or "[G]"
 
 function discord.relay_func(ply, text)
