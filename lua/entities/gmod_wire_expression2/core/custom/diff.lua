@@ -498,7 +498,7 @@ e2function void entity:giveWeapon(string classname)
 	if not this:IsPlayer() then return end
 	if not list.HasEntry("Weapon", classname) then return end
 
-	this:Give(weap)
+	this:Give(classname)
 end
 
 
