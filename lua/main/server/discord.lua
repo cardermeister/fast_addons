@@ -148,7 +148,7 @@ function discord.relay_func(ply, text)
 	if !ply:AvatarURL() then return end
 	
 	local post_params = {
-		content = text,
+		content = string.gsub(text, "[\\`*_~]", "\\%1"),
 		username = discord.relay_prefix.." "..(ply:Nick() or "Unknown"),
 		avatar_url = ply:AvatarURL()
 	}
