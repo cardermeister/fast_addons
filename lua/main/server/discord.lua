@@ -7,6 +7,20 @@ local discord_auth_json = util.JSONToTable(file.Read(discord_auth,"DATA"))
 
 discord = discord or {}
 
+discord.apikey = "Mzc3ODkwNjA0MTk5MzEzNDA4.Datiow.coYtcPmWVEiek9ZtJh69TOC-jJs"
+
+local dev_chan = "378129058317336576"
+local ans_channel = dev_chan
+function discord.setchannel(chan) ans_channel=chan end
+function discord.getchannel() return ans_channel end
+
+
+function discord.send(msg,tab)
+	tab = istable(tab) and table.Add({content = msg},tab) or {content = msg}
+	local channel = discord.getchannel()
+	http.Post(Format("https://discordapp.com/api/channels/%s/messages",channel),tab,_,_,{Authorization = "Bot "..discord.apikey})
+end
+
 local function ReadFuncClose(callback)
 
 	discord_auth_json = util.JSONToTable(file.Read(discord_auth,"DATA"))
@@ -20,7 +34,6 @@ function discord.auth_flush() file.Write(discord_auth,util.TableToJSON({})) disc
 function discord.auth_request(ply)
 	
 	local isauthed = discord_auth_json[ply:SteamID()]
-	//util.Base64Encode(me:SteamID():gsub("STEAM","AUTHD")) // QVVUSERfMDoxOjIyNDc3OTc2
 	
 	if ( (not isauthed) or (#isauthed~=18) ) then
 		
@@ -56,8 +69,6 @@ function discord.auth_apply(token,discordid)
 	Msg"[discord] "print("auth error",discordid)
 	
 end
-
-
 
 
 
@@ -97,7 +108,8 @@ function discord.print(...)
 	local func = CompileString( str, "", false )
 	if type(func)=='function' then str='```lua\n'..str:Left(1980)..'\n```' else str='```Markdown\n'..str:Left(1980)..'\n```' end
 	
-	http.Post(webhook,{content = str})
+	//http.Post(webhook,{content = str})
+	discord.send(str)
 	return print(...)
 end
 
@@ -112,12 +124,15 @@ function discord.status()
 	end
 	
 	str = str + "}\n``` steam://connect/195.2.252.214:27015"
-	http.Post(webhook,{content = str})
+	//http.Post(webhook,{content = str})
+	discord.send(str)
 end
 
 function discord.PrintTable(...)
 	
-	http.Post(webhook,{content = "```Markdown\n"..table.ToString(...,nil,true):Left(1980).."\n```"})
+	local str = "```Markdown\n"..table.ToString(...,nil,true):Left(1980).."\n```"
+	//http.Post(webhook,{content = str})
+	discord.send(str)
 	return PrintTable(...)	
 end
 
@@ -198,16 +213,20 @@ end)
 concommand.Add("discord-lua-run",function(ply,cmd,arg,line)
 	
 	if IsValid(ply) then return end
+	local linejson = util.JSONToTable(line)
+	local line = linejson[1]
+	local answer_chan = linejson[2]
 	local luacode = file.Read("discord-lua.txt","DATA")
 	local steamid_user = table.KeyFromValue(discord_auth_json,line)
-	
+
 	if not steamid_user then Msg"[discord] "print("please link your profile to run lua.") return end
 	
 	luacode = "local me = easylua.FindEntity('"+steamid_user+"'); if me:IsPlayer() then local this = me:GetEyeTrace().Entity end; local suki = player.GetAll; " + luacode
 	
-	Msg"[discord] "print("running lua by",line or "1337")
+	Msg"[discord] "print("running lua by",steamid_user or "1337","/ Answer:",answer_chan)
 	
 	local func = CompileString( luacode, line, false )
+	discord.setchannel(answer_chan)
 	if type(func) == "function" then
 			setfenv(func, discord.metatable)
 			local args = {pcall(func)}
@@ -219,7 +238,7 @@ concommand.Add("discord-lua-run",function(ply,cmd,arg,line)
 	else
 		discord.print("ERROR: "+func)
 	end
-
+	discord.setchannel(dev_chan)
 
 end)
 
