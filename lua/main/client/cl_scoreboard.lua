@@ -1,7 +1,7 @@
 local nTag = "iin_ScoreboardInfo"
 
 
-if LocalPlayer():IsAdmin() then print(nTag) end
+--if LocalPlayer():IsAdmin() then print(nTag) end
 
 SCOREBOARD_INFO = SCOREBOARD_INFO or {}
 
