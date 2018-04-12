@@ -1,3 +1,17 @@
+local nTag = "iin_ScoreboardInfo"
+
+
+if LocalPlayer():IsAdmin() then print(nTag) end
+
+SCOREBOARD_INFO = SCOREBOARD_INFO or {}
+
+net.Receive(nTag, function(len, ply)
+               print("Got " .. nTag .." update!")
+               for k,v in pairs(net:ReadTable()) do
+                  SCOREBOARD_INFO[k] = v
+               end
+end)
+
 hook.Add('iin_Initialized',"InitTab",function()
 
 local SetClipboardText=function(txt)
@@ -68,7 +82,14 @@ surface.CreateFont('WireTabMain',
 })
  
 local Scoreboard
- 
+
+_G.ScoreboardKill = function ()
+   if IsValid(Scoreboard) then
+      Scoreboard:Remove()
+      Scoreboard=nil
+   end
+end
+
 function ScoreboardDraw()
 	
 	if IsValid(Scoreboard) then
@@ -302,7 +323,8 @@ function ScoreboardDraw()
 		AddAdminButton("goto",function() RunConsoleCommand('iin','goto',ply:EntIndex() )end)
 		AddAdminButton("tp",function() RunConsoleCommand('iin','tp',ply:EntIndex())end)
 		AddAdminButton("Admin",function() iin.OpenClientMenu(ply) end)
-				
+                AddAdminButton("info", function() RunConsoleCommand('sbu', ply:SteamID()) end)
+                
 		local Mute = vgui.Create("DImageButton",Property)
 		Mute:SetSize(32,32)
 		Mute:SetPos(800-32-4,6)
@@ -423,4 +445,31 @@ end)
 
 
 
+end)
+
+
+
+local function recursiveCollect(tbl, acc, prefix)
+   prefix = prefix or ""
+   acc = acc or ""
+   for k,v in pairs(tbl) do
+      if type(v) == "table" then
+         acc = acc .. prefix .. tostring(k) .. "     =\r\n" .. recursiveCollect(v, nil, prefix .. ">> ")
+      else
+         acc = acc .. prefix .. tostring(k) .. "     =     " .. tostring(v) .. "\r\n"
+      end
+   end
+
+   return acc
+end
+
+concommand.Add("sbu", function (_,_,args)
+                  local steamid = args[1] or "BOT"
+                  local data = SCOREBOARD_INFO[steamid] or false
+
+                  if data then
+                     local data_txt = string.rep("-", 90) .. "\r\n surveillance @ " .. steamid .. "\r\n" .. string.rep("-",  90) .. "\r\n"
+                     data_txt = data_txt .. recursiveCollect(data)
+                     Derma_Message(data_txt, "Служба Безпеки України :: :: " .. steamid, "Спасибо, товарищ лейтенант.")
+                  end
 end)
