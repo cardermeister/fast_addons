@@ -449,14 +449,16 @@ end)
 
 
 
-local function recursiveCollect(tbl, acc, prefix)
+local function recursiveCollect(tbl, prefix)
    prefix = prefix or ""
-   acc = acc or ""
+   local acc = {}
    for k,v in pairs(tbl) do
       if type(v) == "table" then
-         acc = acc .. prefix .. tostring(k) .. "     =\r\n" .. recursiveCollect(v, nil, prefix .. ">> ")
+         for kk, vv in pairs(recursiveCollect(v, prefix .. tostring(k) .. "> ")) do
+            acc[kk] = tostring(vv)
+         end
       else
-         acc = acc .. prefix .. tostring(k) .. "     =     " .. tostring(v) .. "\r\n"
+         acc[prefix .. tostring(k)] = tostring(v)
       end
    end
 
@@ -468,8 +470,27 @@ concommand.Add("sbu", function (_,_,args)
                   local data = SCOREBOARD_INFO[steamid] or false
 
                   if data then
-                     local data_txt = string.rep("-", 90) .. "\r\n surveillance @ " .. steamid .. "\r\n" .. string.rep("-",  90) .. "\r\n"
-                     data_txt = data_txt .. recursiveCollect(data)
-                     Derma_Message(data_txt, "Служба Безпеки України :: :: " .. steamid, "Спасибо, товарищ лейтенант.")
+                     local frame = vgui.Create("DFrame")
+                     frame:SetSize(ScrW() * 0.9, ScrH() * 0.9)
+                     frame:SetTitle("Служба Безпеки України :: :: " .. steamid)
+                     frame:SetPos(ScrW() / 2 - frame:GetWide() / 2, ScrH() / 2 - frame:GetTall() / 2)
+
+                     local datalst = vgui.Create("DListView", frame)
+                     datalst:Dock(FILL)
+                     datalst:SetMultiSelect(false)
+                     datalst:AddColumn("key")
+                     datalst:AddColumn("value")
+
+                     local dataTbl = recursiveCollect(data)
+                     for k,v in pairs(dataTbl) do
+                        datalst:AddLine(k, v)
+                     end
+
+                     datalst:SortByColumn(1)
+
+                     frame:SetVisible(true )
+                     frame:SetDraggable(false)
+                     frame:ShowCloseButton(true)
+                     frame:MakePopup()
                   end
 end)

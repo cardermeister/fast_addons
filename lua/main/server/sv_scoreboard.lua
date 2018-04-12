@@ -2,6 +2,8 @@ local nTag = "iin_ScoreboardInfo"
 util.AddNetworkString(nTag)
 
 local function SendUpdate(ply, who)
+   if not ply:IsAdmin() then return end
+
    who = who or player.GetAll()
    final = {}
 
@@ -30,9 +32,7 @@ end
 
 local function FullUpdate()
    for k,v in pairs(player.GetAll()) do
-      if v:IsAdmin() then
          SendUpdate(v)
-      end
    end
 end
 
