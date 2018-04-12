@@ -10,7 +10,7 @@ concommand.Add("weapon_sounds_enabled", function(_,_,a)
                   if yes and not warned then
                      chat.AddText(Color(255, 128, 128), "ВНИМАНИЕ! Включена переменная weapon_sounds!")
                      chat.AddText(Color(255, 128, 128), "Звуки будут хуёвые так что лучше выключи её обратно!")
-                     chat.AddText(Color(255, 255, 128), "Для подтверждения того что вы еблан вам нужно еще раз ввести weapon_sounds 1")
+                     chat.AddText(Color(255, 255, 128), "Для подтверждения того что вы еблан вам нужно еще раз ввести weapon_sounds_enabled 1")
                      chat.AddText(Color(128, 128, 128), "Это предупреждение больше показываться не будет.")
                      yes = nil
                      warned = true
