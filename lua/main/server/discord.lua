@@ -1,3 +1,5 @@
+util.AddNetworkString("discord.img")
+
 local webhook = "https://discordapp.com/api/webhooks/378116447605620736/z8UAE5XXQMAlpLCbvM8gd25jh17Jopg6rVGNkvvfgvlbgc65J5cgJ69U--SRdkg5FCD8"
 
 local discord_auth = "discord_auth.txt"
@@ -23,6 +25,16 @@ end
 function discord.say_from_ds(pl,msg,hex)
 	if hex == "#000000" then hex = "#447092" end
 	ChatAddText(Color(161,161,255),"> ",hex2rgb(hex),pl,Color(255,255,255),": ",msg)
+end
+
+function discord.show_image(username, hexcolor, url)
+	if hexcolor == "#000000" then hexcolor = "#447092" end
+	
+	net.Start("discord.img")
+		net.WriteString(username)
+		net.WriteColor(hex2rgb(hexcolor))
+		net.WriteString(url)
+	net.Send()
 end
 
 concommand.Add("getdstext",function(pl,cmd,a,line)

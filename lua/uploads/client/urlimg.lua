@@ -48,10 +48,10 @@ local function is_image_queued(url)
 	return false
 end
 
-local function queue_image(url, sender)
+function chathud.queue_image(url, clr, sendername)
 	if is_image_queued(url) then return end
 	
-	table.insert(queue, {url, sender})
+	table.insert(queue, {url, clr, sendername})
 end
 
 local busy
@@ -60,7 +60,7 @@ local chathud_image_slideduration = CreateClientConVar("chathud_image_slidedurat
 local chathud_image_holdduration  = CreateClientConVar("chathud_image_holdduration","5")
 
 
-local function show_image(url, sender)
+local function show_image(url, clr, sendername)
 	busy = true
 	if chathud_image_sender:IsValid() then
 		chathud_image_sender:Remove()
@@ -71,9 +71,8 @@ local function show_image(url, sender)
 	
 	--chathud_image_sender:SetFontInternal("chathud_image")
 	
-	local clr = team.GetColor(sender:Team())
 	chathud_image_sender:InsertColorChange( clr.r, clr.g, clr.b, clr.a )
-	chathud_image_sender:AppendText(sender:Nick())
+	chathud_image_sender:AppendText(sendername)
 	chathud_image_sender:InsertColorChange( 255, 255, 255, 255 )
 	chathud_image_sender:AppendText(": " .. url)
 	
@@ -178,8 +177,8 @@ end
 timer.Create("chathud_image_url_queue", 0.25, 0, function()
 	if busy then return end
 	if queue[1] then
-		local url, sender = queue[1][1], queue[1][2]
-		show_image(url, sender)
+		local url, clr, sendername = queue[1][1], queue[1][2], queue[1][3]
+		show_image(url, clr, sendername)
 	end
 end)
 
@@ -240,15 +239,15 @@ hook.Add("OnPlayerChat", "chathud_image_url", function(ply, str)
 			if not ext then return end
 			if not allowed[ext] then return end
 			
-			queue_image(url.."?dl=1", ply)
+			chathud.queue_image(url.."?dl=1", ply:Nick())
 		elseif string.match(url, "steamusercontent.com/ugc/") then
 			-- Support for Steam Community screenshots (could probably have a better match but this works)
-			queue_image(url, ply)
+			chathud.queue_image(url, team.GetColor(ply:Team()), ply:Nick())
 		else
 			if not ext then return end
 			if not allowed[ext] then return end
 			
-			queue_image(url, ply)
+			chathud.queue_image(url, team.GetColor(ply:Team()), ply:Nick())
 		end
 	end
 end)
