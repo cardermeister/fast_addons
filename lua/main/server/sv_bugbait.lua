@@ -24,7 +24,7 @@ function bugply(ply)
    local startSize, endSize = 5, 20
    local trailMaterial = "trails/smoke.vmt"
    local trail_entity = util.SpriteTrail(proj, 0, Color(89, 48, 1), false, startSize, endSize, 2, 1 / ((startSize + endSize) * 0.5), trailMaterial)
-   ent.SToolTrail = trail_entity
+   proj.SToolTrail = trail_entity
 
 
    proj:SetModelScale(1.5)
