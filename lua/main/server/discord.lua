@@ -22,7 +22,7 @@ function hex2rgb(hex)
     return Color(tonumber("0x"..hex:sub(1,2)), tonumber("0x"..hex:sub(3,4)), tonumber("0x"..hex:sub(5,6)))
 end
 
-function discord.say_from_ds(username, msg, hexcolor)
+local function parse_say_from_ds(username, msg, hexcolor)
 	if hexcolor == "#000000" then hexcolor = "#447092" end
 
 	net.Start("discord.msg")
@@ -32,17 +32,17 @@ function discord.say_from_ds(username, msg, hexcolor)
 	net.Broadcast()
 end
 
-concommand.Add("getdstext",function(pl,cmd,a,line)
-	if IsValid(pl) then return end
+function discord.get_relay()
+
 	local mem = util.JSONToTable(file.Read('discord-chat.txt'))
-	//PrintTable(mem)
-	discord.say_from_ds(mem[1],mem[2],mem[3])
-end)
+	parse_say_from_ds(mem[1],mem[2],mem[3])
+		
+end
 
 function discord.send(msg,tab)
 	tab = istable(tab) and table.Add({content = msg},tab) or {content = msg}
 	local channel = discord.getchannel()
-	http.Post(Format("https://discordapp.com/api/channels/%s/messages",channel),tab,_,_,{Authorization = "Bot "..discord.apikey})
+	http.Post(Format("https://discordapp.com/api/channels/%s/messages",channel),tab,function()end,function()end,{Authorization = "Bot "..discord.apikey})
 end
 
 local function ReadFuncClose(callback)
