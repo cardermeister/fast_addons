@@ -2,6 +2,7 @@ local chathud_image_enable = CreateClientConVar("chathud_image_enable", "1")
 
 hook.Add("Initialize", "chathud_image_html_override", function()
 
+urlimg = {}
 
 if _G.chathud_image_html and _G.chathud_image_html:IsValid() then
 	_G.chathud_image_html:Remove()
@@ -48,10 +49,10 @@ local function is_image_queued(url)
 	return false
 end
 
-local function queue_image(url, sender)
+function urlimg.queue_image(url, clr, sendername)
 	if is_image_queued(url) then return end
 	
-	table.insert(queue, {url, sender})
+	table.insert(queue, {url, clr, sendername})
 end
 
 local busy
@@ -60,7 +61,7 @@ local chathud_image_slideduration = CreateClientConVar("chathud_image_slidedurat
 local chathud_image_holdduration  = CreateClientConVar("chathud_image_holdduration","5")
 
 
-local function show_image(url, sender)
+local function show_image(url, clr, sendername)
 	busy = true
 	if chathud_image_sender:IsValid() then
 		chathud_image_sender:Remove()
@@ -71,9 +72,8 @@ local function show_image(url, sender)
 	
 	--chathud_image_sender:SetFontInternal("chathud_image")
 	
-	local clr = team.GetColor(sender:Team())
 	chathud_image_sender:InsertColorChange( clr.r, clr.g, clr.b, clr.a )
-	chathud_image_sender:AppendText(sender:Nick())
+	chathud_image_sender:AppendText(sendername)
 	chathud_image_sender:InsertColorChange( 255, 255, 255, 255 )
 	chathud_image_sender:AppendText(": " .. url)
 	
@@ -178,8 +178,8 @@ end
 timer.Create("chathud_image_url_queue", 0.25, 0, function()
 	if busy then return end
 	if queue[1] then
-		local url, sender = queue[1][1], queue[1][2]
-		show_image(url, sender)
+		local url, clr, sendername = queue[1][1], queue[1][2], queue[1][3]
+		show_image(url, clr, sendername)
 	end
 end)
 
@@ -192,6 +192,41 @@ local t_bans = {}
 //	t_bans[v] = true
 //end
 t_bans["STEAM_0:1:123511712"] = true
+
+function urlimg.get_image_link(text)
+	if string.find(text, "http") then
+		text = string.gsub(text, "https:", "http:")
+		
+		-- Look for URL
+		text = text .. " "
+		local url = string.match(text, "(http://.-)%s")
+		if not url then return end
+		
+		-- Apply URL rewriting rules
+		for _, rewriteRule in ipairs(urlRewriters) do
+			url = string.gsub(url, rewriteRule[1], rewriteRule[2])
+		end
+		
+		-- Determine URL extension
+		local ext = string.match(url, ".+%.(.+)")
+		if ext then ext = string.lower (ext) end
+
+		if string.match(url, "[/w.]+dropbox.com") then -- (www.) or https?:(//)
+			-- Support for Dropbox screenshots (dl=* should have been replaced by the rewriter by now)
+			if not ext then return end
+			if not allowed[ext] then return end
+			return url .. "?dl=1"
+		elseif string.match(url, "steamusercontent.com/ugc/") then
+			-- Support for Steam Community screenshots (could probably have a better match but this works)
+			return url
+		else
+			if not ext then return end
+			if not allowed[ext] then return end
+			
+			return url
+		end
+	end
+end
 
 hook.Add("OnPlayerChat", "chathud_image_url", function(ply, str)
 	if not IsValid(ply) or str=="" then return end
@@ -218,38 +253,10 @@ hook.Add("OnPlayerChat", "chathud_image_url", function(ply, str)
 		return
 	end
 	
-	if string.find(str, "http") then
-		str = string.gsub(str, "https:", "http:")
-		
-		-- Look for URL
-		str = str .. " "
-		local url = string.match(str, "(http://.-)%s")
-		if not url then return end
-		
-		-- Apply URL rewriting rules
-		for _, rewriteRule in ipairs(urlRewriters) do
-			url = string.gsub(url, rewriteRule[1], rewriteRule[2])
-		end
-		
-		-- Determine URL extension
-		local ext = string.match(url, ".+%.(.+)")
-		if ext then ext = string.lower (ext) end
+	local url = urlimg.get_image_link(str)
 
-		if string.match(url, "[/w.]+dropbox.com") then -- (www.) or https?:(//)
-			-- Support for Dropbox screenshots (dl=* should have been replaced by the rewriter by now)
-			if not ext then return end
-			if not allowed[ext] then return end
-			
-			queue_image(url.."?dl=1", ply)
-		elseif string.match(url, "steamusercontent.com/ugc/") then
-			-- Support for Steam Community screenshots (could probably have a better match but this works)
-			queue_image(url, ply)
-		else
-			if not ext then return end
-			if not allowed[ext] then return end
-			
-			queue_image(url, ply)
-		end
+	if url then
+		urlimg.queue_image(url, team.GetColor(ply:Team()), ply:Nick())
 	end
 end)
 

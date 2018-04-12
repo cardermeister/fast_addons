@@ -1,3 +1,5 @@
+util.AddNetworkString("discord.msg")
+
 local webhook = "https://discordapp.com/api/webhooks/378116447605620736/z8UAE5XXQMAlpLCbvM8gd25jh17Jopg6rVGNkvvfgvlbgc65J5cgJ69U--SRdkg5FCD8"
 
 local discord_auth = "discord_auth.txt"
@@ -20,22 +22,27 @@ function hex2rgb(hex)
     return Color(tonumber("0x"..hex:sub(1,2)), tonumber("0x"..hex:sub(3,4)), tonumber("0x"..hex:sub(5,6)))
 end
 
-function discord.say_from_ds(pl,msg,hex)
-	if hex == "#000000" then hex = "#447092" end
-	ChatAddText(Color(161,161,255),"> ",hex2rgb(hex),pl,Color(255,255,255),": ",msg)
+local function parse_say_from_ds(username, msg, hexcolor)
+	if hexcolor == "#000000" then hexcolor = "#447092" end
+
+	net.Start("discord.msg")
+		net.WriteString(username)
+		net.WriteColor(hex2rgb(hexcolor))
+		net.WriteString(msg)
+	net.Broadcast()
 end
 
-concommand.Add("getdstext",function(pl,cmd,a,line)
-	if IsValid(pl) then return end
+function discord.get_relay()
+
 	local mem = util.JSONToTable(file.Read('discord-chat.txt'))
-	//PrintTable(mem)
-	discord.say_from_ds(mem[1],mem[2],mem[3])
-end)
+	parse_say_from_ds(mem[1],mem[2],mem[3])
+		
+end
 
 function discord.send(msg,tab)
 	tab = istable(tab) and table.Add({content = msg},tab) or {content = msg}
 	local channel = discord.getchannel()
-	http.Post(Format("https://discordapp.com/api/channels/%s/messages",channel),tab,_,_,{Authorization = "Bot "..discord.apikey})
+	http.Post(Format("https://discordapp.com/api/channels/%s/messages",channel),tab,function()end,function()end,{Authorization = "Bot "..discord.apikey})
 end
 
 local function ReadFuncClose(callback)
