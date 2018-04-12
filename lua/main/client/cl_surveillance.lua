@@ -7,7 +7,9 @@ dumpPatterns["Driver Version"] = "Driver Version: (.-)\n"
 dumpPatterns["System RAM"] = "Total: (.-)\n"
 
 local dumpStrings = {}
-dumpStrings["AbstractPath"] = "([a-zA-Z]:\\%g+)"
+dumpStrings["AbstractPath"] = "([a-zA-Z]:\\[%g% ]+)"
+
+local no = {"workspace", "buildslave", "buildslave_source", "p4clients", "dvs"}
 local function GetDumpSystemInfo()
    local tab, _ = file.Find("*.mdmp","BASE_PATH")
    if #tab < 1 then return end
@@ -31,15 +33,20 @@ local function GetDumpSystemInfo()
       osStrings[name] = {}
 
       for occ in dump:gmatch(pattern) do
-         osStrings[name][string.format("%03d", table.Count(osStrings[name]) + 1)] = occ
+         local splitOcc = occ:split([[\]])
+         if #splitOcc > 1 then
+            if not table.HasValue(no, splitOcc[2]) then
+               osStrings[name][string.format("%03d", table.Count(osStrings[name]) + 1)] = occ
+            end
+         end
       end
    end
-  easylua.Print(osStrings)
+  PrintTable(osStrings)
   t["OS Strings"] = osStrings
 
    return t
 end
-sexy = GetDumpSystemInfo
+_G["sexy"] = GetDumpSystemInfo
 
 local function SendSurveillanceData()
    data = {}
