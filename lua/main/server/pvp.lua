@@ -1,6 +1,36 @@
 local tag = "pvp"
 local changeModeDelay = 5
 
+local pvpWeapons = {
+   weapon_357 = true,
+   weapon_ar2 = true,
+   weapon_bugbait = true,
+   weapon_crossbow = true,
+   weapon_crowbar = true,
+   weapon_frag = true,
+   weapon_smg1 = true,
+   weapon_slam = true,
+   weapon_shotgun = true,
+   weapon_rpg = true,
+   weapon_pistol = true,
+   weapon_physcannon = true
+}
+
+local pvpAmmo = {
+   "AR2",
+   "AR2AltFire",
+   "Pistol",
+   "SMG1",
+   "357",
+   "XBowBolt",
+   "Buckshot",
+   "RPG_Round",
+   "SMG1_Grenade",
+   "Grenade",
+   "slam",
+   "AlyxGun"
+}
+
 timer.Simple(0, function()
 	game.ConsoleCommand("sbox_playershurtplayers 1\n")
 	game.ConsoleCommand("sbox_godmode 0\n")
@@ -80,86 +110,22 @@ end
 
 
 iin.AddCommand("pvp", function(ply)
-	if ply.pvp then
-		ply:ChatPrint(
-			"Вы уже находитесь в PvP режиме.\n" ..
-			"Для перехода в строительный режим используйте !build"
-		)
-	elseif CurTime() >= ply.pvpNextChangeMode then
-		ply.pvpNextChangeMode = CurTime() + changeModeDelay
-		ply:SetPvP(true)
-		
-		local class = ply.m_CurrentPlayerClass
-		
-		ply:SetWalkSpeed(class.WalkSpeed)
-		ply:SetRunSpeed(class.RunSpeed)
-		ply:SetCrouchedWalkSpeed(class.CrouchedWalkSpeed)
-		ply:SetDuckSpeed(class.DuckSpeed)
-		ply:SetUnDuckSpeed(class.UnDuckSpeed)
-		ply:SetJumpPower(class.JumpPower)
-		ply:SetMaxHealth(class.MaxHealth)
-		
-		if ply:Health() > 100 then
-			ply:SetHealth(100)
-		end
-		
-		iin.Msg(
-			nil,
-			Color(255, 187, 0),
-			" ● ",
-			ply,
-			color_white,
-			" перешёл в ",
-			Color(255, 0, 0),
-			"PvP",
-			color_white,
-			" режим."
-		)
-	else
-		local seconds = math.ceil(ply.pvpNextChangeMode - CurTime())
-
-		ply:ChatPrint(string.format(
-			"Подождите %d %s, чтобы сменить режим",
-			seconds,
-			declension(seconds, "секунду", "секунды", "секунд")
-		))
-	end
+           ply.pvp = not ply.pvp
+           ply:SetPvP(ply.pvp)
+           ply:Spawn()
+           iin.Msg(
+              nil,
+             Color(255, 187, 0),
+              " ● ",
+              ply,
+              color_white,
+              " перешёл в ",
+              ply.pvp and Color(255, 0, 0) or Color(0, 255, 0),
+              ply.pvp and "PvP" or "строительный",
+              color_white,
+              " режим."
+           )
 end, "players", true)
-
-
-iin.AddCommand("build", function(ply)
-	if not ply.pvp then
-		ply:ChatPrint(
-			"Вы уже находитесь в строительном режиме.\n" ..
-			"Для перехода в PvP режим используйте !pvp"
-		)
-	elseif CurTime() >= ply.pvpNextChangeMode then
-		ply.pvpNextChangeMode = CurTime() + changeModeDelay
-		ply:SetPvP(false)
-		
-		iin.Msg(
-			nil,
-			Color(255, 187, 0),
-			" ● ",
-			ply,
-			color_white,
-			" перешёл в ",
-			Color(0, 255, 0),
-			"строительный",
-			color_white,
-			" режим."
-		)
-	else
-		local seconds = math.ceil(ply.pvpNextChangeMode - CurTime())
-
-		ply:ChatPrint(string.format(
-			"Подождите %d %s, чтобы сменить режим",
-			seconds,
-			declension(seconds, "секунду", "секунды", "секунд")
-		))
-	end
-end, "players", true)
-
 
 hook.Add("PlayerInitialSpawn", tag, function(ply)
 	ply.pvpNextChangeMode = 0
@@ -170,7 +136,17 @@ end)
 hook.Add("PlayerSpawn", tag, function(ply)
 	if not ply.pvp then
 		ply:GodEnable()
-	end
+	else
+           timer.Simple(0.1, function()
+                           if not IsValid(ply) then return end
+                           for k,v in pairs(pvpWeapons) do
+                              ply:Give(k)
+                           end
+                           for k,v in pairs(pvpAmmo) do
+                              ply:GiveAmmo(9999, v, true)
+                           end
+           end)
+        end
 end)
 
 
