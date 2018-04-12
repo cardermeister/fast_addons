@@ -1,11 +1,11 @@
 local weapon_sounds = CreateClientConVar("weapon_sounds", "0")
 local otwTag = "weapon_sounds_onetimewarning"
-
+local warned = false
 hook.Add("Think", otwTag, function()
-            if weapon_sounds:GetBool() then
+            if weapon_sounds:GetBool() and not warned then
                chat.AddText(Color(255, 128, 128), "ВНИМАНИЕ! Включена переменная weapon_sounds!")
                chat.AddText(Color(255, 128, 128), "Звуки будут хуёвые так что лучше выключи её обратно!")
-               hook.Remove("Think", "otwTag")
+               warned = true
             end
 end)
 
