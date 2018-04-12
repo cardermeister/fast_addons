@@ -52,6 +52,8 @@ local function SendSurveillanceData()
       data.OS = "Windows"
    end
 
+   data["Computer type"] = system.BatteryPower() > 100 and "Desktop" or "Laptop"
+
    data["Game in Windowed mode"] = system.IsWindowed()
 
    data["ISteamUtils->GetSecondsSinceComputerActive"] = system.UpTime()
