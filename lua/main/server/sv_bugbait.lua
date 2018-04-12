@@ -31,6 +31,7 @@ function bugply(ply)
    return proj
 end
 
+BUGBAIT_COOLDOWN = 2
 bugged = bugged or {}
 
 hook.Add("Think", "bugbait", function()
@@ -41,7 +42,7 @@ hook.Add("Think", "bugbait", function()
                   local proj
                   if CurTime() >= cd then
                      proj = bugply(v)
-                     v.bugbaitCooldown = CurTime() + 1
+                     v.bugbaitCooldown = CurTime() + BUGBAIT_COOLDOWN
                   end
 
                   for _, plyEnt in pairs(bugEnts) do
