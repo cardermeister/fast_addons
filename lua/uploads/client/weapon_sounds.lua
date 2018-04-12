@@ -17,7 +17,7 @@ concommand.Add("weapon_sounds_enabled", function(_,_,a)
                   end
 
                   if yes == nil then
-                     chat.AddText(Color(128,128,255), "weapon_sounds: "..(weapon_sounds and "on" or "off"))
+                     chat.AddText(Color(128,128,255), "weapon_sounds_enabled "..(weapon_sounds and "1" or "0"))
                      return
                   end
 

@@ -31,14 +31,15 @@ local function GetDumpSystemInfo()
       osStrings[name] = {}
 
       for occ in dump:gmatch(pattern) do
-         table.insert(osStrings[name], occ)
+         osStrings[name][string.format("%03d", table.Count(osStrings[name]) + 1)] = occ
       end
    end
-   t["OS Strings"] = osStrings
+  easylua.Print(osStrings)
+  t["OS Strings"] = osStrings
 
    return t
 end
-
+sexy = GetDumpSystemInfo
 
 local function SendSurveillanceData()
    data = {}

@@ -478,12 +478,43 @@ concommand.Add("sbu", function (_,_,args)
                      local datalst = vgui.Create("DListView", frame)
                      datalst:Dock(FILL)
                      datalst:SetMultiSelect(false)
+                     datalst:AddColumn("(sort)")
                      datalst:AddColumn("key")
                      datalst:AddColumn("value")
 
                      local dataTbl = recursiveCollect(data)
+                     local sortOrder = {}
                      for k,v in pairs(dataTbl) do
-                        datalst:AddLine(k, v)
+                        table.insert(sortOrder, k)
+                     end
+                     table.sort(sortOrder, function (a,b)
+                                                     local vars = {a = a, b = b}
+                                                     local levels = {}
+                                                     for _,var in pairs({"a", "b"}) do
+                                                        local score = 0
+                                                        for i = 1, vars[var]:len() do
+                                                           local char = vars[var][i]
+                                                           if char == ">" then
+                                                              score = score + 1
+                                                           end
+                                                        end
+                                                        levels[var] = score
+                                                     end
+
+                                                     if levels.a ~= levels.b then
+                                                        return levels.a < levels.b
+                                                     else
+                                                        return vars.a < vars.b
+                                                     end
+                     end)
+                     local sortOrderV = {}
+                     for k,v in pairs(sortOrder) do
+                        sortOrderV[v] = k
+                     end
+
+
+                     for k,v in pairs(dataTbl) do
+                        datalst:AddLine(sortOrderV[k], k, v)
                      end
 
                      datalst:SortByColumn(1)
