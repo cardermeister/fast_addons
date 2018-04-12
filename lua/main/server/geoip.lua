@@ -76,7 +76,9 @@ function GetIP(name,ip_port)
 		
 		Msg"[Geoip] "print(name,"-",crctxt,"(Δ"..tostring(delta)..")")	
 		
-	end)
+                         end, function ()
+                 geoip[ip] = {error=true}
+        end)
 	
 end
 
