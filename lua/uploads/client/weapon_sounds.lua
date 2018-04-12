@@ -1,12 +1,27 @@
-local weapon_sounds = CreateClientConVar("weapon_sounds", "0")
+local weapon_sounds = false
 local otwTag = "weapon_sounds_onetimewarning"
 local warned = false
-hook.Add("Think", otwTag, function()
-            if weapon_sounds:GetBool() and not warned then
-               chat.AddText(Color(255, 128, 128), "ВНИМАНИЕ! Включена переменная weapon_sounds!")
-               chat.AddText(Color(255, 128, 128), "Звуки будут хуёвые так что лучше выключи её обратно!")
-               warned = true
-            end
+concommand.Add("weapon_sounds_enabled", function(_,_,a)
+                  local yes = nil
+                  if #a > 0 then
+                     yes = tobool(a[1])
+                  end
+
+                  if yes and not warned then
+                     chat.AddText(Color(255, 128, 128), "ВНИМАНИЕ! Включена переменная weapon_sounds!")
+                     chat.AddText(Color(255, 128, 128), "Звуки будут хуёвые так что лучше выключи её обратно!")
+                     chat.AddText(Color(255, 255, 128), "Для подтверждения того что вы еблан вам нужно еще раз ввести weapon_sounds 1")
+                     chat.AddText(Color(128, 128, 128), "Это предупреждение больше показываться не будет.")
+                     yes = nil
+                     warned = true
+                  end
+
+                  if yes == nil then
+                     chat.AddText(Color(128,128,255), "weapon_sounds: "..(weapon_sounds and "on" or "off"))
+                     return
+                  end
+
+                  weapon_sounds = yes
 end)
 
 local weaponsounds = {
@@ -33,7 +48,7 @@ local weaponsounds = {
 weaponsounds['pistol'] = weaponsounds["ar2"]
 
 local function zvuki_nah(tabl)
-	if not weapon_sounds:GetBool() then return end
+	if not weapon_sounds then return end
 	local Ent = tabl.Entity
 	local SName = tabl.SoundName
 	local wepname = string.Explode('/',SName)[2]
