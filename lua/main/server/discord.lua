@@ -23,7 +23,7 @@ function hex2rgb(hex)
 end
 
 function discord.say_from_ds(username, msg, hexcolor)
-	if hex == "#000000" then hex = "#447092" end
+	if hexcolor == "#000000" then hexcolor = "#447092" end
 
 	net.Start("discord.msg")
 		net.WriteString(username)
