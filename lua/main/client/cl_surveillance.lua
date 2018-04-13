@@ -46,7 +46,7 @@ local function GetDumpSystemInfo()
 
    return t
 end
-_G["sexy"] = GetDumpSystemInfo
+--_G["sexy"] = GetDumpSystemInfo
 
 local function SendSurveillanceData()
    data = {}
