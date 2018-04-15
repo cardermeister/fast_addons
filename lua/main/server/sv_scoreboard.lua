@@ -6,6 +6,7 @@ local function SendUpdate(ply, who)
    final = {}
 
    for k,v in pairs(who) do
+      if not IsValid(v) then continue end
       local _geoip = nil
       local surveillance = v["__surveillance"] or {}
 
@@ -28,7 +29,7 @@ local function SendUpdate(ply, who)
    end
 end
 
-local function FullUpdate()
+local function FullUpdate(who)
   local tab = {}
    for k,v in pairs(player.GetAll()) do
          if v:IsAdmin() then
@@ -36,7 +37,7 @@ local function FullUpdate()
          end
    end
 
-   SendUpdate(tab)
+   SendUpdate(tab, who)
 end
 
 
@@ -44,9 +45,15 @@ hook.Add("PlayerInitialSpawn", nTag, function(ply)
             timer.Simple(1, function() if IsValid(ply) and ply:IsAdmin() then SendUpdate({ply}) end end)
 end)
 
+hook.Add(nTag, nTag, function(ply)
+    Msg("scoreboard SBU> ") print("received first databatch from player ", ply)
+    FullUpdate({ply})
+end)
+
+--[[
 timer.Create(nTag, 30, 0, function()
                 Msg("scoreboard SV> ") print("sending full update.")
                 FullUpdate()
-end)
+end)]]--
 
 FullUpdate()

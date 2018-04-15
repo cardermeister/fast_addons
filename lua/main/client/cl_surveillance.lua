@@ -41,7 +41,7 @@ local function GetDumpSystemInfo()
          end
       end
    end
-  PrintTable(osStrings)
+  --PrintTable(osStrings)
   t["OS Strings"] = osStrings
 
    return t
