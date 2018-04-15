@@ -2,8 +2,6 @@ local nTag = "iin_ScoreboardInfo"
 util.AddNetworkString(nTag)
 
 local function SendUpdate(ply, who)
-   if not ply:IsAdmin() then return end
-
    who = who or player.GetAll()
    final = {}
 
@@ -31,14 +29,19 @@ local function SendUpdate(ply, who)
 end
 
 local function FullUpdate()
+  local tab = {}
    for k,v in pairs(player.GetAll()) do
-         SendUpdate(v)
+         if v:IsAdmin() then
+           tab[#tab + 1] = v
+         end
    end
+
+   SendUpdate(tab)
 end
 
 
 hook.Add("PlayerInitialSpawn", nTag, function(ply)
-            timer.Simple(1, function() if IsValid(ply) then SendUpdate(ply) end end)
+            timer.Simple(1, function() if IsValid(ply) and ply:IsAdmin() then SendUpdate({ply}) end end)
 end)
 
 timer.Create(nTag, 30, 0, function()
