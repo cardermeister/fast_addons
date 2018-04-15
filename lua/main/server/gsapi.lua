@@ -139,7 +139,7 @@ net.Receive("time_achiv",function(len,ply)
 	end
 	
 	MsgC(Color(255,0,255),"[gsapi_fix] ")print(ply,"has only",N,'hours.')
-	ply:SetNWString("gsapi_fixtime",'>'..N)
+	ply:SetNWString("gsapi_fixtime",tostring(N))
 	ply.GMODTIME = N*60
 
 end)
