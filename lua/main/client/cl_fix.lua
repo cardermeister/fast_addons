@@ -90,6 +90,10 @@ hook.Add("EntityEmitSound", "TimeWarpSounds", function(data)
 
 end)
 
+concommand.Add("fixchat",function()
+	chatbox.chatgui:SetSize(ScrW()*1/3,ScrH()*1/3)
+end)
+
 hook.Add("Think", "SF.console.command", function()
 	if not SF then return end
 	if not SF.Permissions then return end
