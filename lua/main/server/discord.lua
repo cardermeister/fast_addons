@@ -22,8 +22,12 @@ function hex2rgb(hex)
     return Color(tonumber("0x"..hex:sub(1,2)), tonumber("0x"..hex:sub(3,4)), tonumber("0x"..hex:sub(5,6)))
 end
 
-local function parse_say_from_ds(username, msg, hexcolor)
+local function do_say_from_ds(username, msg, hexcolor, attachments)
 	if hexcolor == "#000000" then hexcolor = "#447092" end
+	
+	if attachments then
+		msg=attachments.." "..msg	
+	end
 
 	net.Start("discord.msg")
 		net.WriteString(username)
@@ -34,8 +38,8 @@ end
 
 function discord.get_relay()
 
-	local mem = util.JSONToTable(file.Read('discord-chat.txt'))
-	parse_say_from_ds(mem[1],mem[2],mem[3])
+	local t = util.JSONToTable(file.Read('discord-chat.txt'))
+	do_say_from_ds(t.author,t.content,t.hexcolor,t.attachments)
 		
 end
 
