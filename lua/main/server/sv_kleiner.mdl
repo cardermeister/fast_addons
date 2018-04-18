@@ -1,0 +1,6 @@
+hook.Add("PlayerSpawn", "no_kleiner", function(ply)
+  if ply:GetModel() ~= "models/player/kleiner.mdl" then return end
+  ply:KillSilent()
+  ply:ChatPrint("Пожалуйста, нажмите [C] и смените свою модель игрока.")
+  ply:ChatPrint("Please, press [C] and change your player model.")
+end)
