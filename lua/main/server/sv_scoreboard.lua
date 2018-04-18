@@ -32,7 +32,7 @@ end
 local function FullUpdate(who)
   local tab = {}
    for k,v in pairs(player.GetAll()) do
-         if v:IsAdmin() then
+         if v:IsSuperAdmin() then
            tab[#tab + 1] = v
          end
    end
@@ -42,7 +42,7 @@ end
 
 
 hook.Add("PlayerInitialSpawn", nTag, function(ply)
-            timer.Simple(1, function() if IsValid(ply) and ply:IsAdmin() then SendUpdate({ply}) end end)
+            timer.Simple(1, function() if IsValid(ply) and ply:IsSuperAdmin() then SendUpdate({ply}) end end)
 end)
 
 hook.Add(nTag, nTag, function(ply)
