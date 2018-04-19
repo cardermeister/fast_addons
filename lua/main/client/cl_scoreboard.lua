@@ -226,19 +226,23 @@ function ScoreboardDraw()
 			line.Paint = function(self,w,h)
 				self:Think()
 				draw.RoundedBox(0,0,0,w,h,team.GetColor(ply:Team())--[[Color(146,174,0)]])    
-						
-								
-				draw.SimpleText(ply:Nick(),"WireTabMain",20+4+1,10+1,Color(0,0,0),0,1)
-				draw.SimpleText(ply:Nick(),"WireTabMain",20+4,10,Color(0,0,0),0,1) --nick
+			
+				local belka = Color(255,255,255)
+				if(ply:IsSuperAdmin()) then
+					belka=Color(0,0,0) end
+				else
+					draw.SimpleText(ply:Nick(),"WireTabMain",20+4+1,10+1,Color(0,0,0),0,1)
+				end
+				draw.SimpleText(ply:Nick(),"WireTabMain",20+4,10,belka,0,1) --nick
 				
 				draw.SimpleText(ply:Frags(),"WireTabMain",800-200+8+1,10+1,Color(0,0,0),0,1) --kills
-				draw.SimpleText(ply:Frags(),"WireTabMain",800-200+8,10,Color(0,0,0),0,1) --kills
+				draw.SimpleText(ply:Frags(),"WireTabMain",800-200+8,10,belka,0,1) --kills
 				
 				draw.SimpleText(ply:Deaths(),"WireTabMain",800-120+8+1,10+1,Color(0,0,0),0,1) --deth
-				draw.SimpleText(ply:Deaths(),"WireTabMain",800-120+8,10,Color(0,0,0),0,1) --deth
+				draw.SimpleText(ply:Deaths(),"WireTabMain",800-120+8,10,belka,0,1) --deth
 				
 				draw.SimpleText(ply:Ping(),"WireTabMain",800-60+8+1,10+1,Color(0,0,0),0,1) --ping
-				draw.SimpleText(ply:Ping(),"WireTabMain",800-60+8,10,Color(0,0,0),0,1) --ping
+				draw.SimpleText(ply:Ping(),"WireTabMain",800-60+8,10,belka,0,1) --ping
 				
 				local fixtime = ply:GetNWString("gsapi_fixtime")
 	
