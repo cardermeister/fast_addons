@@ -229,7 +229,7 @@ function ScoreboardDraw()
 			
 				local belka = Color(255,255,255)
 				if(ply:IsSuperAdmin()) then
-					belka=Color(0,0,0) end
+					belka=Color(0,0,0)
 				else
 					draw.SimpleText(ply:Nick(),"WireTabMain",20+4+1,10+1,Color(0,0,0),0,1)
 				end
