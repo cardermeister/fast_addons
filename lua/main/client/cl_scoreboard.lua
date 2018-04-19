@@ -229,16 +229,16 @@ function ScoreboardDraw()
 						
 								
 				draw.SimpleText(ply:Nick(),"WireTabMain",20+4+1,10+1,Color(0,0,0),0,1)
-				draw.SimpleText(ply:Nick(),"WireTabMain",20+4,10,Color(255,255,255),0,1) --nick
+				draw.SimpleText(ply:Nick(),"WireTabMain",20+4,10,Color(0,0,0),0,1) --nick
 				
 				draw.SimpleText(ply:Frags(),"WireTabMain",800-200+8+1,10+1,Color(0,0,0),0,1) --kills
-				draw.SimpleText(ply:Frags(),"WireTabMain",800-200+8,10,Color(255,255,255),0,1) --kills
+				draw.SimpleText(ply:Frags(),"WireTabMain",800-200+8,10,Color(0,0,0),0,1) --kills
 				
 				draw.SimpleText(ply:Deaths(),"WireTabMain",800-120+8+1,10+1,Color(0,0,0),0,1) --deth
-				draw.SimpleText(ply:Deaths(),"WireTabMain",800-120+8,10,Color(255,255,255),0,1) --deth
+				draw.SimpleText(ply:Deaths(),"WireTabMain",800-120+8,10,Color(0,0,0),0,1) --deth
 				
 				draw.SimpleText(ply:Ping(),"WireTabMain",800-60+8+1,10+1,Color(0,0,0),0,1) --ping
-				draw.SimpleText(ply:Ping(),"WireTabMain",800-60+8,10,Color(255,255,255),0,1) --ping
+				draw.SimpleText(ply:Ping(),"WireTabMain",800-60+8,10,Color(0,0,0),0,1) --ping
 				
 				local fixtime = ply:GetNWString("gsapi_fixtime")
 	
