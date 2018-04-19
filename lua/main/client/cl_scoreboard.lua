@@ -226,7 +226,7 @@ function ScoreboardDraw()
 			line.Paint = function(self,w,h)
 				self:Think()
 				local temacolor=team.GetColor(ply:Team())
-				if ply():IsSuperAdmin() then temacolor = Color(0, 175, 43) end
+				if ply:IsSuperAdmin() then temacolor = Color(0, 175, 43) end
 				draw.RoundedBox(0,0,0,w,h,temacolor--[[Color(146,174,0)]])    
 			
 				local belka = Color(255,255,255)
