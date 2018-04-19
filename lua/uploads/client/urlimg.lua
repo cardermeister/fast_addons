@@ -37,6 +37,7 @@ local allowed = {
 	jpg  = true,
 	jpeg = true,
 	png  = true,
+	svg  = true,
 }
 
 -- Image URL queue
