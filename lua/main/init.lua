@@ -13,11 +13,11 @@ hook.Add('Initialize','teams',function()
 	
 	local color =  false//hide_admins:GetBool() and Color(68, 	112, 146) or false
 	
-	team.SetUp(30, "admins", color or Color(138, 0, 255))
-	team.SetUp(40, "devs", 	color or Color(149,255,0))
-	team.SetUp(50,"owners", 	color or Color(255, 140, 113))
+	team.SetUp(30, "admins", color or Color(161, 161, 255))
+	team.SetUp(40, "devs", color or Color(149, 255, 0))
+	team.SetUp(50, "owners", color or Color(255, 140, 113))
 	
-	team.SetUp(1001, "bots",Color(68, 	112, 146))
+	team.SetUp(1001, "bots", Color(68, 112, 146))
 
 	//cvars.AddChangeCallback( "hide_ranks", function( convar_name, value_old, value_new )
 	//	if value_new=="1" then
@@ -51,6 +51,7 @@ end
 local list ={
 	banni = -1,
 	players = 5,
+	bots = 5,
 	admins = 228,
 	devs = 1337,
 	owners = math.huge,
