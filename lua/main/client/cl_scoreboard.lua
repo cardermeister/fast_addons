@@ -6,32 +6,32 @@ local nTag = "iin_ScoreboardInfo"
 SCOREBOARD_INFO = SCOREBOARD_INFO or {}
 
 net.Receive(nTag, function(len, ply)
-               print("Got " .. nTag .." update!")
-               for k,v in pairs(net:ReadTable()) do
-                  SCOREBOARD_INFO[k] = v
-               end
+	print("Got " .. nTag .." update!")
+	for k,v in pairs(net:ReadTable()) do
+		SCOREBOARD_INFO[k] = v
+	end
 end)
 
 hook.Add('iin_Initialized',"InitTab",function()
 
 local SetClipboardText=function(txt)
-        local _,count=txt:gsub("\n","\n")
-        txt=txt..('_'):rep(count)
- 
-        local b=vgui.Create('DTextEntry',nil,'ClipboardCopyHelper')
-                b:SetVisible(false)
-                b:SetText(txt)
-                b:SelectAllText()
-                b:CutSelected()
-                b:Remove()
+	local _, count = txt:gsub("\n","\n")
+	txt = txt..('_'):rep(count)
+
+	local b=vgui.Create('DTextEntry',nil,'ClipboardCopyHelper')
+		b:SetVisible(false)
+		b:SetText(txt)
+		b:SelectAllText()
+		b:CutSelected()
+		b:Remove()
 end
- 
- 
+
+
 local ApiURL = "http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=C9E4E47AB57681D140D9924A16196EC8&steamids="
 
 local LoadingMat = url_tex.Image'http://www.iguides.ru/forum/imagehosting/2011/05/08/853174dc624e58f3bd.png'
 
- 
+
 local draw = draw
 local surface = surface
 local table = table
@@ -44,50 +44,50 @@ local Color = Color
 local http = http
 
 local list ={
-  banni = -1,
-  players = 5,
-  admins = 228,
-  devs = 1337,
-  owners = math.huge,
+	banni = -1,
+	players = 5,
+	admins = 228,
+	devs = 1337,
+	owners = math.huge,
 }
 
 local function SortPlys(players_sort)
-  table.sort(players_sort,function(a,b)
-          if not a or not b then return false      end
-          if not list[a:GetUserGroup()] or not list[b:GetUserGroup()] then return false end
-          --if a:Team() == b:Team() then return #TIME# end
-          return list[a:GetUserGroup()] > list[b:GetUserGroup()]              
-  end)
+	table.sort(players_sort,function(a,b)
+		if not a or not b then return false      end
+		if not list[a:GetUserGroup()] or not list[b:GetUserGroup()] then return false end
+		--if a:Team() == b:Team() then return #TIME# end
+		return list[a:GetUserGroup()] > list[b:GetUserGroup()]
+	end)
 end
- 
+
 surface.CreateFont('WireTab',
-{      
-        font = "Lucida Console",
-        size = 53,
-        weight = 500,
-        blursize = 0,
-        scanlines = 0,
-        antialias = true,
- 
+{
+	font = "Lucida Console",
+	size = 53,
+	weight = 500,
+	blursize = 0,
+	scanlines = 0,
+	antialias = true,
+
 })
- 
+
 surface.CreateFont('WireTabMain',
 {
-        font = "Lucida Console",
-        size = 13,
-        weight = 500,
-        blursize = 0,
-        scanlines = 0,
-        antialias = true,
+	font = "Lucida Console",
+	size = 13,
+	weight = 500,
+	blursize = 0,
+	scanlines = 0,
+	antialias = true,
 })
- 
+
 local Scoreboard
 
 _G.ScoreboardKill = function ()
-   if IsValid(Scoreboard) then
-      Scoreboard:Remove()
-      Scoreboard=nil
-   end
+	if IsValid(Scoreboard) then
+		Scoreboard:Remove()
+		Scoreboard=nil
+	end
 end
 
 function ScoreboardDraw()
@@ -138,7 +138,7 @@ function ScoreboardDraw()
 								
 				end
 						
-						//print("scoreboard resorted")
+					//print("scoreboard resorted")
 			end
 				
 		end
@@ -164,7 +164,7 @@ function ScoreboardDraw()
 			draw.SimpleText("#dezes","WireTabMain",800-120,100+10   ,Color(255,255,255),0,1)
 			draw.SimpleText("#pingas","WireTabMain",800-60,100+10   ,Color(255,255,255),0,1)
 	
-		end                    
+		end
 			
 		local yos = p:Add('DHTML')
 		yos:SetPos(800-200,-8   )
@@ -195,19 +195,19 @@ function ScoreboardDraw()
 		plys:EnableVerticalScrollbar( true )
 
 		Scoreboard.plys = plys
-		
-				local mats = {
-		
-				owners          = Material'icon16/server_chart.png',
-				admins          = Material'icon16/shield.png',
-				devs            = Material'icon16/script.png',
-				banni           = Material'icon16/cancel.png',
-				players         = Material'icon16/user.png',
-				time_played   = Material'icon16/time.png',
-				e2power         = Material'icon16/cog.png',
-				film            = Material'icon16/film.png',
-				monitor_link  = Material'icon16/monitor_link.png',
-				telephone_link  = Material'icon16/telephone_link.png',
+
+		local mats = {
+	
+			owners          = Material'icon16/server_chart.png',
+			admins          = Material'icon16/shield.png',
+			devs            = Material'icon16/script.png',
+			banni           = Material'icon16/cancel.png',
+			players         = Material'icon16/user.png',
+			time_played   = Material'icon16/time.png',
+			e2power         = Material'icon16/cog.png',
+			film            = Material'icon16/film.png',
+			monitor_link  = Material'icon16/monitor_link.png',
+			telephone_link  = Material'icon16/telephone_link.png',
 		}
 			
 		function MakePlayerLine(ply)
@@ -221,13 +221,13 @@ function ScoreboardDraw()
 				ply.Expanded = status
 			end
 					
-			line.DoRightClick = function() iin.OpenClientMenu(ply) end 
+			line.DoRightClick = function() iin.OpenClientMenu(ply) end
 					
 			line.Paint = function(self,w,h)
 				self:Think()
 				local temacolor=team.GetColor(ply:Team())
 				if ply:IsSuperAdmin() then temacolor = Color(0, 175, 43) end
-				draw.RoundedBox(0,0,0,w,h,temacolor--[[Color(146,174,0)]])    
+				draw.RoundedBox(0,0,0,w,h,temacolor--[[Color(146,174,0)]])
 			
 				local belka = Color(255,255,255)
 				
@@ -246,23 +246,23 @@ function ScoreboardDraw()
 	
 				if type(ply.TimePlayed)=="number" and ply.TimePlayed>=0 then
 				
-						surface.SetDrawColor(255,255,255)      
-						surface.SetMaterial(mats['time_played'])
-						surface.DrawTexturedRect(400-18,2,16,16)
-					
-						local hours_ = math.Round(ply.TimePlayed/60)..' hours'
-						draw.SimpleText(hours_,"WireTabMain",400+1,10+1,Color(0,0,0),0,1)
-						draw.SimpleText(hours_,"WireTabMain",400,10,Color(255,255,255),0,1) 
+					surface.SetDrawColor(255,255,255)
+					surface.SetMaterial(mats['time_played'])
+					surface.DrawTexturedRect(400-18,2,16,16)
+				
+					local hours_ = math.Round(ply.TimePlayed/60)..' hours'
+					draw.SimpleText(hours_,"WireTabMain",400+1,10+1,Color(0,0,0),0,1)
+					draw.SimpleText(hours_,"WireTabMain",400,10,Color(255,255,255),0,1)
 						
 				elseif fixtime~="" then
-						
-						surface.SetDrawColor(255,255,255)      
-						surface.SetMaterial(mats['time_played'])
-						surface.DrawTexturedRect(400-18,2,16,16)
-						
-						local hours_ = fixtime..' hours'
-						draw.SimpleText(hours_,"WireTabMain",400+1,10+1,Color(0,0,0),0,1)
-						draw.SimpleText(hours_,"WireTabMain",400,10,Color(255,255,255),0,1) 
+
+					surface.SetDrawColor(255,255,255)
+					surface.SetMaterial(mats['time_played'])
+					surface.DrawTexturedRect(400-18,2,16,16)
+					
+					local hours_ = fixtime..' hours'
+					draw.SimpleText(hours_,"WireTabMain",400+1,10+1,Color(0,0,0),0,1)
+					draw.SimpleText(hours_,"WireTabMain",400,10,Color(255,255,255),0,1)
 
 				else
 					
@@ -276,10 +276,10 @@ function ScoreboardDraw()
 			local mat_tags = {}
 			
 			table.insert(mat_tags,mats[ply:GetUserGroup() or "players"])
-			if ply:GetNWBool('E2PowerAccess') then table.insert(mat_tags,mats["e2power"]) end               
+			if ply:GetNWBool('E2PowerAccess') then table.insert(mat_tags,mats["e2power"]) end
 			if ply:GetNWBool('PlayXAcсess') then table.insert(mat_tags,mats["film"]) end
-			if #ply:GetNWString('discordid')>0 then table.insert(mat_tags,mats["telephone_link"]) end 
-			if ply:IsBot() then table.insert(mat_tags,mats["monitor_link"]) end 
+			if #ply:GetNWString('discordid')>0 then table.insert(mat_tags,mats["telephone_link"]) end
+			if ply:IsBot() then table.insert(mat_tags,mats["monitor_link"]) end
 			
 				
 			local Property = vgui.Create('DPanel')
@@ -292,7 +292,7 @@ function ScoreboardDraw()
 			
 			for id,mat in next,mat_tags do
 				
-				surface.SetDrawColor(255,255,255)      
+				surface.SetDrawColor(255,255,255)
 					surface.SetMaterial(mat)
 					surface.DrawTexturedRect(35+id*18,2+20,16,16)
 			
@@ -325,8 +325,8 @@ function ScoreboardDraw()
 		AddAdminButton("goto",function() RunConsoleCommand('iin','goto',ply:EntIndex() )end)
 		AddAdminButton("tp",function() RunConsoleCommand('iin','tp',ply:EntIndex())end)
 		AddAdminButton("Admin",function() iin.OpenClientMenu(ply) end)
-                AddAdminButton("info", function() RunConsoleCommand('sbu', ply:SteamID()) end)
-                
+								AddAdminButton("info", function() RunConsoleCommand('sbu', ply:SteamID()) end)
+								
 		local Mute = vgui.Create("DImageButton",Property)
 		Mute:SetSize(32,32)
 		Mute:SetPos(800-32-4,6)
@@ -335,11 +335,11 @@ function ScoreboardDraw()
 			Mute:SetImage("icon32/muted.png")
 		else
 			Mute:SetImage("icon32/unmuted.png")
-		end    
+		end
 			
 		Mute.DoClick = function()
 			ply:SetMuted(!ply:IsMuted())
-			if ply:IsMuted() then Mute:SetImage("icon32/muted.png") else Mute:SetImage("icon32/unmuted.png") end  
+			if ply:IsMuted() then Mute:SetImage("icon32/muted.png") else Mute:SetImage("icon32/unmuted.png") end
 		end
 					
 				// PROPERTYS
@@ -374,10 +374,10 @@ function ScoreboardDraw()
 			a:Open()
 		end
 		avabox.DoClick = function()
-				ply:ShowProfile()
+			ply:ShowProfile()
 		end
 		
-		avabox.OnCursorEntered = function()    
+		avabox.OnCursorEntered = function()
 			
 			avabox.Target = true
 			Scoreboard.Tar_Ava_Ply = ply
@@ -395,7 +395,7 @@ function ScoreboardDraw()
 					if type(json) == 'table' then
 						json = json.response.players[1].avatarfull
 						if json then
-								ply.AvatarURL = url_tex.Image(json)
+							ply.AvatarURL = url_tex.Image(json)
 						end
 					end
 				end)
@@ -412,23 +412,23 @@ function ScoreboardDraw()
 		////ITEMS
 		/////ITEMS
 		line.Think = function()
-				if not ply or not IsValid(ply) then    
-						line:Remove()
-				end
-		end                    
+			if not ply or not IsValid(ply) then
+				line:Remove()
+			end
+		end
 		
-	 	
+		
 		
 		plys:AddItem(line)
-			end
+			end -- wtf
 			
-	end --if Scoreboard    
+	end --if Scoreboard
 end
 
 hook.Add('HUDPaint',"Scoreboard_AvatarGUI",function()
 	if Scoreboard and Scoreboard.Tar_Ava_Ply and Scoreboard.Tar_Ava_Ply:IsPlayer() then
 		surface.SetMaterial(Scoreboard.Tar_Ava_Ply.AvatarURL or LoadingMat)
-		surface.DrawTexturedRect(gui.MouseX()-200-16,gui.MouseY()-200,200,200) 
+		surface.DrawTexturedRect(gui.MouseX()-200-16,gui.MouseY()-200,200,200)
 	end
 end)
 
@@ -452,78 +452,78 @@ end)
 
 
 local function recursiveCollect(tbl, prefix)
-   prefix = prefix or ""
-   local acc = {}
-   for k,v in pairs(tbl) do
-      if type(v) == "table" then
-         for kk, vv in pairs(recursiveCollect(v, prefix .. tostring(k) .. "> ")) do
-            acc[kk] = tostring(vv)
-         end
-      else
-         acc[prefix .. tostring(k)] = tostring(v)
-      end
-   end
+	prefix = prefix or ""
+	local acc = {}
+	for k,v in pairs(tbl) do
+		if type(v) == "table" then
+			for kk, vv in pairs(recursiveCollect(v, prefix .. tostring(k) .. "> ")) do
+				acc[kk] = tostring(vv)
+			end
+		else
+			acc[prefix .. tostring(k)] = tostring(v)
+		end
+	end
 
-   return acc
+	return acc
 end
 
 concommand.Add("sbu", function (_,_,args)
-                  local steamid = args[1] or "BOT"
-                  local data = SCOREBOARD_INFO[steamid] or false
+	local steamid = args[1] or "BOT"
+	local data = SCOREBOARD_INFO[steamid] or false
 
-                  if data then
-                     local frame = vgui.Create("DFrame")
-                     frame:SetSize(ScrW() * 0.9, ScrH() * 0.9)
-                     frame:SetTitle("Служба Безпеки України :: :: " .. steamid)
-                     frame:SetPos(ScrW() / 2 - frame:GetWide() / 2, ScrH() / 2 - frame:GetTall() / 2)
+	if data then
+		local frame = vgui.Create("DFrame")
+		frame:SetSize(ScrW() * 0.9, ScrH() * 0.9)
+		frame:SetTitle("Служба Безпеки України :: :: " .. steamid)
+		frame:SetPos(ScrW() / 2 - frame:GetWide() / 2, ScrH() / 2 - frame:GetTall() / 2)
 
-                     local datalst = vgui.Create("DListView", frame)
-                     datalst:Dock(FILL)
-                     datalst:SetMultiSelect(false)
-                     datalst:AddColumn("(sort)")
-                     datalst:AddColumn("key")
-                     datalst:AddColumn("value")
+		local datalst = vgui.Create("DListView", frame)
+		datalst:Dock(FILL)
+		datalst:SetMultiSelect(false)
+		datalst:AddColumn("(sort)")
+		datalst:AddColumn("key")
+		datalst:AddColumn("value")
 
-                     local dataTbl = recursiveCollect(data)
-                     local sortOrder = {}
-                     for k,v in pairs(dataTbl) do
-                        table.insert(sortOrder, k)
-                     end
-                     table.sort(sortOrder, function (a,b)
-                                                     local vars = {a = a, b = b}
-                                                     local levels = {}
-                                                     for _,var in pairs({"a", "b"}) do
-                                                        local score = 0
-                                                        for i = 1, vars[var]:len() do
-                                                           local char = vars[var][i]
-                                                           if char == ">" then
-                                                              score = score + 1
-                                                           end
-                                                        end
-                                                        levels[var] = score
-                                                     end
+		local dataTbl = recursiveCollect(data)
+		local sortOrder = {}
+		for k,v in pairs(dataTbl) do
+			table.insert(sortOrder, k)
+		end
+		table.sort(sortOrder, function (a,b)
+			local vars = {a = a, b = b}
+			local levels = {}
+			for _,var in pairs({"a", "b"}) do
+				local score = 0
+				for i = 1, vars[var]:len() do
+					local char = vars[var][i]
+					if char == ">" then
+						score = score + 1
+					end
+				end
+				levels[var] = score
+			end
 
-                                                     if levels.a ~= levels.b then
-                                                        return levels.a < levels.b
-                                                     else
-                                                        return vars.a < vars.b
-                                                     end
-                     end)
-                     local sortOrderV = {}
-                     for k,v in pairs(sortOrder) do
-                        sortOrderV[v] = k
-                     end
+			if levels.a ~= levels.b then
+				return levels.a < levels.b
+			else
+				return vars.a < vars.b
+			end
+		end)
+		local sortOrderV = {}
+		for k,v in pairs(sortOrder) do
+			sortOrderV[v] = k
+		end
 
 
-                     for k,v in pairs(dataTbl) do
-                        datalst:AddLine(sortOrderV[k], k, v)
-                     end
+		for k,v in pairs(dataTbl) do
+			datalst:AddLine(sortOrderV[k], k, v)
+		end
 
-                     datalst:SortByColumn(1)
+		datalst:SortByColumn(1)
 
-                     frame:SetVisible(true )
-                     frame:SetDraggable(false)
-                     frame:ShowCloseButton(true)
-                     frame:MakePopup()
-                  end
+		frame:SetVisible(true )
+		frame:SetDraggable(false)
+		frame:ShowCloseButton(true)
+		frame:MakePopup()
+	end
 end)
