@@ -91,13 +91,13 @@ _G.ScoreboardKill = function ()
 end
 
 function ScoreboardDraw()
-	
+
 	if IsValid(Scoreboard) then
-		
+
 		Scoreboard:Show()
 		Scoreboard:MakePopup()
 		Scoreboard:SetKeyboardInputEnabled( false )
-			
+
 	else
 
 		Scoreboard = vgui.Create'DPanel'
@@ -107,44 +107,44 @@ function ScoreboardDraw()
 		Scoreboard:Center()
 		Scoreboard.last_upd = ""
 		Scoreboard.Paint = function(s,w,h) end
-		
-		
+
+
 		Scoreboard._Update = function(self)
-		
+
 			local get_sorted = player.GetAll()
-			
+
 			SortPlys(get_sorted)
-		
+
 			local temp_sorter = ""
-				
+
 			for i,k in pairs(get_sorted) do
 				temp_sorter = temp_sorter..tostring(k:UniqueID())
 			end
-			
+
 			if temp_sorter == self.last_upd then return end
-			
+
 			self.last_upd = ""
-			
+
 			if self.plys then
 				self.plys:Clear()
-					
+
 				for i,k in pairs(get_sorted) do
-						
+
 					local s_fix = k:GetNWString("gsapi_fixtime")
-					
+
 					k.TimePlayed = (s_fix=="" and k:GetNWInt("gsapi_playtime")) or (s_fix~="" and s_fix) or -1
 					MakePlayerLine(k)
 					self.last_upd = self.last_upd..tostring(k:UniqueID())
-								
+
 				end
-						
+
 					//print("scoreboard resorted")
 			end
-				
+
 		end
-			
+
 		concommand.Add("scoreboard_update",function() Scoreboard:_Update() end)
-			
+
 		local p = vgui.Create('DPanel',Scoreboard)
 		p:SetSize(800,480)
 		--p:Center()
@@ -152,25 +152,25 @@ function ScoreboardDraw()
 		p.Paint = function(self,w,h)
 
 			draw.RoundedBox(0,0,100,w,h,Color(142,202,112))
-				
+
 			draw.RoundedBox(0,0,100,w,20,Color(114,143,83))
-				
+
 			surface.SetDrawColor(Color(114,143,83))
 			surface.DrawOutlinedRect(0,100,w,h-100)
-			
+
 			draw.SimpleText(player.GetCount().." #username","WireTabMain",5     ,100+10 ,Color(255,255,255),0,1)
 			draw.SimpleText("#gmod_timeplayed","WireTabMain",400-40,100+10        ,Color(255,255,255),0,1)
 			draw.SimpleText("#killos","WireTabMain",800-200,100+10  ,Color(255,255,255),0,1)
 			draw.SimpleText("#dezes","WireTabMain",800-120,100+10   ,Color(255,255,255),0,1)
 			draw.SimpleText("#pingas","WireTabMain",800-60,100+10   ,Color(255,255,255),0,1)
-	
+
 		end
-			
+
 		local yos = p:Add('DHTML')
 		yos:SetPos(800-200,-8   )
 		yos:SetSize(200,116     )
 		yos:SetHTML([[ <img src="http://195.2.252.214/images/yo_bg2.png" height=100/> ]])
-		
+
 			local rest = yos:Add('DButton')
 			rest:SetSize(200,116)
 			rest:SetText("")
@@ -180,14 +180,14 @@ function ScoreboardDraw()
 				menu:AddSubMenu( "Restart (no changelevel)"):AddOption("ARE YOU SERIOUSLY",function() LocalPlayer():ConCommand("iin restart") end)
 				menu:Open()
 			end
-		
+
 		local yos_bg = p:Add('DHTML')
 		yos_bg:SetPos(800-316-10,480-316-5)
 		yos_bg:SetSize(316+16,316+16)
 		yos_bg:SetHTML([[ <img src="http://195.2.252.214/images/yo_bg.png" width=316/> ]])
-		
-		
-		
+
+
+
 		local plys = p:Add'DPanelList'
 		plys:SetSize(800,480-(100+20))
 		plys:SetPos(0,100+20+1)
@@ -197,7 +197,7 @@ function ScoreboardDraw()
 		Scoreboard.plys = plys
 
 		local mats = {
-	
+
 			owners          = Material'icon16/server_chart.png',
 			admins          = Material'icon16/shield.png',
 			devs            = Material'icon16/script.png',
@@ -209,100 +209,100 @@ function ScoreboardDraw()
 			monitor_link  = Material'icon16/monitor_link.png',
 			telephone_link  = Material'icon16/telephone_link.png',
 		}
-			
+
 		function MakePlayerLine(ply)
 			local change = true
 			local line = vgui.Create'DCollapsibleCategory'
 			line:SetLabel''
 			line:SetExpanded(ply.Expanded or false)
 			line:SetSize(800,20)
-					
+
 			line.OnToggle = function(self,status)
 				ply.Expanded = status
 			end
-					
+
 			line.DoRightClick = function() iin.OpenClientMenu(ply) end
-					
+
 			line.Paint = function(self,w,h)
 				self:Think()
 				local temacolor=team.GetColor(ply:Team())
 				draw.RoundedBox(0,0,0,w,h,temacolor--[[Color(146,174,0)]])
-				
+
 				draw.SimpleText(ply:Nick(),"WireTabMain",20+4+1,10+1,Color(0,0,0),0,1) --nick
 				draw.SimpleText(ply:Nick(),"WireTabMain",20+4,10,color_white,0,1) --nick
-				
+
 				draw.SimpleText(ply:Frags(),"WireTabMain",800-200+8+1,10+1,Color(0,0,0),0,1) --kills
 				draw.SimpleText(ply:Frags(),"WireTabMain",800-200+8,10,color_white,0,1) --kills
-				
+
 				draw.SimpleText(ply:Deaths(),"WireTabMain",800-120+8+1,10+1,Color(0,0,0),0,1) --deth
 				draw.SimpleText(ply:Deaths(),"WireTabMain",800-120+8,10,color_white,0,1) --deth
-				
+
 				draw.SimpleText(ply:Ping(),"WireTabMain",800-60+8+1,10+1,Color(0,0,0),0,1) --ping
 				draw.SimpleText(ply:Ping(),"WireTabMain",800-60+8,10,color_white,0,1) --ping
-				
+
 				local fixtime = ply:GetNWString("gsapi_fixtime")
-	
+
 				if type(ply.TimePlayed)=="number" and ply.TimePlayed>=0 then
-				
+
 					surface.SetDrawColor(255,255,255)
 					surface.SetMaterial(mats['time_played'])
 					surface.DrawTexturedRect(400-18,2,16,16)
-				
+
 					local hours_ = math.Round(ply.TimePlayed/60)..' hours'
 					draw.SimpleText(hours_,"WireTabMain",400+1,10+1,Color(0,0,0),0,1)
 					draw.SimpleText(hours_,"WireTabMain",400,10,Color(255,255,255),0,1)
-						
+
 				elseif fixtime~="" then
 
 					surface.SetDrawColor(255,255,255)
 					surface.SetMaterial(mats['time_played'])
 					surface.DrawTexturedRect(400-18,2,16,16)
-					
+
 					local hours_ = fixtime..' hours'
 					draw.SimpleText(hours_,"WireTabMain",400+1,10+1,Color(0,0,0),0,1)
 					draw.SimpleText(hours_,"WireTabMain",400,10,Color(255,255,255),0,1)
 
 				else
-					
+
 					draw.SimpleText("Private Profile","WireTabMain",400+1-25,10+1,Color(0,0,0),0,1)
 					draw.SimpleText("Private Profile","WireTabMain",400-25,10,Color(255,255,255),0,1)
 
 				end
-						
+
 			end
-			
+
 			local mat_tags = {}
-			
+
 			table.insert(mat_tags,mats[ply:GetUserGroup() or "players"])
 			if ply:GetNWBool('E2PowerAccess') then table.insert(mat_tags,mats["e2power"]) end
 			if ply:GetNWBool('PlayXAcсess') then table.insert(mat_tags,mats["film"]) end
 			if #ply:GetNWString('discordid')>0 then table.insert(mat_tags,mats["telephone_link"]) end
 			if ply:IsBot() then table.insert(mat_tags,mats["monitor_link"]) end
-			
-				
+
+
 			local Property = vgui.Create('DPanel')
-			
+
 			Property:SetPos(0,20)
 			Property:SetSize(800,40)
 			Property.Paint = function(self,w,h)
 			draw.RoundedBox(0,0,0,800,1,Color(255,255,255))
 			draw.SimpleText("Tags: ","WireTabMain",10,10+20,Color(255,255,255),0,1) --ping
-			
+
 			for id,mat in next,mat_tags do
-				
+
 				surface.SetDrawColor(255,255,255)
 					surface.SetMaterial(mat)
 					surface.DrawTexturedRect(35+id*18,2+20,16,16)
-			
+
 			end
 		end
-				
+
 		local AdminButPanel = Property:Add'DPanelList'
 		AdminButPanel:EnableHorizontal(true)
 		AdminButPanel:SetSpacing(1)
 		AdminButPanel:SetSize(200,40)
 		AdminButPanel:SetPos(10,5)
-		
+
 		local function AddAdminButton(name,func)
 			local aButton = vgui.Create'DButton'
 			--aButton:SetSize(30,15)
@@ -313,18 +313,18 @@ function ScoreboardDraw()
 				surface.SetDrawColor(Color(114,143,83))
 					surface.DrawOutlinedRect(0,0,w,h)
 			end
-			
+
 			aButton.DoClick = func
 			aButton.DoRightClick = func
-		
+
 			AdminButPanel:AddItem(aButton)
 		end
-				
+
 		AddAdminButton("goto",function() RunConsoleCommand('iin','goto',ply:EntIndex() )end)
 		AddAdminButton("tp",function() RunConsoleCommand('iin','tp',ply:EntIndex())end)
 		AddAdminButton("Admin",function() iin.OpenClientMenu(ply) end)
-								AddAdminButton("info", function() RunConsoleCommand('sbu', ply:SteamID()) end)
-								
+		AddAdminButton("info", function() RunConsoleCommand('sbu', ply:SteamID()) end)
+
 		local Mute = vgui.Create("DImageButton",Property)
 		Mute:SetSize(32,32)
 		Mute:SetPos(800-32-4,6)
@@ -334,61 +334,61 @@ function ScoreboardDraw()
 		else
 			Mute:SetImage("icon32/unmuted.png")
 		end
-			
+
 		Mute.DoClick = function()
 			ply:SetMuted(!ply:IsMuted())
 			if ply:IsMuted() then Mute:SetImage("icon32/muted.png") else Mute:SetImage("icon32/unmuted.png") end
 		end
-					
+
 				// PROPERTYS
 		line.Contents = Property
 		Property:SetParent( line )
 		line:InvalidateLayout()
-					
-					
+
+
 		line.OnCursorEntered = function() line.Target = true end
 		line.OnCursorExited = function() line.Target = false end
-			
+
 		local ava = vgui.Create('AvatarImage',line)
 		ava:SetPlayer(ply,16)
 		ply.vgui_avatar = ava
 		ava:SetSize(20,20)
 		ava:SetPos(0,0)
-		
+
 		local avabox = vgui.Create('DButton',ava)
 		avabox:SetSize(28,28)
 		avabox:SetText('')
 		avabox.Paint = function() end
 		avabox.DoRightClick = function()
 			local a=DermaMenu()
-			
+
 			a:AddOption("Копировать SteamID",function() SetClipboardText(ply:SteamID()) end):SetIcon'icon16/computer.png'
 			a:AddOption("Копировать ник",function() SetClipboardText(ply:Name()) end):SetIcon'icon16/color_swatch.png'
 			a:AddOption("Индекс Ентити",function() chat.AddText(Color(255,187,0),"● ",ply,Color(255,255,255),'\'s EntIndex = ',Color(191,255,255),ply:EntIndex()) end):SetIcon'icon16/bin_closed.png'
 			a:AddOption("Открыть профиль",function() ply:ShowProfile() end):SetIcon'icon16/book_open.png'
 			a:AddOption("Копировать ссылку на профиль",function() SetClipboardText("http://steamcommunity.com/profiles/"..ply:SteamID64()) end):SetIcon'icon16/book.png'
 			a:AddOption("Копировать cid",function() SetClipboardText(ply:SteamID64()) end):SetIcon'icon16/computer.png'
-				
+
 			a:Open()
 		end
 		avabox.DoClick = function()
 			ply:ShowProfile()
 		end
-		
+
 		avabox.OnCursorEntered = function()
-			
+
 			avabox.Target = true
 			Scoreboard.Tar_Ava_Ply = ply
-		
+
 			if not ply.AvatarURL and not ply:IsBot() then
-			
+
 				print("Fetching",ply,"avatar...")
-				
-				
+
+
 				http.Fetch(ApiURL..(util.SteamIDTo64(ply:SteamID())),function(s)
-					
+
 					//if not IsValid(ply) then return end
-					
+
 					local json = util.JSONToTable(s)
 					if type(json) == 'table' then
 						json = json.response.players[1].avatarfull
@@ -397,12 +397,12 @@ function ScoreboardDraw()
 						end
 					end
 				end)
-			
+
 			end
-		
-		
+
+
 		end
-		
+
 		avabox.OnCursorExited = function(self)
 			avabox.Target = false
 			Scoreboard.Tar_Ava_Ply = false
@@ -414,12 +414,12 @@ function ScoreboardDraw()
 				line:Remove()
 			end
 		end
-		
-		
-		
+
+
+
 		plys:AddItem(line)
 			end -- wtf
-			
+
 	end --if Scoreboard
 end
 
