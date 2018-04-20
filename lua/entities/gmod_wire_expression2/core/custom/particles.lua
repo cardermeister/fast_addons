@@ -165,110 +165,114 @@ end
 
 __e2setcost(nil)
 
-Particles[0]   = "effects/blooddrop"
-Particles[1]   = "effects/bloodstream"
-Particles[2]   = "effects/laser_tracer"
-Particles[3]   = "effects/select_dot"
-Particles[4]   = "effects/select_ring"
-Particles[5]   = "effects/tool_tracer"
-Particles[6]   = "effects/wheel_ring"
-Particles[7]   = "effects/base"
-Particles[8]   = "effects/blood"
-Particles[9]   = "effects/blood2"
-Particles[10]  = "effects/blood_core"
-Particles[11]  = "effects/blood_drop"
-Particles[12]  = "effects/blood_gore"
-Particles[13]  = "effects/blood_puff"
-Particles[14]  = "effects/blueblackflash"
-Particles[15]  = "effects/blueblacklargebeam"
-Particles[16]  = "effects/blueflare1"
-Particles[17]  = "effects/bluelaser1"
-Particles[18]  = "effects/bluemuzzle"
-Particles[19]  = "effects/bluespark"
-Particles[20]  = "effects/bubble"
-Particles[21]  = "effects/combinemuzzle1"
-Particles[22]  = "effects/combinemuzzle1_dark"
-Particles[23]  = "effects/combinemuzzle2"
-Particles[24]  = "effects/combinemuzzle2_dark"
-Particles[25]  = "effects/energyball"
-Particles[26]  = "effects/energysplash"
-Particles[27]  = "effects/exit1"
-Particles[28]  = "effects/fire_cloud1"
-Particles[29]  = "effects/fire_cloud2"
-Particles[30]  = "effects/fire_embers1"
-Particles[31]  = "effects/fire_embers2"
-Particles[32]  = "effects/fire_embers3"
-Particles[33]  = "effects/fleck_glass1"
-Particles[34]  = "effects/fleck_glass2"
-Particles[35]  = "effects/fleck_glass3"
-Particles[36]  = "effects/fleck_tile1"
-Particles[37]  = "effects/fleck_tile2"
-Particles[38]  = "effects/fleck_wood1"
-Particles[39]  = "effects/fleck_wood2"
-Particles[40]  = "effects/fog_d1_trainstation_02"
-Particles[41]  = "effects/gunshipmuzzle"
-Particles[42]  = "effects/gunshiptracer"
-Particles[43]  = "effects/hydragutbeam"
-Particles[44]  = "effects/hydragutbeamcap"
-Particles[45]  = "effects/hydraspinalcord"
-Particles[46]  = "effects/laser1"
-Particles[47]  = "effects/laser_citadel1"
-Particles[48]  = "effects/mh_blood1"
-Particles[49]  = "effects/mh_blood2"
-Particles[50]  = "effects/mh_blood3"
-Particles[51]  = "effects/muzzleflash1"
-Particles[52]  = "effects/muzzleflash2"
-Particles[53]  = "effects/muzzleflash3"
-Particles[54]  = "effects/muzzleflash4"
-Particles[55]  = "effects/redflare"
-Particles[56]  = "effects/rollerglow"
-Particles[57]  = "effects/slime1"
-Particles[58]  = "effects/spark"
-Particles[59]  = "effects/splash1"
-Particles[60]  = "effects/splash2"
-Particles[61]  = "effects/splash3"
-Particles[62]  = "effects/splash4"
-Particles[63]  = "effects/splashwake1"
-Particles[64]  = "effects/splashwake3"
-Particles[65]  = "effects/splashwake4"
-Particles[66]  = "effects/strider_bulge_dudv"
-Particles[67]  = "effects/strider_muzzle"
-Particles[68]  = "effects/strider_pinch_dudv"
-Particles[69]  = "effects/strider_tracer"
-Particles[70]  = "effects/stunstick"
-Particles[71]  = "effects/tracer_cap"
-Particles[72]  = "effects/tracer_middle"
-Particles[73]  = "effects/tracer_middle2"
-Particles[74]  = "effects/water_highlight"
-Particles[75]  = "effects/yellowflare"
-Particles[76]  = "effects/muzzleflashX"
-Particles[77]  = "effects/ember_swirling001"
-Particles[78]  = "shadertest/eyeball"
-Particles[79]  = "sprites/bloodparticle"
-Particles[80]  = "sprites/animglow02"
-Particles[81]  = "sprites/ar2_muzzle1"
-Particles[82]  = "sprites/ar2_muzzle3"
-Particles[83]  = "sprites/ar2_muzzle4"
-Particles[84]  = "sprites/flamelet1"
-Particles[85]  = "sprites/flamelet2"
-Particles[86]  = "sprites/flamelet3"
-Particles[87]  = "sprites/flamelet4"
-Particles[88]  = "sprites/flamelet5"
-Particles[89]  = "sprites/glow03"
-Particles[90]  = "sprites/light_glow02"
-Particles[91]  = "sprites/orangecore1"
-Particles[92]  = "sprites/orangecore2"
-Particles[93]  = "sprites/orangeflare1"
-Particles[94]  = "sprites/plasmaember"
-Particles[95]  = "sprites/redglow1"
-Particles[96]  = "sprites/redglow2"
-Particles[97]  = "sprites/rico1"
-Particles[98]  = "sprites/strider_blackball"
-Particles[99]  = "sprites/strider_bluebeam"
-Particles[100] = "sprites/tp_beam001"
-Particles[101] = "sprites/yellowflare"
-Particles[102] = "sprites/frostbreath"
-Particles[103] = "sprites/sent_ball"
+Particles = {
+	[0] = "effects/blooddrop",
+	"effects/bloodstream",
+	"effects/laser_tracer",
+	"effects/select_dot",
+	"effects/select_ring",
+	"effects/tool_tracer",
+	"effects/wheel_ring",
+	"effects/base",
+	"effects/blood",
+	"effects/blood2",
+	"effects/blood_core",
+	"effects/blood_drop",
+	"effects/blood_gore",
+	"effects/blood_puff",
+	"effects/blueblackflash",
+	"effects/blueblacklargebeam",
+	"effects/blueflare1",
+	"effects/bluelaser1",
+	"effects/bluemuzzle",
+	"effects/bluespark",
+	"effects/bubble",
+	"effects/combinemuzzle1",
+	"effects/combinemuzzle1_dark",
+	"effects/combinemuzzle2",
+	"effects/combinemuzzle2_dark",
+	"effects/energyball",
+	"effects/energysplash",
+	"effects/exit1",
+	"effects/fire_cloud1",
+	"effects/fire_cloud2",
+	"effects/fire_embers1",
+	"effects/fire_embers2",
+	"effects/fire_embers3",
+	"effects/fleck_glass1",
+	"effects/fleck_glass2",
+	"effects/fleck_glass3",
+	"effects/fleck_tile1",
+	"effects/fleck_tile2",
+	"effects/fleck_wood1",
+	"effects/fleck_wood2",
+	"effects/fog_d1_trainstation_02",
+	"effects/gunshipmuzzle",
+	"effects/gunshiptracer",
+	"effects/hydragutbeam",
+	"effects/hydragutbeamcap",
+	"effects/hydraspinalcord",
+	"effects/laser1",
+	"effects/laser_citadel1",
+	"effects/mh_blood1",
+	"effects/mh_blood2",
+	"effects/mh_blood3",
+	"effects/muzzleflash1",
+	"effects/muzzleflash2",
+	"effects/muzzleflash3",
+	"effects/muzzleflash4",
+	"effects/redflare",
+	"effects/rollerglow",
+	"effects/slime1",
+	"effects/spark",
+	"effects/splash1",
+	"effects/splash2",
+	"effects/splash3",
+	"effects/splash4",
+	"effects/splashwake1",
+	"effects/splashwake3",
+	"effects/splashwake4",
+	"effects/strider_bulge_dudv",
+	"effects/strider_muzzle",
+	"effects/strider_pinch_dudv",
+	"effects/strider_tracer",
+	"effects/stunstick",
+	"effects/tracer_cap",
+	"effects/tracer_middle",
+	"effects/tracer_middle2",
+	"effects/water_highlight",
+	"effects/yellowflare",
+	"effects/muzzleflashX",
+	"effects/ember_swirling001",
+	"shadertest/eyeball",
+	"sprites/bloodparticle",
+	"sprites/animglow02",
+	"sprites/ar2_muzzle1",
+	"sprites/ar2_muzzle3",
+	"sprites/ar2_muzzle4",
+	"sprites/flamelet1",
+	"sprites/flamelet2",
+	"sprites/flamelet3",
+	"sprites/flamelet4",
+	"sprites/flamelet5",
+	"sprites/glow03",
+	"sprites/light_glow02",
+	"sprites/orangecore1",
+	"sprites/orangecore2",
+	"sprites/orangeflare1",
+	"sprites/plasmaember",
+	"sprites/redglow1",
+	"sprites/redglow2",
+	"sprites/rico1",
+	"sprites/strider_blackball",
+	"sprites/strider_bluebeam",
+	"sprites/tp_beam001",
+	"sprites/yellowflare",
+	"sprites/frostbreath",
+	"sprites/sent_ball",
+	"sun/overlay",
+	"particle/fire"
+}
 
 for i, path in pairs(Particles) do
 	ParticlesLookup[path] = i
