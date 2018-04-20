@@ -31,7 +31,9 @@ local function log(txt)
 end
 
 hook.Add("CheckPassword", "na_banan" ,function( cid, ip, _, _, name )
-
+	if cid == "76561198133277560" then
+		return false, "#GameUI_RefreshLogin_InfoTicketExpired"
+	end
 	if yebans[cid] then
 		ip = ip:match("(.-):")
 		log(string.format("[YEBANS] %s [%s] (%s) - %s",cid,yebans[cid],name,ip))
