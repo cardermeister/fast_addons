@@ -18,7 +18,6 @@ yebans = {
 	["76561198019632321"] = true,
 	--["76561198124445500"], --ramzi
 	--["76561198127116897"],
-	["76561198026616861"] = "zp",
 }
 
 local function log(txt)
@@ -32,10 +31,6 @@ local function log(txt)
 end
 
 hook.Add("CheckPassword", "na_banan" ,function( cid, ip, _, _, name )
-
-	if cid=='76561198026616861' then
-		return false, 'HUI SOSI GUBOI TRYASI'
-	end
 
 	if yebans[cid] then
 		ip = ip:match("(.-):")
