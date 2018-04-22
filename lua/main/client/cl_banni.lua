@@ -24,3 +24,7 @@ hook.Add("PostPlayerDraw",Tag,function(pl)
 		banned = false
 	end
 end)
+
+hook.Add("PlayerNoClip", "banni", function(p)
+	if isbanned(p) then return false end
+end)
