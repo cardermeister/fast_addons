@@ -9,7 +9,7 @@ local discord_auth_json = util.JSONToTable(file.Read(discord_auth,"DATA"))
 
 discord = discord or {}
 
-discord.apikey = "Mzc3ODkwNjA0MTk5MzEzNDA4.Datiow.coYtcPmWVEiek9ZtJh69TOC-jJs"
+discord.apikey = "Mzc3ODkwNjA0MTk5MzEzNDA4.Db2ohQ.mMGodUNrG_09E8PyRwpuwL2FBnw"
 
 local dev_chan = "378129058317336576"
 local ans_channel = dev_chan
