@@ -43,20 +43,9 @@ local player = player
 local Color = Color
 local http = http
 
-local list ={
-	banni = -1,
-	players = 5,
-	admins = 228,
-	devs = 1337,
-	owners = math.huge,
-}
-
 local function SortPlys(players_sort)
 	table.sort(players_sort,function(a,b)
-		if not a or not b then return false      end
-		if not list[a:GetUserGroup()] or not list[b:GetUserGroup()] then return false end
-		--if a:Team() == b:Team() then return #TIME# end
-		return list[a:GetUserGroup()] > list[b:GetUserGroup()]
+		return a:Team() > b:Team()
 	end)
 end
 
