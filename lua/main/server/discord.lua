@@ -98,6 +98,17 @@ function discord.auth_apply(token,discordid)
 	
 end
 
+function discord.send_sys_tab(tab)
+
+	local devchan = discord.getchannel()
+	discord.setchannel'433228548979949578'
+	discord.send("<SYS-`"..util.TableToJSON(tab)..'`-SYS>')
+	discord.setchannel(devchan)	
+	
+end
+
+hook.Add("PlayerInitialSpawn","discord.online",function()discord.send_sys_tab({action="setgame",count=player.GetCount()})end)
+hook.Add("PlayerDisconnected","discord.online",function()discord.send_sys_tab({action="setgame",count=player.GetCount()})end)
 
 
 function discord.print(...)
