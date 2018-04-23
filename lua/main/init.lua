@@ -205,27 +205,30 @@ if SERVER then
 	
 	end
 
-hook.Remove("PlayerInitialSpawn", "PlayerAuthSpawn")
-hook.Add("PlayerAuthed","PlayerAuthSpawn",function(ply)
-	timer.Simple(0,function()
-		ply:SetUserGroup('players')
-		
-		local users = luadata.ReadFile('iin/users.txt')
-		
-		for name, users in pairs(users) do
-			for steamid in pairs(users) do
-				if ply:SteamID() == steamid or ply:UniqueID() == steamid then
-					ply:SetUserGroup(name)
+	hook.Add("PlayerInitialSpawn", "PlayerAuthSpawn", function(ply)
+		if ply:IsBot() then ply:SetUserGroup("players") end
+	end)
+
+	hook.Add("PlayerAuthed","PlayerAuthSpawn",function(ply)
+		timer.Simple(0,function()
+			ply:SetUserGroup('players')
+			
+			local users = luadata.ReadFile('iin/users.txt')
+			
+			for name, users in pairs(users) do
+				for steamid in pairs(users) do
+					if ply:SteamID() == steamid or ply:UniqueID() == steamid then
+						ply:SetUserGroup(name)
+					end
 				end
 			end
-		end
-		
-		if not list[ply:GetUserGroup()] then ply:SetUserGroup'players' end
-		
-		DefaultWeapons(ply)
-		
-	end)
-end) --hook
+			
+			if not list[ply:GetUserGroup()] then ply:SetUserGroup'players' end
+			
+			DefaultWeapons(ply)
+			
+		end)
+	end) --hook
 
 end  --if SERVER 
 
