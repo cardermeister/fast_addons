@@ -19,7 +19,7 @@ do
 			s = s .. kkey[key]
 			if #s>10 then s = string.sub(s,2) end
 			if s == "UUDDLRLRBA" then
-				pl:SetTeam(40)
+				pl:SetTeam(10)
 				for ii = 0,4 do
 					ChatAddText(team.GetColor(pl:Team()),pl:GetName(),Color(255,255,255),": ",HSVToColor(300/5*ii, 1, 1),"コナミコマンド")
 				end
