@@ -16,8 +16,6 @@ hook.Add('Initialize','teams',function()
 	team.SetUp(30, "admins", color or Color(161, 161, 255))
 	team.SetUp(40, "devs", color or Color(138, 0, 255))
 	team.SetUp(50, "owners", color or Color(255, 140, 113))
-	
-	team.SetUp(1001, "bots", Color(68, 112, 146))
 
 	//cvars.AddChangeCallback( "hide_ranks", function( convar_name, value_old, value_new )
 	//	if value_new=="1" then
@@ -206,11 +204,18 @@ if SERVER then
 	end
 
 	hook.Add("PlayerInitialSpawn", "PlayerAuthSpawn", function(ply)
-		if ply:IsBot() then ply:SetUserGroup("players") end
+		timer.Simple(0, function()
+			if IsValid(ply) and ply:IsBot() then
+				ply:SetUserGroup("players")
+			end
+		end)
 	end)
 
 	hook.Add("PlayerAuthed","PlayerAuthSpawn",function(ply)
 		timer.Simple(0,function()
+
+			if not IsValid(ply) then return end
+
 			ply:SetUserGroup('players')
 			
 			local users = luadata.ReadFile('iin/users.txt')
@@ -219,6 +224,7 @@ if SERVER then
 				for steamid in pairs(users) do
 					if ply:SteamID() == steamid or ply:UniqueID() == steamid then
 						ply:SetUserGroup(name)
+						break
 					end
 				end
 			end
