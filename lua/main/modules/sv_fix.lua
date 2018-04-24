@@ -69,7 +69,7 @@ hook.Add('CheckPassword','BadNick',function( steamID,  ipAddress,  svPassword,  
 	--local name = ply:Name() or ply:GetName()
 	name = name:lower()
 	
-	if #name<3 or name:find'brony' or name:find'unnamed' or name:find'‎' then
+	if name:find'brony' or name:find'unnamed' or name:find'‎' then
 		return false,"Извините, ваш ник содержит запрещенные символы. (Ban Nickname)"
 	end
 	
