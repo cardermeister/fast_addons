@@ -103,9 +103,9 @@ function discord.send_tab(tab)
 	file.Write("discord-tab.txt",util.TableToJSON(tab))
 end
 
-hook.Add("PlayerInitialSpawn","discord.online",function()timer.Simple(0,function()discord.send_tab({action="setgame",count=player.GetCount()})end)end)
+hook.Add("PlayerInitialSpawn","discord.online",function()timer.Simple(0,function()discord.send_tab({action="setgame",count=player.GetCount().."/"..GetConVarString'maxplayers'})end)end)
 gameevent.Listen"player_disconnect"
-hook.Add("player_disconnect","discord.online",function()timer.Simple(0,function()discord.send_tab({action="setgame",count=player.GetCount()})end)end)
+hook.Add("player_disconnect","discord.online",function()timer.Simple(0,function()discord.send_tab({action="setgame",count=player.GetCount().."/"..GetConVarString'maxplayers'})end)end)
 
 
 function discord.print(...)
