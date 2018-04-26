@@ -197,7 +197,7 @@ function EasyCleanUp(what,radius,callback)
 			if not callback then
 				ChatAddText(Color(125,63,150)," - Removing Entity [",k:EntIndex(),"]")
 			end
-			local funcdo = callback or SafeRemoveEntity
+			local funcdo = type(radius)=="function" and radius or callback or SafeRemoveEntity
 			funcdo(k)	
 		end
 	elseif(type(what)=="Vector" and radius and radius>0) then
