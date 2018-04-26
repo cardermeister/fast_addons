@@ -1,0 +1,18 @@
+us and radius>0) then
+		if not callback then
+			ChatAddText(Color(112,141,99),"Cleanup in Vector(",what,") radius:",radius)
+		end
+		for i,k in pairs(ents.FindInSphere(what,radius)) do 
+			if k:GetClass''=="physgun_beam" then continue end
+			if not callback then
+				ChatAddText(Color(125,63,150)," - Removing ",k:GetClass()," [",k:EntIndex(),"]")
+			end
+			local funcdo = callback or SafeRemoveEntity
+			funcdo(k)	
+		end
+	end
+
+end
+
+hook.Add( "CanPlayerUnfreeze", "UnfreezeOnR", function( ply, entity )
+	if entity:GetPersistent() then return false end
