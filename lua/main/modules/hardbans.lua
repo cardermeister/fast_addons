@@ -96,9 +96,9 @@ function iin.Ban(identifier, reason, by)
 	end
 
 
-	if iin.BannedUsers[cid] then return end
+	if iin.BannedUsers["_" .. cid] then return end
 
-	iin.BannedUsers[cid] = {
+	iin.BannedUsers["_" .. cid] = {
 		reason = reason,
 		by = by and by:SteamID64() or "(Console)",
 		date = os.time()
@@ -163,8 +163,8 @@ function iin.Unban(cid, by)
 	end
 
 
-	if iin.BannedUsers[cid] then
-		iin.BannedUsers[cid] = nil
+	if iin.BannedUsers["_" .. cid] then
+		iin.BannedUsers["_" .. cid] = nil
 		iin.UpdateBans()
 		log(string.format("%s unbanned %s", by and by:Name() or "(Console)", cid))
 
@@ -181,7 +181,7 @@ function iin.BanInfo(cid)
 		"bad argument #1 to 'BanInfo' (string expected, got " .. type(cid) .. ")"
 	)
 
-	local ban = iin.BannedUsers[cid]
+	local ban = iin.BannedUsers["_" .. cid]
 
 	return {
 		reason = ban.reason,
@@ -263,7 +263,7 @@ end, "admins", true)
 
 
 hook.Add("CheckPassword", "RainbowBans", function(cid, _, _, _, name)
-	local ban = iin.BannedUsers[cid]
+	local ban = iin.BannedUsers["_" .. cid]
 
 	if ban then
 		log(name .. " try to join - " .. cid)
