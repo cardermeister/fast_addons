@@ -184,8 +184,8 @@ function discord.relay_func(ply, text)
 	if !ply:AvatarURL() then return end
 	
 	local post_params = {
-		content = string.gsub(text, "%s+", function(word)
-			if string.find(word, "^%w+://.") then -- do not terminate urls
+		content = string.gsub(text, "%S+", function(word)
+			if string.find(word, "^%w+://.") then -- do not escape urls
 				return word
 			end
 
