@@ -502,7 +502,9 @@ iin.AddCommand("w",function(ply,line)
 	--if ply~= me then return end
 	print(urlencode(line))
 	http.Fetch("http://api.wolframalpha.com/v2/query?input="..urlencode(line).."&appid=K677A9-RYWJPVUUJK",function(s)
-		
+		s = string.gsub(s, [[\:(%d%d%d%d)]], function(code)
+			return utf8.char(tonumber(code, 16))
+		end)
 		
 		local found = false
 		for i,k in string.gmatch( s,"<plaintext>(.-)</plaintext>") do 
