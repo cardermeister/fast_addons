@@ -30,7 +30,7 @@ local function findEntity(identifier)
 	identifier = tostring(identifier)
 	local entity = easylua.FindEntity(identifier)
 
-	if not IsValid(entity) and #identifier == 17 then
+	if not IsValid(entity) or #identifier == 17 then
 		entity = player.GetBySteamID64(identifier) or NULL
 	end
 
@@ -112,7 +112,7 @@ function iin.Ban(identifier, reason, by)
 			nil,
 			Color(255, 187, 0),
 			"● ",
-			ply,
+			by,
 			color_black,
 			" banned ",
 			pcolor,
@@ -135,6 +135,8 @@ function iin.Ban(identifier, reason, by)
 			reason
 		)
 	end
+
+	return true, cid .. " has been banned"
 end
 
 
