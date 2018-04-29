@@ -183,11 +183,13 @@ function iin.BanInfo(cid)
 
 	local ban = iin.BannedUsers["_" .. cid]
 
-	return {
-		reason = ban.reason,
-		by = by or "n/a",
-		date = date and unixTimeToHuman(ban.date) or "n/a"
-	}
+	if ban then
+		return {
+			reason = ban.reason,
+			by = by or "n/a",
+			date = ban.date and unixTimeToHuman(ban.date) or "n/a"
+		}
+	end
 end
 
 
