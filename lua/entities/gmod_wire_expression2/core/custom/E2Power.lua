@@ -150,11 +150,14 @@ hook.Add("PlayerInitialSpawn", "E2Power_CheckPlayer", function(ply)
 	if ply:IsBot() then return end
 	
 	timer.Simple(5,function()
-	local permissions = luadata.ReadFile('iin/permissions.txt')
-	if permissions['E2Power'][ply:SteamID()] then
-		GiveAccess(ply)
-		iin.Msg(ply,Color(255,187,0)," ● ",Color(0,255,255),'E2power ',Color(255,255,255),'access was given.')
-	end
+		if IsValid(ply) then
+			local permissions = luadata.ReadFile('iin/permissions.txt')
+
+			if permissions['E2Power'][ply:SteamID()] then
+				GiveAccess(ply)
+				iin.Msg(ply,Color(255,187,0)," ● ",Color(0,255,255),'E2power ',Color(255,255,255),'access was given.')
+			end
+		end
 	end)
 end)
 
