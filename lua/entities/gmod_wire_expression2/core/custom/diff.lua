@@ -543,7 +543,7 @@ e2function void entity:pp(string param, string value)
 	if not this:IsPlayer() then return end
 	if not isOwner(self, this) then return end
 
-	if string.find(param, "[^%w_]") or string.find(value, "[^%w_]") then return end
+	if string.find(param, "[^%w_\\/]") or string.find(value, "[^%w_\\/]") then return end
 
 	this:ConCommand(string.format("pp_%s %q", param, value))
 end
