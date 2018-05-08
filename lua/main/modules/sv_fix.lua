@@ -134,7 +134,7 @@ end)
 
 
 hook.Add("Initialize", "starfall_processor", function()
-	SF.Libraries.AddHook("initialize", function(instance)
+	SF.AddHook("initialize", function(instance)
 		if not instance.ppdata then return end
 		
 		local name
