@@ -188,7 +188,7 @@ function iin.BanInfo(cid)
 	if ban then
 		return {
 			reason = ban.reason,
-			by = by or "n/a",
+			by = ban.by or "n/a",
 			date = ban.date and unixTimeToHuman(ban.date) or "n/a"
 		}
 	end
