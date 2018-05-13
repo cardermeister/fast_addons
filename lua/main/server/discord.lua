@@ -44,7 +44,6 @@ function discord.get_relay()
 	if msg_t then
 		do_say_from_ds(msg_t.author, msg_t.content, msg_t.hexcolor, msg_t.attachments)
 	elseif #msg ~= 0 then
-		error("Failed to parse[] \"" .. msg .. "\"")
 		error(string.format("Failed to parse[%d]: %s", #msg, msg))
 	end
 		
