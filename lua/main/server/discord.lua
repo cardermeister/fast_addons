@@ -38,9 +38,14 @@ end
 
 function discord.get_relay()
 
-	local t = util.JSONToTable(file.Read('discord-chat.txt'))
-	if t then
-		do_say_from_ds(t.author,t.content,t.hexcolor,t.attachments)
+	local msg = file.Read('discord-chat.txt')
+	local msg_t = util.JSONToTable(chatmsg)
+
+	if msg_t then
+		do_say_from_ds(msg_t.author, msg_t.content, msg_t.hexcolor, msg_t.attachments)
+	elseif #msg ~= 0 then
+		error("Failed to parse[] \"" .. msg .. "\"")
+		error(string.format("Failed to parse[%d]: %s", #msg, msg))
 	end
 		
 end
