@@ -39,7 +39,7 @@ end
 function discord.get_relay()
 
 	local msg = file.Read('discord-chat.txt')
-	local msg_t = util.JSONToTable(chatmsg)
+	local msg_t = util.JSONToTable(msg)
 
 	if msg_t then
 		do_say_from_ds(msg_t.author, msg_t.content, msg_t.hexcolor, msg_t.attachments)
