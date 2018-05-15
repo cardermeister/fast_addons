@@ -216,17 +216,6 @@ function EasyCleanUp(what,radius,callback)
 
 end
 
-hook.Add( "CanPlayerUnfreeze", "UnfreezeOnR", function( ply, entity )
-	if entity:GetPersistent() then return false end
-	
-	if entity:CPPIGetOwner() == ply then return true end
-	
-	local EntityOwner = entity:CPPIGetOwner()
-	if ply:IsAdmin() or sv_PProtect.IsBuddy( EntityOwner, ply, "phys" ) then return true end
-	
-	return false
-end )
-
 -- Taken from http://wiki.garrysmod.com/page/GM/EntityEmitSound example
 hook.Add("EntityEmitSound", "TimeWarpSounds", function(data)
 

@@ -94,7 +94,7 @@ function iin.OpenClientMenu(k)
 	
 	Menu:AddOption("Крашнуть",function() LocalPlayer():ConCommand("iin crash ".."\""..k:SteamID().."\"") end):SetIcon'icon16/shading.png'
 	Menu:AddOption("Убить",function() LocalPlayer():ConCommand("iin kill ".."\""..k:SteamID().."\"") end):SetIcon'icon16/user_female.png'
-	Menu:AddOption("Удалить пропы",function() k:CleanUp() end):SetIcon'icon16/shape_group.png'
+	Menu:AddOption("Удалить пропы",function() LocalPlayer():ConCommand("FPP_Cleanup "..k:UserID()) end):SetIcon'icon16/shape_group.png'
 	Menu:AddOption("Консоль",function() DermaStringReq("Комманда","",function(text) LocalPlayer():ConCommand("iin cexxec ".."\""..k:SteamID().."\"".." '"..text.."'") end) end):SetIcon'icon16/application_osx_terminal.png'
 	
 	Menu:AddSpacer()

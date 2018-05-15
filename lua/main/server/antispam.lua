@@ -22,10 +22,9 @@ local function banni( ply, time, unbanni_clb )
 		
 		timer.Simple( 0, function()
 			if IsValid( ply ) then
-				ply:CleanUp()
+				RunConsoleCommand("FPP_Cleanup", tostring(ply:UserID()))
 			else
-				sv_PProtect.Cleanup( "disc" )
-				sv_PProtect.Cleanup( "unowned" )
+				RunConsoleCommand("FPP_Cleanup", "disconnected")
 			end
 		end )
 	end
@@ -42,7 +41,6 @@ local function banni( ply, time, unbanni_clb )
 	if ply:GetMoveType() == MOVETYPE_NOCLIP then
 		ply:SetMoveType( MOVETYPE_WALK )
 	end
-	-- ply:ConCommand("FPP_Cleanup "..ply:UserID())
 	
 	
 	if time <= 60*60 and time ~= 0 then
