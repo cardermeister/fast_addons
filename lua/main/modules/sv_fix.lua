@@ -1,4 +1,4 @@
-do
+/*do
 
 	local kkey = {
 		[KEY_UP] = "U",
@@ -29,7 +29,7 @@ do
 		end
 	end)
 	
-end
+end*/ --Rip in peep
 
 
 hook.Add("GetFallDamage","GetFallDamageNormal",function(ply,speed)
