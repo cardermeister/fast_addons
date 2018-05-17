@@ -141,7 +141,7 @@ hook.Add("Initialize", "starfall_processor", function()
 		if not instance.ppdata.scriptnames then
 			name = "generic"
 		else
-			name = instance.ppdata.scriptnames.main or "generic"
+			name = instance.ppdata.scriptnames[instance.mainfile] or "generic"
 		end
 		
 		local chip = instance.data.entity
