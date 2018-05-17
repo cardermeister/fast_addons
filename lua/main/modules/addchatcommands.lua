@@ -235,8 +235,7 @@ end,'admins', true)
 iin.AddCommand('cleanup',function(ply,args)
 	local id = FindEntity(args)
 	if id:IsPlayer() then
-		//id:ConCommand("gmod_cleanup")
-		id:CleanUp(ply)
+		id:ConCommand("gmod_cleanup")
 		iin_Msg(nil,Color(255,187,0)," ● ",ply,Color(255,255,255),' remove ',id,Color(255,255,255),' props.')
 	else
 		iin.error(ply,'Ply not found.')

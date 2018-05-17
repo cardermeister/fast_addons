@@ -27,8 +27,7 @@ iin.AddCommand("banni",function(ply,args)
 			id:SetUserGroup('banni')
 			id:StripWeapons()
 			id.IsBanned = true
-			//ply:ConCommand("FPP_Cleanup "..id:UserID())
-			id:CleanUp(ply)
+			ply:ConCommand("FPP_Cleanup " .. id:UserID())
 			local steamid = id:SteamID()
 			local bannitxt = luadata.ReadFile('iin/banni.txt')
 			bannitxt[steamid] = bannitxt[id:SteamID()] or {}
