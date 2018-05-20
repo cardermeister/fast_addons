@@ -66,18 +66,19 @@ META.GetGTime = function(self)
 end
 
 META.AvatarURL = function(self)
-
-	local cid = self:SteamID64()
-	
-	if _avatarurl[cid] then
-		return _avatarurl[cid]
-	end
-	
-	GetAvatar(cid,function(url)
-		if url:match('https?://.+%.jpg') then
-			_avatarurl[cid] = url
+	if not self:IsBot() then
+		local cid = self:SteamID64()
+		
+		if _avatarurl[cid] then
+			return _avatarurl[cid]
 		end
-	end)
+		
+		GetAvatar(cid,function(url)
+			if url:match('https?://.+%.jpg') then
+				_avatarurl[cid] = url
+			end
+		end)
+	end
 	
 	return false
 end
