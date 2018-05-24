@@ -1,3 +1,4 @@
+timer.Simple(0, function()
 
 syntax = {}
 local syntax = syntax
@@ -118,21 +119,24 @@ local methods = {
 	["printc"] = "clients",
 	["printm"] = "self",
 	["table"]  = "table",
-	["table2"]  = "table2",
+	["table2"] = "table2",
 	["keys"]   = "keys",
+	["src"]    = "source"
 }
 
 local col_server = Color(191, 159, 127)
 local col_client = Color(127, 191, 191)
+local col_source = Color(207, 110, 90)
 
 local colors = {
-	["l"] = col_server,
-	["lc"] = col_client,
-	["print"] = col_server,
+	["l"]      = col_server,
+	["lc"]     = col_client,
+	["print"]  = col_server,
 	["printc"] = col_client,
-	["table"] = col_server,
+	["table"]  = col_server,
 	["table2"] = col_server,
-	["keys"] = col_server
+	["keys"]   = col_server,
+	["src"]    = col_source
 }
 
 local grey = Color(191, 191, 191)
@@ -145,7 +149,9 @@ hook.Add("OnPlayerChat", "syntax", function(player, message, team, dead)
 	if not code then cmd, code = message:match("^!(print[bcm]?) (.*)$") end
 	if not code then cmd, code = message:match("^!(table2?) (.*)$") end
 	if not code then cmd, code = message:match("^!(keys) (.*)$") end
-	if not code then cmd, code = message:match("^@(l[bcms]?) (.*)$") if code then silent=true end end
+	--- TODO: implement it on serverside
+	-- if not code then cmd, code = message:match("^@(l[bcms]?) (.*)$") if code then silent=true end end
+	if not code then cmd, code = message:match("^!(src) (.*)$") end
 	
 	if not code then
 	
@@ -163,4 +169,6 @@ hook.Add("OnPlayerChat", "syntax", function(player, message, team, dead)
 	end
 
 	return true
+end)
+
 end)

@@ -131,4 +131,11 @@ add("printb", function(ply, line, target)
 	return luadev.RunOnServer("print(" .. line .. ")",  X(ply,"printb"), {ply=ply})
 end)
 
+add("src", function(ply, line, target)
+	if not line or line=="" then return end
+	if luadev.ValidScript then local valid,err = luadev.ValidScript('x('..line..')','src') if not valid then return false,err end end
+
+	return luadev.RunOnServer("print(GetFunctionSource(" .. line .. "))",  X(ply,"src"), {ply=ply})
+end)
+
 end)
