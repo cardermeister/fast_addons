@@ -183,6 +183,10 @@ function iin.BanInfo(cid)
 		"bad argument #1 to 'BanInfo' (string expected, got " .. type(cid) .. ")"
 	)
 
+	if string.find(cid, "^STEAM_%d:%d:%d+$") then
+		cid = util.SteamIDTo64(cid)
+	end
+	
 	local ban = iin.BannedUsers["_" .. cid]
 
 	if ban then
