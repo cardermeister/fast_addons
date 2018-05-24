@@ -555,6 +555,8 @@ iin.AddCommand("timescale", function(ply, line)
 
 		if timescale then
 			timescale = math.Clamp(timescale, 0.1, 10)
+
+			iin.Msg(nil, Color(255,187,0), " ● ", ply, color_white, " set the timescale to ", Color(0, 230, 255), timescale)
 			game.SetTimeScale(timescale)
 			
 			return
@@ -566,12 +568,13 @@ end, "devs", true)
 
 
 iin.AddCommand("src",function(ply,line)
-	if line and #line>0 then
-		iin.Msg(nil,Color(255,187,0)," ● ",ply,Color(255,255,255),'@',Color(207, 110, 90),'src',Color(255,255,255),': '..line)
-		RunString("print(GetFunctionSource("..line.."))")
+	if line and #line > 0 then
+		iin.Msg(nil, Color(255, 187, 0), " ● ", ply, color_white, "@", Color(207, 110, 90), "src", color_white, ": " .. line)
+		RunString("print(GetFunctionSource(" .. line .. "))")
 		return
 	end
-	iin.error(ply,' #arg == 0 ')
+
+	iin.error(ply, " #arg == 0 ")
 end,'devs',true)
 
 
