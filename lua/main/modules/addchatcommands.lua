@@ -567,15 +567,4 @@ iin.AddCommand("timescale", function(ply, line)
 end, "devs", true)
 
 
-iin.AddCommand("src",function(ply,line)
-	if line and #line > 0 then
-		iin.Msg(nil, Color(255, 187, 0), " ● ", ply, color_white, "@", Color(207, 110, 90), "src", color_white, ": " .. line)
-		RunString("print(GetFunctionSource(" .. line .. "))")
-		return
-	end
-
-	iin.error(ply, " #arg == 0 ")
-end,'devs',true)
-
-
 end) -- end HOOK.ADD
