@@ -24,6 +24,8 @@ end
 
 local function do_say_from_ds(username, msg, hexcolor, attachments)
 	if hexcolor == "#000000" then hexcolor = "#447092" end
+	//admin here pls
+	if hexcolor == "#8650ac" then hexcolor = "#8a00ff" end //dev
 	
 	if attachments then
 		msg=attachments.." "..msg	
