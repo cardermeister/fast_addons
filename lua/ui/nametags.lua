@@ -138,7 +138,7 @@ if CLIENT then
 
 		angles.y = eyeang.y - 90
 
-		local ent = ply.GetRagdollEntity and ply:GetRagdollEntity() or ply
+		local ent = ply.GetRagdollEntity and IsValid(ply:GetRagdollEntity()) and ply:GetRagdollEntity() or ply
 		local head_pos, head_ang = get_head_pos(ent)
 
 		local scale = ply:GetModelScale()
