@@ -276,17 +276,17 @@ concommand.Add("discord-lua-run",function(ply,cmd,arg,line)
 	Msg"[discord] "print("running lua by",steamid_user or "1337","/ Answer:",answer_chan)
 	
 	local func = CompileString( luacode, line, false )
+	local onerror = function(msg)
+		local traceback = debug.traceback("ERROR: " .. (msg or ""), 2)
+		discord.print(traceback)
+	end
+
 	discord.setchannel(answer_chan)
-	if type(func) == "function" then
-			setfenv(func, discord.metatable)
-			local args = {pcall(func)}
-
-			if args[1] == false then
-				discord.print("ERROR: "+args[2])
-			end
-
+	if isfunction(func) then
+		setfenv(func, discord.metatable)
+		xpcall(func, onerror)
 	else
-		discord.print("ERROR: "+func)
+		discord.print("ERROR: " + func)
 	end
 	discord.setchannel(dev_chan)
 
