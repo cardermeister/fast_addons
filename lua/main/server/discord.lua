@@ -9,8 +9,6 @@ local discord_auth_json = util.JSONToTable(file.Read(discord_auth,"DATA"))
 
 discord = discord or {}
 
-discord.apikey = "Mzc3ODkwNjA0MTk5MzEzNDA4.Db2ohQ.mMGodUNrG_09E8PyRwpuwL2FBnw"
-
 local dev_chan = "378129058317336576"
 local ans_channel = dev_chan
 function discord.setchannel(chan) ans_channel=chan end
@@ -54,7 +52,7 @@ end
 function discord.send(msg,tab)
 	tab = istable(tab) and table.Add({content = msg},tab) or {content = msg}
 	local channel = discord.getchannel()
-	http.Post(Format("https://discordapp.com/api/channels/%s/messages",channel),tab,function()end,function()end,{Authorization = "Bot "..discord.apikey})
+	http.Post("http://localhost/php_projects/token_bypass.php?"..channel,tab)
 end
 
 local function ReadFuncClose(callback)
