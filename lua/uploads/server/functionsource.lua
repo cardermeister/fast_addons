@@ -51,6 +51,9 @@ function GetFunctionSource(func)
 	
 	-- Insert the first/last line and the source file path
 	table.insert(ret, 1, string.format("-- [%i:%i] %s", info.linedefined, info.lastlinedefined, src))
+	if (src:Left(19)=="addons/fast_addons/") then
+		table.insert(ret, 2, string.format("-- [https://github.com/cardermeister/fast_addons/blob/master/%s]", string.gsub(src,"addons/fast_addons/","")))
+	end
 	
 	return table.concat(ret, "\n")
 end
