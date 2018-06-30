@@ -143,8 +143,10 @@ end
 __e2setcost(100)
 e2function void entity:setModel(string model)
 	if not ValidAction(self.player) then return end
-	if not IsValid(this) then return nil end
+	if not IsValid(this) then return end
 	if !isOwner(self, this) then return end
+	if this:IsWeapon() then return end
+	
 	this:SetModel(model)
 end
 
@@ -152,5 +154,6 @@ e2function void entity:setOwnerNoEntity()
 	if !IsValid(this) then return end
 	if !isOwner(self, this) then return end
 	if !this.e2co then return end
+	
 	this:SetOwner(nil)
 end
