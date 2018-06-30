@@ -202,7 +202,7 @@ function discord.relay_func(ply, text)
 	}
 	
 	local t_struct = {
-		failed = function( err ) MsgC( Color(255,0,0), "HTTP error: " .. err ) end,
+		failed = function( err ) MsgC( Color(255,0,0), "discord.relay_func HTTP error: " .. err, "\n" ) end,
 		method = "post",
 		url = webhook,
 		parameters = post_params,
