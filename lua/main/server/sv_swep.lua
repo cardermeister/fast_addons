@@ -1,43 +1,42 @@
-local META = FindMetaTable'Player'
-function META:IsCheater() 
-	return self:GetNWBool('cheater') or false
+local PLAYER = FindMetaTable("Player")
+local WEAPON = FindMetaTable("Weapon")
+
+function PLAYER:IsCheater()
+	return self:GetNWBool("cheater") or false
 end
 
-function META:SetCheater(bool) 
-	self:SetNWBool('cheater',bool)
+function PLAYER:SetCheater(bool)
+	self:SetNWBool("cheater", bool)
 end
 
-local m = FindMetaTable'Weapon'
-
-function m:SetAmmo(c,secondary)
-		
-	self.Owner:SetAmmo(c or 100, secondary and self:GetSecondaryAmmoType() or self:GetPrimaryAmmoType())
-	
+function WEAPON:SetAmmo(count, isSecondary)
+	self.Owner:SetAmmo(count, isSecondary and self:GetSecondaryAmmoType() or self:GetPrimaryAmmoType())
 end
 
-local wl = {}
-wl['weapon_crowbar']	 = true
-wl['weapon_physcannon']	 = true
-wl['weapon_physgun']	 = true
-wl['gmod_tool']			 = true
-wl['gmod_camera']		 = true
-wl['laserpointer']		 = true
-wl['remotecontroller']	 = true
+local wepWhitelist = {
+	weapon_crowbar    = true,
+	weapon_physcannon = true,
+	weapon_physgun    = true,
+	gmod_tool         = true,
+	gmod_camera       = true,
+	laserpointer      = true,
+	remotecontroller  = true
+}
 
-hook.Add('PlayerSpawnSWEP','spawnswep1337',function( ply, class, wep )
+hook.Add("PlayerSpawnSWEP", "spawnswep1337", function(ply, class, wep)
 	if ply.IsBanned then return false end
-	if wl[class] then return true end
+	if wepWhitelist[class] then return true end
 	return ply:IsCheater()
 end)
 
-hook.Add('PlayerGiveSWEP','spawnswep1337',function( ply, class, wep )
+hook.Add("PlayerGiveSWEP", "spawnswep1337", function(ply, class, wep)
 	if ply.IsBanned then return false end
-	if wl[class] then return true end
+	if wepWhitelist[class] then return true end
 	return ply:IsCheater()
 end)
 
-hook.Add("PlayerCanPickupWeapon", "Grabbin.Peelz1337", function(ply,wep)
+hook.Add("PlayerCanPickupWeapon", "Grabbin.Peelz1337", function(ply, wep)
 	if ply.IsBanned then return false end
-	if wl[wep:GetClass()] then return true end
-	return ply:IsCheater() 
+	if wepWhitelist[wep:GetClass()] then return true end
+	return ply:IsCheater()
 end)
