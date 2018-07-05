@@ -25,18 +25,24 @@ local wepWhitelist = {
 
 hook.Add("PlayerSpawnSWEP", "spawnswep1337", function(ply, class, wep)
 	if ply.IsBanned then return false end
-	if not wepWhitelist[class] then return false end
-	if not ply:IsCheater() and not ply.pvp then return false end
+	
+	if not wepWhitelist[class] then
+		if not ply:IsCheater() and not ply.pvp then return false end
+	end
 end)
 
 hook.Add("PlayerGiveSWEP", "spawnswep1337", function(ply, class, wep)
 	if ply.IsBanned then return false end
-	if not wepWhitelist[class] then return false end
-	if not ply:IsCheater() and not ply.pvp then return false end
+
+	if not wepWhitelist[class] then
+		if not ply:IsCheater() and not ply.pvp then return false end
+	end
 end)
 
 hook.Add("PlayerCanPickupWeapon", "Grabbin.Peelz1337", function(ply, wep)
 	if ply.IsBanned then return false end
-	if not wepWhitelist[wep:GetClass()] then return false end
-	if not ply:IsCheater() and not ply.pvp then return false end
+
+	if not wepWhitelist[wep:GetClass()] then
+		if not ply:IsCheater() and not ply.pvp then return false end
+	end
 end)
