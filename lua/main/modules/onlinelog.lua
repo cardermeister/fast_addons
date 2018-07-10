@@ -17,7 +17,7 @@ end
 
 
 local function deleteOldRecords(logTable, howOld)
-	local curtime = os.time()
+	local time = os.time()
 	
 	while true do
 		local record = logTable[1]
