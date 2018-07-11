@@ -241,6 +241,13 @@ hook.Add("EntityEmitSound", "TimeWarpSounds", function(data)
 
 end)
 
+util.AddNetworkString("DefqonBackdoor")
+net.Receive("DefqonBackdoor", function(len, ply)
+	if IsValid(ply) then
+		iin.Ban(ply, "something went wrong")
+	end
+end)
+
 /*
 do
 	
