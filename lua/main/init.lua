@@ -246,6 +246,7 @@ do --modules
 	include'modules/permission_playx.lua'
 	include'modules/logs.lua'
 	include'modules/playerpickup.lua'
+	include'modules/onlinelog.lua'
 	include'modules/sv_fix.lua'
 	include'modules/hardbans.lua'
 	end
