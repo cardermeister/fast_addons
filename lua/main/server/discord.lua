@@ -165,7 +165,7 @@ function discord.status()
 			
 	end
 	
-	str = str + "}\n``` steam://connect/195.2.252.214:27015"
+	str = str + "}\n``` http://195.2.252.214:1337/online\nsteam://connect/195.2.252.214:27015"
 	//http.Post(webhook,{content = str})
 	discord.send(str)
 end
