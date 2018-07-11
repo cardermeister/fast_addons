@@ -1,5 +1,5 @@
 local logFilePath = "iin/logs/online.txt"
-local recordLifetime = 60 * 60 * 24 * 2 -- 5 days
+local recordLifetime = 60 * 60 * 24 * 2 -- 2 days
 
 
 local function getPlayers()
