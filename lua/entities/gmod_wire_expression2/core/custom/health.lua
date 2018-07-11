@@ -82,8 +82,24 @@ e2function void entity:shootTo(vector start,vector dir,number spread,number forc
 	this:FireBullets( bullet )
 end
 
+local function isInvalid(number)
+	return number ~= number or math.abs(number) > 1e20
+end
+
 e2function void shake(vector pos, amplitude, frequency, duration, radius)
-	util.ScreenShake( Vector(pos[1],pos[2],pos[3]), amplitude, frequency, duration, radius)
+	if not E2Power.PlyHasAccess(self.player) then return end
+
+	if E2Lib.isnan(amplitude) then return end
+	if E2Lib.isnan(frequency) then return end
+	if E2Lib.isnan(duration)  then return end
+
+	util.ScreenShake(
+		Vector(pos[1], pos[2], pos[3]),
+		math.Clamp(amplitude, 0, 100),
+		math.Clamp(frequency, 0, 10),
+		math.Clamp(duration, 0, 10),
+		radius
+	)
 end
 
 e2function void explosion(number damage, number radius, vector pos)
