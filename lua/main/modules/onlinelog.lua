@@ -1,19 +1,5 @@
 local logFilePath = "iin/logs/online.txt"
-local recordLifetime = 60 * 60 * 24 * 7 -- 7 days
-
-
-local function getPlayers()
-	local players = {}
-	
-	for i, ent in ipairs(player.GetHumans()) do
-		table.insert(players, {
-			cid = ent:SteamID64(),
-			name = ent.DefaultName and ent:DefaultName() or ent:Name()
-		})
-	end
-	
-	return players
-end
+local recordLifetime = 60 * 60 * 24 * 14 -- 14 days
 
 
 local function deleteOldRecords(logTable, howOld)
@@ -22,7 +8,7 @@ local function deleteOldRecords(logTable, howOld)
 	while true do
 		local record = logTable[1]
 		
-		if time - record.time >= howOld then
+		if time - record.t >= howOld then
 			table.remove(logTable, 1)
 		else
 			break
@@ -31,11 +17,12 @@ local function deleteOldRecords(logTable, howOld)
 end
 
 
-local function updateLog(ply)
-	if ply:IsBot() then return end
+local function updateLog(ply,dbool)
+//	if ply:IsBot() then return end
+	local _ply = {cid = ply:SteamID64(),name = ply.DefaultName and ply:DefaultName() or ply:Name()}
 	
 	timer.Simple(0, function()
-		local logJson = file.Read(logFilePath, "DATA")
+		
 		local log = {}
 		
 		if logJson then
@@ -45,15 +32,17 @@ local function updateLog(ply)
 		local time, lastRecord = os.time(), log[#log]
 		local writeIndex
 		
-		if not lastRecord or lastRecord.time ~= time then
+		if not lastRecord or lastRecord.t ~= time then
 			writeIndex = #log + 1
 		else
 			writeIndex = #log
 		end
 		
 		log[writeIndex] = {
-			time = time,
-			players = getPlayers()
+			t = time,
+			n = _ply.name,
+			c = _ply.cid,
+			d = dbool
 		}
 		
 		deleteOldRecords(log, recordLifetime)
@@ -65,5 +54,5 @@ local function updateLog(ply)
 end
 
 
-hook.Add("PlayerInitialSpawn", "online-log", updateLog)
-hook.Add("PlayerDisconnected", "online-log", updateLog)
+hook.Add("PlayerInitialSpawn", "online-log", function(ply)updateLog(ply,false)end)
+hook.Add("PlayerDisconnected", "online-log", function(ply)updateLog(ply,true)end)	
