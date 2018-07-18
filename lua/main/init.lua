@@ -247,6 +247,7 @@ do --modules
 	include'modules/logs.lua'
 	include'modules/playerpickup.lua'
 	include'modules/onlinelog.lua'
+	include'modules/onlinelog2.lua'
 	include'modules/sv_fix.lua'
 	include'modules/hardbans.lua'
 	end
