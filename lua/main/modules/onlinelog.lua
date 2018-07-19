@@ -18,7 +18,7 @@ end
 
 
 local function updateLog(ply,dbool)
-	if ply:IsBot() then return end
+	if ply and ply.IsBot and ply:IsBot() then return end
 	local init = false
 	local _ply
 	
