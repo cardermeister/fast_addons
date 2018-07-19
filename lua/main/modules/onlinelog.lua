@@ -19,7 +19,12 @@ end
 
 local function updateLog(ply,dbool)
 	if ply:IsBot() then return end
-	local _ply = {cid = ply:SteamID64(),name = ply.DefaultName and ply:DefaultName() or ply:Name()}
+	local init = false
+	
+	if (ply==false) then init = true
+	else
+		local _ply = {cid = ply:SteamID64(),name = ply.DefaultName and ply:DefaultName() or ply:Name()}
+	end
 	
 	timer.Simple(0, function()
 		
@@ -38,12 +43,19 @@ local function updateLog(ply,dbool)
 			writeIndex = #log
 		end
 		
-		log[writeIndex] = {
-			t = time,
-			n = _ply.name,
-			c = _ply.cid,
-			d = dbool
-		}
+		if init and player.GetCount()==0 then
+			log[writeIndex] = {
+				t = time,
+				first_init = true
+			}	
+		else
+			log[writeIndex] = {
+				t = time,
+				n = _ply.name,
+				c = _ply.cid,
+				d = dbool
+			}
+		end
 		
 		deleteOldRecords(log, recordLifetime)
 		
@@ -53,6 +65,8 @@ local function updateLog(ply,dbool)
 	end)
 end
 
-
+hook.Add('iin_Initialized','online-log-start',function()
+	updateLog(false,false)
+end)
 hook.Add("PlayerInitialSpawn", "online-log", function(ply)updateLog(ply,false)end)
 hook.Add("PlayerDisconnected", "online-log", function(ply)updateLog(ply,true)end)	
