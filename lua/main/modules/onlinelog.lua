@@ -29,6 +29,8 @@ local function updateLog(ply,dbool)
 	
 	timer.Simple(0, function()
 		
+		local logJson = file.Read(logFilePath, "DATA")
+			
 		local log = {}
 		
 		if logJson then
