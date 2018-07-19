@@ -18,7 +18,7 @@ end
 
 
 local function updateLog(ply,dbool)
-//	if ply:IsBot() then return end
+	if ply:IsBot() then return end
 	local _ply = {cid = ply:SteamID64(),name = ply.DefaultName and ply:DefaultName() or ply:Name()}
 	
 	timer.Simple(0, function()
