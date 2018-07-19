@@ -20,10 +20,11 @@ end
 local function updateLog(ply,dbool)
 	if ply:IsBot() then return end
 	local init = false
+	local _ply
 	
 	if (ply==false) then init = true
 	else
-		local _ply = {cid = ply:SteamID64(),name = ply.DefaultName and ply:DefaultName() or ply:Name()}
+		_ply = {cid = ply:SteamID64(),name = ply.DefaultName and ply:DefaultName() or ply:Name()}
 	end
 	
 	timer.Simple(0, function()
