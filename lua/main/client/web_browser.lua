@@ -59,6 +59,16 @@ function PANEL:Init()
 				surface.SetDrawColor(240 + math.sin(RealTime()*10)*15, 100, 50, 200)
 				surface.DrawRect(1, 1, w-2, h-2)
 			end
+	end
+
+	local btn = vgui.Create("DButton", top)
+		btn:SetText("Open in Steam")
+		btn:SizeToContents()
+		btn:SetWide(btn:GetWide()+8)
+		btn:Dock(LEFT)
+		btn.DoClick = function()
+			chatbox.chatgui:Hide()
+			gui.OpenURL(self.entry:GetValue():Trim())
 		end
 
 	local entry = vgui.Create("DTextEntry", top)
@@ -145,7 +155,7 @@ function PANEL:Think(w,h)
 		--print("WAS LOADING")
 		self.browser:QueueJavascript[[gmod.LoadedURL(document.location.href,document.title); gmod.status(""); ]]
 		self.browser:QueueJavascript[[function alert(str) { console.log("Alert: "+str); }]]
-		self.browser:QueueJavascript[[if (!document.body.style.background) { document.body.style.background = 'white'; }; void 0;]]
+		//self.browser:QueueJavascript[[if (!document.body.style.background) { document.body.style.background = 'white'; }; void 0;]]
 		self.browser:QueueJavascript[[
 			function getLink() {
 				gmod.status(this.href || "-");
