@@ -82,10 +82,6 @@ e2function void entity:shootTo(vector start,vector dir,number spread,number forc
 	this:FireBullets( bullet )
 end
 
-local function isInvalid(number)
-	return number ~= number or math.abs(number) > 1e20
-end
-
 e2function void shake(vector pos, amplitude, frequency, duration, radius)
 	if not E2Power.PlyHasAccess(self.player) then return end
 
@@ -298,8 +294,11 @@ hook.Add("EntityTakeDamage", "CheckE2Dmg", function( ent, dmginfo )
 	if ent.hasHP then
 		local H = ent:Health()
 		local D = dmginfo:GetDamage()
-		if H>D then ent:SetHealth(H-D) dmgEffect[ent.dmgEff](ent,D,H)
-			else dstrEffect[ent.dstrEff](ent)
+		
+		if H>D then
+			ent:SetHealth(H-D) dmgEffect[ent.dmgEff](ent,D,H)
+		else
+			dstrEffect[ent.dstrEff](ent)
 		end
 	end
 end)

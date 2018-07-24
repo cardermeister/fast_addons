@@ -36,15 +36,33 @@ timer.Simple(0, function()
 	game.ConsoleCommand("sbox_godmode 0\n")
 end)
 
-if not OLD_UNLOCK then
+
+do -- Some fixes
 	local PLAYER = FindMetaTable("Player")
-	OLD_UNLOCK = PLAYER.UnLock
-	
-	function PLAYER:UnLock()
-		OLD_UNLOCK(self)
+
+	if not OLD_UNLOCK then
+		OLD_UNLOCK = PLAYER.UnLock
+		local OLD_UNLOCK = OLD_UNLOCK
 		
-		if not self.pvp then
-			self:GodEnable()
+		function PLAYER:UnLock()
+			OLD_UNLOCK(self)
+			
+			if not self.pvp then
+				self:GodEnable()
+			end
+		end
+	end
+
+	if not OLD_GODDISABLE then
+		OLD_GODDISABLE = PLAYER.GodDisable
+		local OLD_GODDISABLE = OLD_GODDISABLE
+
+		function PLAYER:GodDisable()
+			local info = debug.getinfo(2, "S")
+
+			if info.source ~= "@addons/chess/lua/entities/ent_chess_board.lua" or self.pvp then
+				OLD_GODDISABLE(self)
+			end
 		end
 	end
 end
