@@ -133,7 +133,7 @@ iin.AddCommand('goto',function(ply,line)
     local ent = FindEntity(line)
 
 	if ent:IsPlayer() then
-		if ent:GetInfo("allowgoto") ~= "0" or ply:Team() > ent:Team() then
+		if ent:GetInfo("allowgoto") ~= "0" or ply:Team() > ent:Team() or ply:IsSuperAdmin() then
 			local dir = ent:GetAngles(); dir.p = 0; dir.r = 0; dir = (dir:Forward() * -100)
 			ply:SetPos(ent:GetPos() + dir)	
 			ply:SetEyeAngles((ent:EyePos() - ply:EyePos()):Angle())
