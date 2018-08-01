@@ -1,5 +1,5 @@
 local logFilePath = "iin/logs/online.txt"
-local recordLifetime = 60 * 60 * 24 * 14 -- 14 days
+local recordLifetime = 60 * 60 * 24 * 30 -- 30 days
 
 
 local function deleteOldRecords(logTable, howOld)
