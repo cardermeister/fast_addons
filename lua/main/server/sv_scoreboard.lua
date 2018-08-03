@@ -1,11 +1,11 @@
 local nTag = "iin_ScoreboardInfo"
 util.AddNetworkString(nTag)
 
-local function SendUpdate(ply, who)
-   who = who or player.GetAll()
-   final = {}
+local function SendUpdate(receivers, of)
+   of = of or player.GetAll()
+   local final = {}
 
-   for k,v in pairs(who) do
+   for k,v in pairs(of) do
       if not IsValid(v) then continue end
       local _geoip = nil
       local surveillance = v["__surveillance"] or {}
@@ -25,19 +25,19 @@ local function SendUpdate(ply, who)
       do
          net.WriteTable(final)
       end
-      net.Send(ply)
+      net.Send(receivers)
    end
 end
 
-local function FullUpdate(who)
-  local tab = {}
-   for k,v in pairs(player.GetAll()) do
-         if v:IsSuperAdmin() then
-           tab[#tab + 1] = v
+local function FullUpdate(of)
+  local receivers = {}
+   for i, ply in ipairs(player.GetAll()) do
+         if ply:IsSuperAdmin() then
+           table.insert(receivers, ply)
          end
    end
 
-   SendUpdate(tab, who)
+   SendUpdate(receivers, of)
 end
 
 
