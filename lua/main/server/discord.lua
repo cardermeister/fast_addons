@@ -212,8 +212,22 @@ function discord.relay_func(ply, text)
 	HTTP( t_struct )
     	
 end
-hook.Add("PlayerSay","discord_relay_chat", discord.relay_func)	
 
+if not OLD_PLAYERSAY then
+	OLD_PLAYERSAY = GAMEMODE.PlayerSay
+	local OLD_PLAYERSAY = OLD_PLAYERSAY
+
+	function GAMEMODE:PlayerSay(ply, msg, ...)
+		local ret = OLD_PLAYERSAY(self, ply, msg, ...)
+		
+		if ret ~= true and ret ~= "" then
+			msg = isstring(ret) and ret or msg
+			discord.relay_func(ply, msg)
+		end
+		
+		return ret
+	end
+end
 
 
 do 
