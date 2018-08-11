@@ -213,7 +213,11 @@ function discord.relay_func(ply, text)
     	
 end
 
+
+
 if not OLD_PLAYERSAY then
+	local GAMEMODE = gmod.GetGamemode()
+	
 	OLD_PLAYERSAY = GAMEMODE.PlayerSay
 	local OLD_PLAYERSAY = OLD_PLAYERSAY
 
