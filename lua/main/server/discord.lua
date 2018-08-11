@@ -216,8 +216,8 @@ end
 
 
 if not OLD_PLAYERSAY then
-	local GAMEMODE = gmod.GetGamemode()
-	
+	local GAMEMODE = GAMEMODE or GM
+
 	OLD_PLAYERSAY = GAMEMODE.PlayerSay
 	local OLD_PLAYERSAY = OLD_PLAYERSAY
 
