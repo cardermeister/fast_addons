@@ -214,26 +214,6 @@ function discord.relay_func(ply, text)
 end
 
 
-
-if not OLD_PLAYERSAY then
-	local GAMEMODE = GAMEMODE or GM
-
-	OLD_PLAYERSAY = GAMEMODE.PlayerSay
-	local OLD_PLAYERSAY = OLD_PLAYERSAY
-
-	function GAMEMODE:PlayerSay(ply, msg, ...)
-		local ret = OLD_PLAYERSAY(self, ply, msg, ...)
-		
-		if ret ~= true and ret ~= "" then
-			msg = isstring(ret) and ret or msg
-			discord.relay_func(ply, msg)
-		end
-		
-		return ret
-	end
-end
-
-
 do 
 	local meta = {}
 	
@@ -311,5 +291,23 @@ end)
 discord.print("[INIT] discord.lua successfully loaded") 
 
 hook.Add('iin_Initialized','serverstartdiscordnotify',function()
+	if not OLD_PLAYERSAY then
+		local GAMEMODE = gmod.GetGamemode()
+		
+		OLD_PLAYERSAY = GAMEMODE.PlayerSay
+		local OLD_PLAYERSAY = OLD_PLAYERSAY
+
+		function GAMEMODE:PlayerSay(ply, msg, ...)
+			local ret = OLD_PLAYERSAY(self, ply, msg, ...)
+			
+			if ret ~= true and ret ~= "" then
+				msg = isstring(ret) and ret or msg
+				discord.relay_func(ply, msg)
+			end
+			
+			return ret
+		end
+	end
+	
 	discord.print("[SERVER] Successfully Initialized") 
 end)
