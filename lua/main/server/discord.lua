@@ -195,7 +195,7 @@ function discord.relay_func(ply, text)
 				return word
 			end
 
-			return string.gsub(word, "[\\`*_~@]", "\\%1")
+			return string.gsub(word, "[\\`*_~]", "\\%1")
 		end),
 		username = discord.relay_prefix.." "..(ply:Nick() or "Unknown"),
 		avatar_url = ply:AvatarURL()
