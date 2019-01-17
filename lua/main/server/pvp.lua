@@ -69,18 +69,18 @@ end
 
 
 --[[
-Determines the correct collective numeral for a number (in Russian language)
+Determines the plural form for a given number
 Example usage:
-	declension(1, "секунда", "секунды", "секунд")
+	plural(1, "секунда", "секунды", "секунд")
 	Result: секунда
 
-	declension(3, "секунда", "секунды", "секунд")
+	plural(3, "секунда", "секунды", "секунд")
 	Result: секунды
 
-	declension(12, "секунда", "секунды", "секунд")
+	plural(12, "секунда", "секунды", "секунд")
 	Result: секунд
 ]]
-local function declension(number, a, b, c) -- Dunno how to name these
+local function plural(number, a, b, c) -- Dunno how to name these
 	number = number % 100
 	
 	if not (number >= 10 and number <= 20) then
@@ -158,7 +158,7 @@ iin.AddCommand("pvp", function(ply)
 		ply:ChatPrint(string.format(
 			"Подождите %d %s, чтобы сменить режим",
 			seconds,
-			declension(seconds, "секунду", "секунды", "секунд")
+			plural(seconds, "секунду", "секунды", "секунд")
 		))
 	end
 end, "players", true)
@@ -195,7 +195,7 @@ iin.AddCommand("build", function(ply)
 		ply:ChatPrint(string.format(
 			"Подождите %d %s, чтобы сменить режим",
 			seconds,
-			declension(seconds, "секунду", "секунды", "секунд")
+			plural(seconds, "секунду", "секунды", "секунд")
 		))
 	end
 end, "players", true)
